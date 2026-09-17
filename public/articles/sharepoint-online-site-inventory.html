@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="Learn how to export SharePoint Online site inventory and storage usage using PnP PowerShell, Microsoft Entra ID certificate authentication, and CSV reporting."
+    >
+
+    <title>Export All SharePoint Online Sites Using PnP PowerShell | M365Buddy</title>
+
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        .article-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 24px 60px;
+        }
+
+        .article-header {
+            margin-bottom: 35px;
+        }
+
+        .article-header h1 {
+            font-size: 42px;
+            line-height: 1.2;
+            margin-bottom: 15px;
+        }
+
+        .article-intro {
+            font-size: 18px;
+            line-height: 1.7;
+            color: #555;
+        }
+
+        .article-content {
+            font-size: 17px;
+            line-height: 1.8;
+        }
+
+        .article-content h2 {
+            margin-top: 42px;
+            margin-bottom: 15px;
+            font-size: 30px;
+            color: #173f70;
+        }
+
+        .article-content h3 {
+            margin-top: 28px;
+            margin-bottom: 10px;
+            font-size: 22px;
+            color: #234f7d;
+        }
+
+        .article-content p {
+            margin-bottom: 16px;
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin-bottom: 20px;
+            padding-left: 28px;
+        }
+
+        .article-content li {
+            margin-bottom: 8px;
+        }
+
+        .article-content code {
+            background: #f1f3f5;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-size: 0.95em;
+        }
+
+        .article-content pre {
+            background: #17202a;
+            color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .article-content pre code {
+            background: transparent;
+            padding: 0;
+            color: inherit;
+        }
+
+        .article-note {
+            background: #fff8e1;
+            border-left: 5px solid #f0ad4e;
+            padding: 16px 20px;
+            margin: 25px 0;
+            border-radius: 5px;
+        }
+
+        .article-security {
+            background: #fff0f0;
+            border-left: 5px solid #d9534f;
+            padding: 16px 20px;
+            margin: 25px 0;
+            border-radius: 5px;
+        }
+
+        .article-info {
+            background: #eef6ff;
+            border-left: 5px solid #2878c8;
+            padding: 16px 20px;
+            margin: 25px 0;
+            border-radius: 5px;
+        }
+
+        .article-table-wrapper {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        .article-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        .article-table th,
+        .article-table td {
+            border: 1px solid #d9e1e8;
+            padding: 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .article-table th {
+            background: #173f70;
+            color: white;
+        }
+
+        .article-table tr:nth-child(even) {
+            background: #f7f9fb;
+        }
+
+        .article-link-box {
+            background: #eef6ff;
+            border: 1px solid #c9def5;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+
+        .article-link-box a {
+            font-weight: bold;
+            color: #145da0;
+        }
+
+        .back-home {
+            display: inline-block;
+            margin-bottom: 25px;
+            color: #145da0;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .back-home:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 700px) {
+            .article-container {
+                padding: 0 16px 40px;
+                margin-top: 25px;
+            }
+
+            .article-header h1 {
+                font-size: 32px;
+            }
+
+            .article-content {
+                font-size: 16px;
+            }
+
+            .article-content h2 {
+                font-size: 26px;
+            }
+
+            .article-content h3 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="container">
+            <h1>M365Buddy</h1>
+
+            <nav>
+                <a href="../index.html">Home</a>
+                <a href="sharepoint-online-site-inventory.html">Articles</a>
+                <a href="../scripts/sharepoint-site-inventory.ps1">Scripts</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="article-container">
+
+        <a class="back-home" href="../index.html">
+            ← Back to M365Buddy Home
+        </a>
+
+        <section class="article-header">
+            <h1>Export All SharePoint Online Sites Using PnP PowerShell</h1>
+
+            <p class="article-intro">
+                Learn how to generate a SharePoint Online site inventory and
+                storage usage report using PnP PowerShell, Microsoft Entra ID
+                certificate authentication, SharePoint tenant commands, and CSV export.
+            </p>
+        </section>
+
+        <article class="article-content">
+
+            <div class="article-note">
+                <strong>Important:</strong>
+                This article is based on a SharePoint Online reporting script.
+                Before using it in production, review the permissions, certificate
+                configuration, SMTP settings, and security requirements with your
+                Microsoft 365 administrator.
+            </div>
+
+            <h2>What does this script do?</h2>
+
+            <p>
+                Managing a large SharePoint Online environment can be difficult
+                when site information is spread across different administration
+                pages. This PowerShell script creates a consolidated report
+                containing SharePoint site information, storage usage, site type,
+                web creation date, site collection administrators, SharePoint
+                owners, and Microsoft 365 Group visibility.
+            </p>
+
+            <p>The script performs the following activities:</p>
+
+            <ol>
+                <li>Connects to the SharePoint Online Admin Center.</li>
+                <li>Retrieves SharePoint Online site collections.</li>
+                <li>Excludes redirect sites.</li>
+                <li>Retrieves tenant storage allocation.</li>
+                <li>Processes each SharePoint site.</li>
+                <li>Connects to individual SharePoint sites.</li>
+                <li>Retrieves the root web creation date.</li>
+                <li>Retrieves SharePoint site collection administrators.</li>
+                <li>Retrieves members of the associated SharePoint Owner Group.</li>
+                <li>Identifies Microsoft 365 Group-connected sites.</li>
+                <li>Retrieves Microsoft 365 Group visibility as Public or Private.</li>
+                <li>Classifies the SharePoint site type.</li>
+                <li>Calculates storage usage in GB.</li>
+                <li>Exports the final results to CSV.</li>
+                <li>Validates the CSV columns.</li>
+                <li>Calculates storage utilization and over-utilization.</li>
+                <li>Sends an email containing the CSV attachment.</li>
+                <li>Deletes the temporary CSV after successful email delivery.</li>
+            </ol>
+
+            <h2>Prerequisites</h2>
+
+            <h3>1. PowerShell 7 or later</h3>
+
+            <p>
+                PowerShell 7 or later is required because the script uses
+                <code>ForEach-Object -Parallel</code> to process multiple sites.
+            </p>
+
+            <p>Check your PowerShell version:</p>
+
+            <pre><code>$PSVersionTable</code></pre>
+
+            <p>
+                Confirm that the <code>PSVersion</code> value is 7 or later.
+            </p>
+
+            <h3>2. PnP PowerShell</h3>
+
+            <p>
+                Install the PnP PowerShell module from PowerShell 7:
+            </p>
+
+            <pre><code>Install-Module PnP.PowerShell -Scope CurrentUser</code></pre>
+
+            <p>Verify that the module is installed:</p>
+
+            <pre><code>Get-Module PnP.PowerShell -ListAvailable</code></pre>
+
+            <p>Import the module:</p>
+
+            <pre><code>Import-Module PnP.PowerShell</code></pre>
+
+            <h3>3. Microsoft Entra ID application</h3>
+
+            <p>
+                The script uses an application registered in Microsoft Entra ID
+                for certificate-based app-only authentication.
+            </p>
+
+            <p>You will need:</p>
+
+            <ul>
+                <li>Microsoft Entra ID application registration</li>
+                <li>Application or Client ID</li>
+                <li>Tenant ID or tenant domain</li>
+                <li>Public certificate uploaded to the application</li>
+                <li>Private certificate available on the execution computer</li>
+                <li>PFX certificate password</li>
+                <li>Required SharePoint and Microsoft Graph permissions</li>
+                <li>Admin consent for the required permissions</li>
+            </ul>
+
+            <div class="article-link-box">
+                <strong>Related setup article:</strong>
+                <br><br>
+
+                <a href="entra-id-pnp-certificate-authentication.html">
+                    Register an Entra ID App for PnP PowerShell Certificate Authentication
+                </a>
+
+                <p>
+                    This linked article will explain application registration,
+                    certificate creation, certificate upload, API permissions,
+                    admin consent, and authentication testing.
+                </p>
+            </div>
+
+            <h3>4. Certificate file</h3>
+
+            <p>
+                The script requires a PFX certificate file. A PFX file normally
+                contains the certificate and private key protected by a password.
+            </p>
+
+            <p>Example certificate path:</p>
+
+            <pre><code>C:\Certificates\SharePointAutomationCert.pfx</code></pre>
+
+            <p>
+                The certificate path must be updated in the script before execution.
+            </p>
+
+            <h3>5. SMTP configuration</h3>
+
+            <p>
+                The script sends the report through an SMTP server. Your
+                organization must provide an approved SMTP relay or email
+                delivery method.
+            </p>
+
+            <p>Example configuration:</p>
+
+            <pre><code>$From = "SharePointReport@contoso.com"
+
+$To = @(
+    "admin@contoso.com"
+)
+
+$SmtpServer = "smtp.contoso.com"</code></pre>
+
+            <p>
+                Replace these example values with the SMTP details approved
+                for your environment.
+            </p>
+
+            <h3>6. Output folder</h3>
+
+            <p>
+                The script creates the output directory if it does not already exist.
+                The account running the script must have permission to write to this folder.
+            </p>
+
+            <pre><code>C:\Reports\SharePointSiteInventory</code></pre>
+
+            <h2>Configuration values</h2>
+
+            <p>
+                Before running the script, update the following values.
+                The values below are examples only.
+            </p>
+
+            <pre><code>$Tenant =
+    "contoso.onmicrosoft.com"
+
+$ClientId =
+    "YOUR-APPLICATION-CLIENT-ID"
+
+$PfxPath =
+    "C:\Certificates\SharePointAutomationCert.pfx"
+
+$PfxPassword =
+    ConvertTo-SecureString `
+        "YOUR-PFX-PASSWORD" `
+        -AsPlainText `
+        -Force
+
+$AdminCenterUrl =
+    "https://contoso-admin.sharepoint.com"
+
+$SharePointRootUrl =
+    "https://contoso.sharepoint.com"
+
+$OutputDirectory =
+    "C:\Reports\SharePointSiteInventory"
+
+$From =
+    "SharePointReport@contoso.com"
+
+$To = @(
+    "admin@contoso.com"
+)
+
+$SmtpServer =
+    "smtp.contoso.com"</code></pre>
+
+            <h2>How to execute the script</h2>
+
+            <h3>Step 1: Save the script</h3>
+
+            <p>
+                Save the PowerShell file with a name similar to:
+            </p>
+
+            <pre><code>Get-SharePointOnlineSiteInventory.ps1</code></pre>
+
+            <h3>Step 2: Open PowerShell 7</h3>
+
+            <p>
+                Open PowerShell 7 and navigate to the folder where the script is saved.
+            </p>
+
+            <pre><code>cd "C:\Scripts\SharePoint"</code></pre>
+
+            <h3>Step 3: Run the script</h3>
+
+            <pre><code>.\Get-SharePointOnlineSiteInventory.ps1</code></pre>
+
+            <p>
+                The script will display progress information while it retrieves
+                and processes the SharePoint sites.
+            </p>
+
+            <h3>Optional: Check execution policy</h3>
+
+            <p>
+                If PowerShell blocks the script, check the current execution policy:
+            </p>
+
+            <pre><code>Get-ExecutionPolicy</code></pre>
+
+            <p>
+                If permitted by your organization's security policy, you can
+                temporarily bypass the policy for the current PowerShell session:
+            </p>
+
+            <pre><code>Set-ExecutionPolicy `
+    -Scope Process `
+    -ExecutionPolicy Bypass</code></pre>
+
+            <p>Then run the script again:</p>
+
+            <pre><code>.\Get-SharePointOnlineSiteInventory.ps1</code></pre>
+
+            <h2>What results will be generated?</h2>
+
+            <p>
+                The script creates a CSV report containing the following nine columns:
+            </p>
+
+            <div class="article-table-wrapper">
+                <table class="article-table">
+                    <thead>
+                        <tr>
+                            <th>Column</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td><code>SiteName</code></td>
+                            <td>SharePoint site title.</td>
+                        </tr>
+
+                        <tr>
+                            <td><code>SiteUrl</code></td>
+                            <td>SharePoint site URL.</td>
+                        </tr>
+
+                        <tr>
+                            <td><code>SiteType</code></td>
+                            <td>Classified type of SharePoint site.</td>
+                        </tr>
+
+                        <tr>
+                            <td><code>Template</code></td>
+                            <td>SharePoint site template.</td>
+                        </tr>
+
+                        <tr>
+                            <td><code>WebCreatedDate</code></td>
+                            <td>Root web creation date.</td>
+                        </tr>
+
+                        <tr>
+                            <td><code>Office365Visibility</code></td>
+                            <td>Microsoft 365 Group visibility: Public or Private.</td>
+                        </tr>
+
+                        <tr>
+                            <td><code>StorageGB</code></td>
+                            <td>Current site storage usage in GB.</td>
+                        </tr>
+
+                        <tr>
+                            <td><code>SiteCollectionAdmins</code></td>
+                            <td>Site collection administrators.</td>
+                        </tr>
+
+                        <tr>
+                            <td><code>SPOwners</code></td>
+                            <td>Members of the associated SharePoint Owner Group.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>Example CSV output</h2>
+
+            <p>
+                The following is an example of what the report may look like.
+                The values are illustrative and will differ in your environment.
+            </p>
+
+            <div class="article-table-wrapper">
+                <table class="article-table">
+                    <thead>
+                        <tr>
+                            <th>SiteName</th>
+                            <th>SiteType</th>
+                            <th>WebCreatedDate</th>
+                            <th>Office365Visibility</th>
+                            <th>StorageGB</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>Finance Team</td>
+                            <td>Microsoft 365 Group / Teams Site</td>
+                            <td>2025-01-10</td>
+                            <td>Private</td>
+                            <td>125.40</td>
+                        </tr>
+
+                        <tr>
+                            <td>HR Portal</td>
+                            <td>Communication Site</td>
+                            <td>2024-08-20</td>
+                            <td>Not applicable</td>
+                            <td>54.20</td>
+                        </tr>
+
+                        <tr>
+                            <td>Project Alpha</td>
+                            <td>Modern Team Site</td>
+                            <td>2025-03-15</td>
+                            <td>Not applicable</td>
+                            <td>80.10</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>Storage calculation</h2>
+
+            <p>
+                SharePoint storage usage is reported in MB by the tenant-level
+                command. The script converts MB to GB using the following formula:
+            </p>
+
+            <pre><code>StorageGB = StorageUsageCurrent / 1024</code></pre>
+
+            <p>
+                Tenant allocated storage is also converted from MB to GB:
+            </p>
+
+            <pre><code>$TotalAllocatedStorageGB =
+    [Math]::Round(
+        ($TenantInfo.StorageQuota / 1024),
+        2
+    )</code></pre>
+
+            <p>
+                The script displays TB values only for reporting purposes.
+                The conversion used is:
+            </p>
+
+            <pre><code>1024 GB = 1 TB</code></pre>
+
+            <h2>Over-utilization calculation</h2>
+
+            <p>
+                The script calculates over-utilized storage using:
+            </p>
+
+            <pre><code>Over-Utilized Storage =
+Used Storage - Allocated Storage</code></pre>
+
+            <p>
+                The over-utilized percentage is calculated using:
+            </p>
+
+            <pre><code>Over-Utilized Percentage =
+(Over-Utilized Storage / Allocated Storage) * 100</code></pre>
+
+            <p>Example:</p>
+
+            <pre><code>Allocated storage = 157 TB
+Over-utilized storage = 358 TB
+
+358 / 157 * 100 = 228.03%</code></pre>
+
+            <p>
+                If the calculated over-utilized storage is negative, the script
+                sets the value to zero.
+            </p>
+
+            <h2>Site types detected by the script</h2>
+
+            <div class="article-table-wrapper">
+                <table class="article-table">
+                    <thead>
+                        <tr>
+                            <th>Site type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>Root Site</td>
+                            <td>The tenant root SharePoint site.</td>
+                        </tr>
+
+                        <tr>
+                            <td>Teams Private Channel Site</td>
+                            <td>Site created for a private Teams channel.</td>
+                        </tr>
+
+                        <tr>
+                            <td>Teams Shared Channel Site</td>
+                            <td>Site created for a shared Teams channel.</td>
+                        </tr>
+
+                        <tr>
+                            <td>Microsoft 365 Group / Teams Site</td>
+                            <td>Microsoft 365 Group-connected Teams site.</td>
+                        </tr>
+
+                        <tr>
+                            <td>Microsoft 365 Group Site</td>
+                            <td>Microsoft 365 Group-connected SharePoint site.</td>
+                        </tr>
+
+                        <tr>
+                            <td>Communication Site</td>
+                            <td>SharePoint Communication site.</td>
+                        </tr>
+
+                        <tr>
+                            <td>Modern Team Site</td>
+                            <td>Modern SharePoint team site.</td>
+                        </tr>
+
+                        <tr>
+                            <td>Classic Team Site</td>
+                            <td>Classic SharePoint team site.</td>
+                        </tr>
+
+                        <tr>
+                            <td>OneDrive Site</td>
+                            <td>OneDrive site.</td>
+                        </tr>
+
+                        <tr>
+                            <td>Other / Custom Site</td>
+                            <td>Site template not specifically classified by the script.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>Email report behavior</h2>
+
+            <p>
+                After creating the CSV, the script generates an HTML email summary.
+                The email includes:
+            </p>
+
+            <ul>
+                <li>Total SharePoint site count</li>
+                <li>Total storage used</li>
+                <li>Total allocated storage</li>
+                <li>Over-utilized storage</li>
+                <li>Over-utilized percentage</li>
+                <li>Microsoft 365 Group-connected site count</li>
+                <li>Public Microsoft 365 Group count</li>
+                <li>Private Microsoft 365 Group count</li>
+                <li>Report date</li>
+                <li>Report generation timestamp</li>
+            </ul>
+
+            <p>
+                The CSV is attached to the email. If the email is sent successfully,
+                the temporary CSV is deleted. If email delivery fails, the CSV is
+                retained so that it can be reviewed manually.
+            </p>
+
+            <h2>CSV validation</h2>
+
+            <p>
+                The script creates a final object containing only the approved
+                report columns. It then validates the CSV structure before and
+                after exporting the file.
+            </p>
+
+            <p>
+                This validation helps prevent unwanted columns such as
+                status, failed sites, Group ID, Microsoft 365 Group owners,
+                Teams channel type, or modification date fields from appearing
+                in the final report.
+            </p>
+
+            <h2>Troubleshooting</h2>
+
+            <h3>Certificate file not found</h3>
+
+            <p>
+                Check whether the certificate file exists:
+            </p>
+
+            <pre><code>Test-Path "C:\Certificates\SharePointAutomationCert.pfx"</code></pre>
+
+            <p>
+                If the result is <code>False</code>, correct the
+                <code>$PfxPath</code> value.
+            </p>
+
+            <h3>PnP PowerShell module not found</h3>
+
+            <p>
+                Check whether the module is installed:
+            </p>
+
+            <pre><code>Get-Module PnP.PowerShell -ListAvailable</code></pre>
+
+            <p>
+                If required, install it:
+            </p>
+
+            <pre><code>Install-Module PnP.PowerShell -Scope CurrentUser</code></pre>
+
+            <h3>Access denied</h3>
+
+            <p>Possible causes include:</p>
+
+            <ul>
+                <li>Admin consent was not granted.</li>
+                <li>The application has insufficient permissions.</li>
+                <li>The certificate does not match the certificate uploaded to Entra ID.</li>
+                <li>The wrong tenant or Client ID was entered.</li>
+                <li>The application cannot access the SharePoint site.</li>
+            </ul>
+
+            <h3>SMTP email failed</h3>
+
+            <p>Check the following:</p>
+
+            <ul>
+                <li>SMTP server name</li>
+                <li>Sender address</li>
+                <li>Recipient address</li>
+                <li>SMTP relay permissions</li>
+                <li>Firewall access</li>
+                <li>Required SMTP port</li>
+                <li>SMTP authentication requirements</li>
+                <li>Whether the sender is permitted to relay</li>
+            </ul>
+
+            <h2>Security recommendations</h2>
+
+            <div class="article-security">
+                <strong>Never publish confidential tenant information.</strong>
+
+                <p>
+                    Before uploading the script to GitHub or publishing it on a
+                    public website, remove or replace:
+                </p>
+
+                <ul>
+                    <li>Real tenant names</li>
+                    <li>Real tenant IDs</li>
+                    <li>Real Client IDs, if your organization considers them confidential</li>
+                    <li>Internal SMTP server names</li>
+                    <li>Internal email addresses</li>
+                    <li>Local certificate paths</li>
+                    <li>Certificate passwords</li>
+                    <li>Client secrets</li>
+                    <li>Private certificate files such as PFX files</li>
+                </ul>
+            </div>
+
+            <p>
+                For production automation, store certificate passwords and other
+                secrets in an approved secret-management solution such as Azure
+                Key Vault, Azure Automation encrypted variables, or another
+                enterprise-approved platform.
+            </p>
+
+            <h2>Download the PowerShell script</h2>
+
+            <div class="article-link-box">
+                <p>
+                    Download the sanitized PowerShell script from the M365Buddy
+                    scripts section:
+                </p>
+
+                <a href="../scripts/sharepoint-site-inventory.ps1" download>
+                    Download SharePoint Online Site Inventory PowerShell Script
+                </a>
+            </div>
+
+            <h2>Related articles</h2>
+
+            <ul>
+                <li>
+                    <a href="entra-id-pnp-certificate-authentication.html">
+                        Register an Entra ID App for PnP PowerShell Certificate Authentication
+                    </a>
+                </li>
+
+                <li>
+                    <a href="../index.html">
+                        Back to M365Buddy Home
+                    </a>
+                </li>
+            </ul>
+
+        </article>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>
+                © 2026 M365Buddy. SharePoint, Microsoft 365 and PowerShell learning resources.
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>
