@@ -1,2341 +1,2873 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0">
-
-    <title>Script Workspace | M365Buddy</title>
-
-    <link
-        rel="icon"
-        type="image/svg+xml"
-        href="favicon.svg">
-
-    <link
-        rel="stylesheet"
-        href="style.css">
-
-
-<style>
-
-/* ============================================================
-   M365BUDDY SCRIPT WORKSPACE V2
-   ============================================================ */
-
-* {
-    box-sizing: border-box;
-}
-
-html,
-body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    overflow: hidden;
-}
-
-body {
-    background: #f5f7fa;
-}
-
-
-/* ============================================================
-   PAGE
-   ============================================================ */
-
-.workspace-page {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-
-/* ============================================================
-   HEADER
-   ============================================================ */
-
-.workspace-header {
-    flex: 0 0 auto;
-    padding: 16px 24px;
-    background: #ffffff;
-    border-bottom: 1px solid #dfe3e8;
-}
-
-.workspace-header h1 {
-    margin: 0 0 4px;
-    font-size: 24px;
-}
-
-.workspace-header p {
-    margin: 0;
-    color: #667085;
-    font-size: 13px;
-}
-
-
-/* ============================================================
-   MAIN WORKSPACE
-   ============================================================ */
-
-.workspace {
-    flex: 1;
-    min-height: 0;
-    display: flex;
-    overflow: hidden;
-}
-
-
-/* ============================================================
-   SIDEBAR
-   ============================================================ */
-
-.sidebar {
-    width: 280px;
-    min-width: 280px;
-
-    display: flex;
-    flex-direction: column;
-
-    background: #fafbfc;
-
-    border-right: 1px solid #dfe3e8;
-
-    overflow: hidden;
-}
-
-.sidebar-top {
-    flex: 0 0 auto;
-
-    padding: 14px;
-
-    border-bottom: 1px solid #e1e5ea;
-}
-
-.sidebar-title {
-    font-size: 14px;
-    font-weight: 700;
-    margin-bottom: 10px;
-}
-
-.script-search {
-    width: 100%;
-
-    padding: 9px 11px;
-
-    border: 1px solid #cfd5dc;
-    border-radius: 6px;
-
-    font-size: 13px;
-
-    outline: none;
-}
-
-.script-search:focus {
-    border-color: #2563eb;
-}
-
-
-.script-list {
-    flex: 1;
-
-    min-height: 0;
-
-    overflow-y: auto;
-
-    padding: 8px;
-}
-
-
-.script-section-title {
-    padding: 7px 8px;
-
-    font-size: 11px;
-
-    font-weight: 700;
-
-    color: #667085;
-
-    text-transform: uppercase;
-
-    letter-spacing: 0.04em;
-}
-
-
-.script-item {
-    padding: 10px 11px;
-
-    margin-bottom: 3px;
-
-    border-radius: 6px;
-
-    cursor: pointer;
-
-    font-size: 13px;
-
-    color: #344054;
-
-    border: 1px solid transparent;
-}
-
-.script-item:hover {
-    background: #eef2f6;
-}
-
-.script-item.active {
-    background: #e8f0fe;
-
-    border-color: #c7d7f7;
-
-    color: #174ea6;
-}
-
-.script-item-title {
-    font-weight: 600;
-}
-
-.script-item-type {
-    font-size: 10px;
-
-    margin-top: 3px;
-
-    color: #667085;
-}
-
-
-.sidebar-bottom {
-    flex: 0 0 auto;
-
-    padding: 10px;
-
-    border-top: 1px solid #dfe3e8;
-}
-
-.new-script-button {
-    width: 100%;
-
-    padding: 10px 12px;
-
-    border: none;
-
-    border-radius: 6px;
-
-    background: #2563eb;
-
-    color: white;
-
-    font-weight: 600;
-
-    cursor: pointer;
-}
-
-.new-script-button:hover {
-    background: #1d4ed8;
-}
-
-
-/* ============================================================
-   MAIN AREA
-   ============================================================ */
-
-.workspace-main {
-    flex: 1;
-
-    min-width: 0;
-    min-height: 0;
-
-    display: flex;
-
-    flex-direction: column;
-
-    overflow: hidden;
-}
-
-
-/* ============================================================
-   TABS
-   ============================================================ */
-
-.tabs {
-    flex: 0 0 42px;
-
-    display: flex;
-
-    align-items: stretch;
-
-    border-bottom: 1px solid #dfe3e8;
-
-    background: #f7f8fa;
-
-    overflow-x: auto;
-
-    overflow-y: hidden;
-}
-
-.tab {
-    display: flex;
-
-    align-items: center;
-
-    padding: 0 15px;
-
-    border-right: 1px solid #dfe3e8;
-
-    cursor: pointer;
-
-    font-size: 12px;
-
-    white-space: nowrap;
-
-    color: #667085;
-
-    background: #f7f8fa;
-}
-
-.tab:hover {
-    background: #ffffff;
-}
-
-.tab.active {
-    background: #ffffff;
-
-    color: #1d2939;
-
-    font-weight: 600;
-
-    border-top: 2px solid #2563eb;
-}
-
-
-/* ============================================================
-   TOOLBAR
-   ============================================================ */
-
-.toolbar {
-    flex: 0 0 auto;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 6px;
-
-    padding: 7px 10px;
-
-    border-bottom: 1px solid #dfe3e8;
-
-    background: #ffffff;
-
-    flex-wrap: wrap;
-}
-
-.toolbar button {
-    padding: 6px 10px;
-
-    border: 1px solid #cfd5dc;
-
-    border-radius: 5px;
-
-    background: #ffffff;
-
-    color: #344054;
-
-    cursor: pointer;
-
-    font-size: 12px;
-}
-
-.toolbar button:hover {
-    background: #f2f4f7;
-}
-
-.toolbar button.primary {
-    background: #2563eb;
-
-    border-color: #2563eb;
-
-    color: white;
-}
-
-.toolbar button.primary:hover {
-    background: #1d4ed8;
-}
-
-.toolbar button.danger {
-    color: #b42318;
-}
-
-.toolbar button:disabled {
-    opacity: 0.5;
-
-    cursor: not-allowed;
-}
-
-.toolbar-spacer {
-    flex: 1;
-}
-
-
-/* ============================================================
-   FIND
-   ============================================================ */
-
-.find-box {
-    width: 180px;
-
-    padding: 6px 9px;
-
-    border: 1px solid #cfd5dc;
-
-    border-radius: 5px;
-
-    font-size: 12px;
-
-    outline: none;
-}
-
-.find-box:focus {
-    border-color: #2563eb;
-}
-
-.find-count {
-    font-size: 11px;
-
-    color: #667085;
-
-    min-width: 45px;
-
-    text-align: center;
-}
-
-
-/* ============================================================
-   EDITOR SETTINGS
-   ============================================================ */
-
-.editor-settings {
-    flex: 0 0 auto;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 7px;
-
-    padding: 6px 10px;
-
-    background: #fafafa;
-
-    border-bottom: 1px solid #dfe3e8;
-
-    font-size: 11px;
-
-    color: #667085;
-}
-
-.editor-settings select {
-    padding: 5px 7px;
-
-    border: 1px solid #cfd5dc;
-
-    border-radius: 4px;
-
-    font-size: 11px;
-
-    background: white;
-}
-
-
-/* ============================================================
-   EDITOR AREA
-   ============================================================ */
-
-.editor-container {
-    flex: 1;
-
-    min-height: 0;
-
-    position: relative;
-
-    overflow: hidden;
-
-    background: #1e1e1e;
-}
-
-
-/*
-   The highlight layer sits behind the textarea.
-
-   The textarea itself remains the real editable control.
-*/
-
-.highlight-layer,
-#scriptEditor {
-    position: absolute;
-
-    top: 0;
-    left: 0;
-
-    width: 100%;
-    height: 100%;
-
-    margin: 0;
-
-    padding: 18px 20px;
-
-    border: none;
-
-    font-family: Consolas, "Courier New", monospace;
-
-    font-size: 14px;
-
-    line-height: 1.55;
-
-    tab-size: 4;
-
-    white-space: pre-wrap;
-
-    word-wrap: break-word;
-
-    overflow: auto;
-}
-
-
-.highlight-layer {
-    z-index: 1;
-
-    pointer-events: none;
-
-    color: #d4d4d4;
-
-    background: #1e1e1e;
-}
-
-
-#scriptEditor {
-    z-index: 2;
-
-    resize: none;
-
-    outline: none;
-
-    background: transparent;
-
-    color: #d4d4d4;
-
-    caret-color: white;
-
-    overflow: auto;
-}
-
-
-#scriptEditor::selection {
-    background: rgba(37, 99, 235, 0.55);
-}
-
-
-.highlight {
-    background: #facc15;
-
-    color: #111827;
-
-    border-radius: 2px;
-}
-
-
-/* ============================================================
-   LIGHT EDITOR
-   ============================================================ */
-
-.editor-container.light {
-    background: #ffffff;
-}
-
-.editor-container.light .highlight-layer {
-    background: #ffffff;
-
-    color: #1f2937;
-}
-
-.editor-container.light #scriptEditor {
-    color: #1f2937;
-
-    caret-color: #111827;
-}
-
-
-/* ============================================================
-   STATUS BAR
-   ============================================================ */
-
-.editor-status {
-    flex: 0 0 28px;
-
-    display: flex;
-
-    align-items: center;
-
-    padding: 0 11px;
-
-    background: #f7f8fa;
-
-    border-top: 1px solid #dfe3e8;
-
-    color: #667085;
-
-    font-size: 11px;
-}
-
-
-/* ============================================================
-   TOAST NOTIFICATION
-   ============================================================ */
-
-.toast {
-    position: fixed;
-
-    right: 22px;
-
-    bottom: 22px;
-
-    z-index: 1000;
-
-    padding: 10px 16px;
-
-    background: #1f2937;
-
-    color: white;
-
-    border-radius: 7px;
-
-    box-shadow:
-        0 6px 20px rgba(0,0,0,0.18);
-
-    font-size: 13px;
-
-    opacity: 0;
-
-    transform: translateY(10px);
-
-    pointer-events: none;
-
-    transition:
-        opacity 0.2s ease,
-        transform 0.2s ease;
-}
-
-.toast.show {
-    opacity: 1;
-
-    transform: translateY(0);
-}
-
-
-/* ============================================================
-   MODAL
-   ============================================================ */
-
-.modal-overlay {
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 2000;
-
-    background: rgba(0,0,0,0.45);
-
-    display: none;
-
-    align-items: center;
-
-    justify-content: center;
-}
-
-.modal-overlay.show {
-    display: flex;
-}
-
-.modal {
-    width: min(500px, 90vw);
-
-    background: white;
-
-    border-radius: 10px;
-
-    box-shadow:
-        0 20px 50px rgba(0,0,0,0.2);
-
-    padding: 22px;
-}
-
-.modal h2 {
-    margin: 0 0 16px;
-
-    font-size: 18px;
-}
-
-.modal-option {
-    padding: 14px;
-
-    margin-bottom: 10px;
-
-    border: 1px solid #dfe3e8;
-
-    border-radius: 7px;
-
-    cursor: pointer;
-}
-
-.modal-option:hover {
-    background: #f5f7fa;
-
-    border-color: #2563eb;
-}
-
-.modal-option strong {
-    display: block;
-
-    margin-bottom: 4px;
-}
-
-.modal-option span {
-    font-size: 12px;
-
-    color: #667085;
-}
-
-.modal-close {
-    margin-top: 5px;
-
-    padding: 8px 13px;
-
-    border: 1px solid #cfd5dc;
-
-    border-radius: 5px;
-
-    background: white;
-
-    cursor: pointer;
-}
-
-
-/* ============================================================
-   MOBILE
-   ============================================================ */
-
-@media (max-width: 850px) {
-
-    html,
-    body {
-        overflow: auto;
-    }
-
-    .workspace-page {
-        height: auto;
-
-        min-height: 100vh;
-
-        overflow: visible;
-    }
-
-    .workspace {
-        height: auto;
-
-        min-height: 0;
-
-        flex-direction: column;
-
-        overflow: visible;
-    }
-
-    .sidebar {
-        width: 100%;
-
-        min-width: 0;
-
-        max-height: 260px;
-
-        border-right: none;
-
-        border-bottom: 1px solid #dfe3e8;
-    }
-
-    .script-list {
-        max-height: 120px;
-    }
-
-    .workspace-main {
-        height: 75vh;
-
-        min-height: 500px;
-    }
-
-    .toolbar-spacer {
-        display: none;
-    }
-
-    .find-box {
-        width: 140px;
-    }
-}
-
-</style>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>M365Buddy Script Workspace</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+    <style>
+        :root {
+            --page-bg: #f4f7fb;
+            --panel-bg: #ffffff;
+            --panel-border: #d9e1ec;
+            --text: #172033;
+            --muted: #667085;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --danger: #dc2626;
+            --danger-hover: #b91c1c;
+            --input-bg: #ffffff;
+            --toolbar-bg: #f8fafc;
+            --tab-bg: #eef2f7;
+            --tab-active: #ffffff;
+            --shadow: 0 8px 30px rgba(15, 23, 42, 0.08);
+
+            --editor-bg: #ffffff;
+            --editor-text: #172033;
+            --editor-caret: #2563eb;
+
+            --match-bg: #fde68a;
+            --match-text: #111827;
+            --current-match-bg: #f59e0b;
+            --current-match-text: #111827;
+        }
+
+        html.dark {
+            --page-bg: #0b1120;
+            --panel-bg: #111827;
+            --panel-border: #273449;
+            --text: #e5e7eb;
+            --muted: #94a3b8;
+            --primary: #60a5fa;
+            --primary-hover: #93c5fd;
+            --danger: #f87171;
+            --danger-hover: #fca5a5;
+            --input-bg: #0f172a;
+            --toolbar-bg: #0f172a;
+            --tab-bg: #172033;
+            --tab-active: #1e293b;
+            --shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
+
+            --editor-bg: #0f172a;
+            --editor-text: #e5e7eb;
+            --editor-caret: #60a5fa;
+
+            /*
+             * Purple/blue instead of yellow in dark mode so that
+             * highlighted PowerShell text remains readable.
+             */
+            --match-bg: #4f46e5;
+            --match-text: #ffffff;
+            --current-match-bg: #22c55e;
+            --current-match-text: #07130a;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            overflow: hidden;
+            background: var(--page-bg);
+            color: var(--text);
+            font-family:
+                Inter,
+                Segoe UI,
+                Roboto,
+                Helvetica,
+                Arial,
+                sans-serif;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .workspace-page {
+            width: 100%;
+            height: 100dvh;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--page-bg);
+        }
+
+        /* =========================================================
+           HEADER
+           ========================================================= */
+
+        .workspace-header {
+            flex: 0 0 68px;
+            height: 68px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 10px 18px;
+            background: var(--panel-bg);
+            border-bottom: 1px solid var(--panel-border);
+            box-shadow: 0 1px 4px rgba(15, 23, 42, 0.05);
+            z-index: 10;
+        }
+
+        .header-left {
+            min-width: 0;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .home-button {
+            flex: 0 0 auto;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            min-height: 38px;
+            padding: 8px 13px;
+            border: 1px solid var(--panel-border);
+            border-radius: 8px;
+            background: var(--panel-bg);
+            color: var(--text);
+            font-weight: 600;
+            transition: 0.15s ease;
+        }
+
+        .home-button:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .header-title {
+            min-width: 0;
+        }
+
+        .header-title h1 {
+            margin: 0;
+            font-size: 19px;
+            line-height: 1.25;
+            font-weight: 700;
+        }
+
+        .header-title p {
+            margin: 2px 0 0;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.3;
+        }
+
+        .header-right {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* =========================================================
+           MAIN WORKSPACE
+           ========================================================= */
+
+        .workspace {
+            flex: 1 1 auto;
+            min-height: 0;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* =========================================================
+           SIDEBAR
+           ========================================================= */
+
+        .sidebar {
+            flex: 0 0 270px;
+            width: 270px;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            background: var(--panel-bg);
+            border-right: 1px solid var(--panel-border);
+        }
+
+        .sidebar-header {
+            flex: 0 0 auto;
+            padding: 14px 14px 10px;
+        }
+
+        .sidebar-title-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-title {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .script-count {
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .sidebar-search {
+            width: 100%;
+            height: 36px;
+            padding: 7px 10px;
+            border: 1px solid var(--panel-border);
+            border-radius: 7px;
+            outline: none;
+            background: var(--input-bg);
+            color: var(--text);
+        }
+
+        .sidebar-search:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.12);
+        }
+
+        .script-list {
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-y: auto;
+            padding: 4px 8px 10px;
+        }
+
+        .script-section-label {
+            padding: 9px 8px 6px;
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .script-item {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 42px;
+            padding: 8px 10px;
+            margin-bottom: 3px;
+            border: 1px solid transparent;
+            border-radius: 7px;
+            background: transparent;
+            color: var(--text);
+            text-align: left;
+            transition: 0.12s ease;
+        }
+
+        .script-item:hover {
+            background: var(--toolbar-bg);
+        }
+
+        .script-item.active {
+            background: rgba(37, 99, 235, 0.1);
+            border-color: rgba(37, 99, 235, 0.2);
+            color: var(--primary);
+        }
+
+        .script-item-icon {
+            flex: 0 0 auto;
+            font-size: 15px;
+        }
+
+        .script-item-text {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .script-item-name {
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .script-item-type {
+            display: block;
+            margin-top: 2px;
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        .sidebar-footer {
+            flex: 0 0 auto;
+            padding: 10px;
+            border-top: 1px solid var(--panel-border);
+        }
+
+        .new-script-button {
+            width: 100%;
+            min-height: 40px;
+            border: 0;
+            border-radius: 8px;
+            background: var(--primary);
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 700;
+            transition: 0.15s ease;
+        }
+
+        .new-script-button:hover {
+            background: var(--primary-hover);
+        }
+
+        .sidebar-note {
+            margin: 8px 2px 0;
+            color: var(--muted);
+            font-size: 10px;
+            line-height: 1.45;
+        }
+
+        /* =========================================================
+           MAIN EDITOR AREA
+           ========================================================= */
+
+        .workspace-main {
+            flex: 1 1 auto;
+            min-width: 0;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* =========================================================
+           TABS
+           ========================================================= */
+
+        .tabs {
+            flex: 0 0 42px;
+            min-width: 0;
+            height: 42px;
+            display: flex;
+            align-items: stretch;
+            gap: 3px;
+            padding: 4px 6px 0;
+            overflow-x: auto;
+            overflow-y: hidden;
+            background: var(--toolbar-bg);
+            border-bottom: 1px solid var(--panel-border);
+        }
+
+        .tabs::-webkit-scrollbar {
+            height: 5px;
+        }
+
+        .tabs::-webkit-scrollbar-thumb {
+            background: var(--panel-border);
+            border-radius: 10px;
+        }
+
+        .tab {
+            flex: 0 0 auto;
+            max-width: 250px;
+            min-width: 120px;
+            height: 37px;
+            display: flex;
+            align-items: center;
+            border: 1px solid transparent;
+            border-bottom: 0;
+            border-radius: 7px 7px 0 0;
+            background: var(--tab-bg);
+            color: var(--muted);
+        }
+
+        .tab.active {
+            background: var(--tab-active);
+            border-color: var(--panel-border);
+            color: var(--text);
+        }
+
+        .tab-main {
+            min-width: 0;
+            flex: 1;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 0 8px 0 10px;
+            border: 0;
+            background: transparent;
+            color: inherit;
+            text-align: left;
+        }
+
+        .tab-name {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .tab-copy-indicator {
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        .tab-close {
+            flex: 0 0 auto;
+            width: 28px;
+            height: 28px;
+            margin-right: 3px;
+            border: 0;
+            border-radius: 5px;
+            background: transparent;
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1;
+        }
+
+        .tab-close:hover {
+            background: rgba(220, 38, 38, 0.1);
+            color: var(--danger);
+        }
+
+        /* =========================================================
+           TOOLBAR
+           ========================================================= */
+
+        .toolbar {
+            flex: 0 0 auto;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 10px;
+            background: var(--panel-bg);
+            border-bottom: 1px solid var(--panel-border);
+        }
+
+        .toolbar-group {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .toolbar-spacer {
+            flex: 1;
+        }
+
+        .tool-button,
+        .select-control,
+        .find-input {
+            height: 32px;
+            border: 1px solid var(--panel-border);
+            border-radius: 6px;
+            background: var(--input-bg);
+            color: var(--text);
+        }
+
+        .tool-button {
+            padding: 0 9px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .tool-button:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .tool-button.primary {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #ffffff;
+        }
+
+        .tool-button.primary:hover {
+            background: var(--primary-hover);
+            border-color: var(--primary-hover);
+        }
+
+        .tool-button.danger:hover {
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        .select-control {
+            padding: 0 7px;
+            font-size: 11px;
+            outline: none;
+        }
+
+        .find-wrapper {
+            min-width: 210px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .find-input {
+            width: 100%;
+            min-width: 0;
+            padding: 0 9px;
+            outline: none;
+            font-size: 11px;
+        }
+
+        .find-input:focus {
+            border-color: var(--primary);
+        }
+
+        .find-count {
+            flex: 0 0 auto;
+            min-width: 46px;
+            color: var(--muted);
+            font-size: 10px;
+            text-align: center;
+        }
+
+        /* =========================================================
+           EDITOR
+           ========================================================= */
+
+        .editor-shell {
+            flex: 1 1 auto;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            background: var(--editor-bg);
+        }
+
+        .editor-statusbar {
+            flex: 0 0 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 0 10px;
+            border-bottom: 1px solid var(--panel-border);
+            background: var(--toolbar-bg);
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        .editor-container {
+            --editor-font-size: 13px;
+            --editor-line-height: 1.55;
+            --editor-font-family: "Cascadia Code", "Consolas", "Courier New", monospace;
+
+            position: relative;
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow: hidden;
+            background: var(--editor-bg);
+        }
+
+        /*
+         * IMPORTANT:
+         *
+         * The highlight layer and textarea use exactly the same
+         * typography, padding, white-space and sizing.
+         *
+         * The textarea's actual text is transparent. Therefore only
+         * one copy of the text is visually rendered, eliminating the
+         * "double text / overlap" problem.
+         */
+
+        .highlight-layer,
+        .script-editor {
+            position: absolute;
+            inset: 0;
+
+            width: 100%;
+            height: 100%;
+
+            margin: 0;
+            padding: 18px 20px;
+
+            border: 0;
+            outline: 0;
+
+            box-sizing: border-box;
+
+            font-family: var(--editor-font-family);
+            font-size: var(--editor-font-size);
+            font-weight: 400;
+            line-height: var(--editor-line-height);
+            letter-spacing: normal;
+
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            word-break: normal;
+
+            tab-size: 4;
+        }
+
+        .highlight-layer {
+            z-index: 1;
+            overflow: auto;
+            pointer-events: none;
+            color: var(--editor-text);
+            background: var(--editor-bg);
+
+            /*
+             * Hide its scrollbar because the textarea is the actual
+             * editing/scrolling surface.
+             */
+            scrollbar-width: none;
+        }
+
+        .highlight-layer::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
+
+        .script-editor {
+            z-index: 2;
+            resize: none;
+            overflow: auto;
+
+            background: transparent;
+
+            /*
+             * Do NOT render textarea text. The synchronized
+             * highlight layer renders it.
+             */
+            color: transparent;
+
+            /*
+             * Keep the insertion caret visible.
+             */
+            caret-color: var(--editor-caret);
+
+            -webkit-text-fill-color: transparent;
+        }
+
+        .script-editor::selection {
+            background: rgba(96, 165, 250, 0.18);
+            color: transparent;
+        }
+
+        .script-editor:focus {
+            outline: none;
+        }
+
+        .highlight-layer mark {
+            padding: 0;
+            margin: 0;
+            border-radius: 2px;
+            background: var(--match-bg);
+            color: var(--match-text);
+            box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.08);
+        }
+
+        .highlight-layer mark.current-match {
+            background: var(--current-match-bg);
+            color: var(--current-match-text);
+            box-shadow:
+                inset 0 0 0 1px rgba(0, 0, 0, 0.18),
+                0 0 0 1px rgba(255, 255, 255, 0.15);
+        }
+
+        .empty-editor-message {
+            position: absolute;
+            z-index: 3;
+            top: 18px;
+            left: 20px;
+            color: var(--muted);
+            font-size: 12px;
+            pointer-events: none;
+        }
+
+        /* =========================================================
+           MODAL
+           ========================================================= */
+
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+
+            display: none;
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(3px);
+        }
+
+        .modal-backdrop.visible {
+            display: flex;
+        }
+
+        .modal {
+            width: min(540px, 100%);
+            max-height: min(680px, calc(100dvh - 40px));
+
+            display: flex;
+            flex-direction: column;
+
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .modal-header {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+
+            padding: 15px 17px;
+            border-bottom: 1px solid var(--panel-border);
+        }
+
+        .modal-title {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border: 0;
+            border-radius: 6px;
+            background: transparent;
+            color: var(--muted);
+            font-size: 20px;
+        }
+
+        .modal-close:hover {
+            background: var(--toolbar-bg);
+            color: var(--text);
+        }
+
+        .modal-body {
+            min-height: 0;
+            overflow-y: auto;
+            padding: 17px;
+        }
+
+        .modal-description {
+            margin: 0 0 14px;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.55;
+        }
+
+        .modal-options {
+            display: grid;
+            gap: 9px;
+        }
+
+        .modal-option {
+            width: 100%;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+
+            padding: 13px;
+
+            border: 1px solid var(--panel-border);
+            border-radius: 9px;
+
+            background: var(--panel-bg);
+            color: var(--text);
+
+            text-align: left;
+            transition: 0.15s ease;
+        }
+
+        .modal-option:hover {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        .modal-option-icon {
+            flex: 0 0 auto;
+            width: 34px;
+            height: 34px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 8px;
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+            font-size: 17px;
+        }
+
+        .modal-option-content {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .modal-option-title {
+            display: block;
+            margin-bottom: 3px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .modal-option-description {
+            display: block;
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.45;
+        }
+
+        .modal-footer {
+            flex: 0 0 auto;
+            display: flex;
+            justify-content: flex-end;
+            gap: 7px;
+
+            padding: 11px 17px;
+            border-top: 1px solid var(--panel-border);
+            background: var(--toolbar-bg);
+        }
+
+        .modal-script-list {
+            display: grid;
+            gap: 7px;
+        }
+
+        .modal-script-item {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            padding: 11px;
+
+            border: 1px solid var(--panel-border);
+            border-radius: 8px;
+
+            background: var(--panel-bg);
+            color: var(--text);
+
+            text-align: left;
+        }
+
+        .modal-script-item:hover {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        .modal-script-item-icon {
+            flex: 0 0 auto;
+            font-size: 15px;
+        }
+
+        .modal-script-item-text {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .modal-script-item-name {
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .modal-script-item-description {
+            display: block;
+            margin-top: 2px;
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        /* =========================================================
+           TOAST
+           ========================================================= */
+
+        .toast-container {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            z-index: 2000;
+
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+
+            pointer-events: none;
+        }
+
+        .toast {
+            min-width: 220px;
+            max-width: 360px;
+
+            padding: 10px 13px;
+
+            border: 1px solid var(--panel-border);
+            border-radius: 8px;
+
+            background: var(--panel-bg);
+            color: var(--text);
+
+            box-shadow: var(--shadow);
+
+            font-size: 11px;
+            line-height: 1.4;
+
+            opacity: 0;
+            transform: translateY(8px);
+
+            transition:
+                opacity 0.18s ease,
+                transform 0.18s ease;
+        }
+
+        .toast.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast.success {
+            border-left: 4px solid #22c55e;
+        }
+
+        .toast.info {
+            border-left: 4px solid var(--primary);
+        }
+
+        .toast.warning {
+            border-left: 4px solid #f59e0b;
+        }
+
+        .toast.error {
+            border-left: 4px solid var(--danger);
+        }
+
+        /* =========================================================
+           RESPONSIVE
+           ========================================================= */
+
+        @media (max-width: 900px) {
+            .sidebar {
+                flex-basis: 230px;
+                width: 230px;
+            }
+
+            .toolbar {
+                flex-wrap: wrap;
+                min-height: 48px;
+            }
+
+            .toolbar-spacer {
+                display: none;
+            }
+
+            .find-wrapper {
+                min-width: 180px;
+                flex: 1 1 180px;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .workspace-header {
+                flex-basis: 62px;
+                height: 62px;
+                padding: 8px 10px;
+            }
+
+            .header-title h1 {
+                font-size: 16px;
+            }
+
+            .header-title p {
+                display: none;
+            }
+
+            .home-button {
+                padding: 7px 9px;
+            }
+
+            .workspace {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                flex: 0 0 190px;
+                width: 100%;
+                height: 190px;
+                border-right: 0;
+                border-bottom: 1px solid var(--panel-border);
+            }
+
+            .sidebar-header {
+                padding: 8px 10px 6px;
+            }
+
+            .script-list {
+                padding: 2px 8px 7px;
+            }
+
+            .sidebar-footer {
+                padding: 7px 10px;
+            }
+
+            .sidebar-note {
+                display: none;
+            }
+
+            .tabs {
+                flex-basis: 40px;
+                height: 40px;
+            }
+
+            .toolbar {
+                max-height: 100px;
+                overflow-y: auto;
+                padding: 6px;
+            }
+
+            .tool-button {
+                padding: 0 7px;
+            }
+
+            .editor-statusbar {
+                display: none;
+            }
+
+            .highlight-layer,
+            .script-editor {
+                padding: 14px;
+            }
+        }
+    </style>
 </head>
-
 
 <body>
 
-
 <div class="workspace-page">
 
-
-    <!-- ======================================================
+    <!-- =========================================================
          HEADER
-         ====================================================== -->
+         ========================================================= -->
 
     <header class="workspace-header">
 
-        <h1>
-            Script Workspace
-        </h1>
+        <div class="header-left">
 
-        <p>
-            Open, edit, search and save your PowerShell scripts.
-        </p>
+            <button
+                type="button"
+                id="homeButton"
+                class="home-button"
+                title="Open M365Buddy home page"
+            >
+                ← M365Buddy
+            </button>
+
+            <div class="header-title">
+                <h1>Script Workspace</h1>
+                <p>Edit, save and manage your M365Buddy PowerShell scripts.</p>
+            </div>
+
+        </div>
+
+        <div class="header-right">
+
+            <button
+                type="button"
+                id="themeButton"
+                class="tool-button"
+                title="Switch dark/light theme"
+            >
+                🌙 Dark
+            </button>
+
+        </div>
 
     </header>
 
 
-    <!-- ======================================================
+    <!-- =========================================================
          WORKSPACE
-         ====================================================== -->
+         ========================================================= -->
 
-    <div class="workspace">
+    <main class="workspace">
 
-
-        <!-- ==================================================
-             SIDEBAR
-             ================================================== -->
+        <!-- =====================================================
+             LEFT SIDEBAR
+             ===================================================== -->
 
         <aside class="sidebar">
 
+            <div class="sidebar-header">
 
-            <div class="sidebar-top">
-
-                <div class="sidebar-title">
-                    Scripts
+                <div class="sidebar-title-row">
+                    <h2 class="sidebar-title">Scripts</h2>
+                    <span id="scriptCount" class="script-count">0</span>
                 </div>
 
                 <input
-                    type="text"
-                    id="scriptSearch"
-                    class="script-search"
+                    type="search"
+                    id="sidebarSearch"
+                    class="sidebar-search"
                     placeholder="Search scripts..."
-                    autocomplete="off">
+                    autocomplete="off"
+                >
 
             </div>
 
 
-            <div
-                id="scriptList"
-                class="script-list">
-            </div>
+            <div id="scriptList" class="script-list"></div>
 
 
-            <div class="sidebar-bottom">
+            <div class="sidebar-footer">
 
                 <button
+                    type="button"
                     id="newScriptButton"
-                    class="new-script-button">
-
+                    class="new-script-button"
+                >
                     + Create New Script
-
                 </button>
 
-            </div>
+                <p class="sidebar-note">
+                    Editable copies are kept in the top tabs and are not repeated
+                    in this list.
+                </p>
 
+            </div>
 
         </aside>
 
 
-        <!-- ==================================================
-             MAIN
-             ================================================== -->
+        <!-- =====================================================
+             MAIN EDITOR
+             ===================================================== -->
 
         <section class="workspace-main">
 
-
-            <!-- TABS -->
-
-            <div
-                id="tabs"
-                class="tabs">
-            </div>
+            <!-- Tabs -->
+            <div id="tabs" class="tabs"></div>
 
 
-            <!-- TOOLBAR -->
-
+            <!-- Toolbar -->
             <div class="toolbar">
 
+                <div class="toolbar-group">
 
-                <button
-                    id="editCopyButton"
-                    class="primary">
+                    <button
+                        type="button"
+                        id="saveButton"
+                        class="tool-button primary"
+                        title="Save current script"
+                    >
+                        Save
+                    </button>
 
-                    Create Editable Copy
+                    <button
+                        type="button"
+                        id="copyButton"
+                        class="tool-button"
+                        title="Copy entire script"
+                    >
+                        Copy
+                    </button>
 
-                </button>
+                    <button
+                        type="button"
+                        id="downloadButton"
+                        class="tool-button"
+                        title="Download script"
+                    >
+                        Download
+                    </button>
 
-
-                <button id="saveButton">
-                    Save
-                </button>
-
-
-                <button id="copyButton">
-                    Copy
-                </button>
-
-
-                <button id="downloadButton">
-                    Download
-                </button>
-
-
-                <button id="renameButton">
-                    Rename
-                </button>
-
-
-                <button id="resetButton">
-                    Reset
-                </button>
+                </div>
 
 
-                <button
-                    id="deleteButton"
-                    class="danger">
+                <div class="toolbar-group">
 
-                    Delete
+                    <button
+                        type="button"
+                        id="renameButton"
+                        class="tool-button"
+                        title="Rename current script"
+                    >
+                        Rename
+                    </button>
 
-                </button>
+                    <button
+                        type="button"
+                        id="resetButton"
+                        class="tool-button"
+                        title="Reset editable copy to original"
+                    >
+                        Reset
+                    </button>
+
+                    <button
+                        type="button"
+                        id="deleteButton"
+                        class="tool-button danger"
+                        title="Delete current personal script"
+                    >
+                        Delete
+                    </button>
+
+                </div>
 
 
                 <div class="toolbar-spacer"></div>
 
 
-                <input
-                    id="findInput"
-                    class="find-box"
-                    type="text"
-                    placeholder="Find in script..."
-                    autocomplete="off">
+                <!-- Find -->
+                <div class="find-wrapper">
+
+                    <input
+                        type="search"
+                        id="findInput"
+                        class="find-input"
+                        placeholder="Find in script..."
+                        autocomplete="off"
+                    >
+
+                    <span
+                        id="findCount"
+                        class="find-count"
+                    >
+                        0 / 0
+                    </span>
+
+                    <button
+                        type="button"
+                        id="findPrevButton"
+                        class="tool-button"
+                        title="Previous match"
+                    >
+                        ↑
+                    </button>
+
+                    <button
+                        type="button"
+                        id="findNextButton"
+                        class="tool-button"
+                        title="Next match"
+                    >
+                        ↓
+                    </button>
+
+                </div>
 
 
-                <span
-                    id="findCount"
-                    class="find-count">
-                </span>
-
-
-                <button id="findButton">
-                    Find
-                </button>
-
-
-            </div>
-
-
-            <!-- EDITOR SETTINGS -->
-
-            <div class="editor-settings">
-
-                <span>
-                    Theme:
-                </span>
-
-                <select id="themeSelect">
-
-                    <option value="dark">
-                        Dark
-                    </option>
-
-                    <option value="light">
-                        Light
-                    </option>
-
+                <!-- Font -->
+                <select
+                    id="fontSelect"
+                    class="select-control"
+                    title="Editor font"
+                >
+                    <option value="Cascadia Code">Cascadia Code</option>
+                    <option value="Consolas">Consolas</option>
+                    <option value="Courier New">Courier New</option>
+                    <option value="monospace">Monospace</option>
                 </select>
 
 
-                <span>
-                    Font:
-                </span>
-
-                <select id="fontSelect">
-
-                    <option value="Consolas">
-                        Consolas
-                    </option>
-
-                    <option value="Courier New">
-                        Courier New
-                    </option>
-
-                    <option value="monospace">
-                        Monospace
-                    </option>
-
+                <!-- Font size -->
+                <select
+                    id="fontSizeSelect"
+                    class="select-control"
+                    title="Editor font size"
+                >
+                    <option value="11">11px</option>
+                    <option value="12">12px</option>
+                    <option value="13">13px</option>
+                    <option value="14">14px</option>
+                    <option value="15">15px</option>
+                    <option value="16">16px</option>
+                    <option value="18">18px</option>
                 </select>
 
-
-                <span>
-                    Size:
-                </span>
-
-                <select id="fontSizeSelect">
-
-                    <option value="12">
-                        12
-                    </option>
-
-                    <option value="13">
-                        13
-                    </option>
-
-                    <option value="14" selected>
-                        14
-                    </option>
-
-                    <option value="15">
-                        15
-                    </option>
-
-                    <option value="16">
-                        16
-                    </option>
-
-                    <option value="18">
-                        18
-                    </option>
-
-                    <option value="20">
-                        20
-                    </option>
-
-                    <option value="22">
-                        22
-                    </option>
-
-                    <option value="24">
-                        24
-                    </option>
-
-                </select>
-
-                <span>
-                    px
-                </span>
-
             </div>
 
 
-            <!-- EDITOR -->
+            <!-- Editor -->
+            <div class="editor-shell">
 
-            <div
-                id="editorContainer"
-                class="editor-container">
+                <div class="editor-statusbar">
+
+                    <span id="editorStatus">
+                        No script selected
+                    </span>
+
+                    <span id="editorMode">
+                        Ready
+                    </span>
+
+                </div>
 
 
-                <pre
-                    id="highlightLayer"
-                    class="highlight-layer"></pre>
+                <div
+                    id="editorContainer"
+                    class="editor-container"
+                >
 
+                    <div
+                        id="highlightLayer"
+                        class="highlight-layer"
+                        aria-hidden="true"
+                    ></div>
 
-                <textarea
-                    id="scriptEditor"
-                    spellcheck="false"
-                    readonly>
-                </textarea>
+                    <textarea
+                        id="scriptEditor"
+                        class="script-editor"
+                        spellcheck="false"
+                        wrap="soft"
+                        aria-label="PowerShell script editor"
+                    ></textarea>
 
+                    <div
+                        id="emptyEditorMessage"
+                        class="empty-editor-message"
+                        hidden
+                    >
+                        Select a script from the left side.
+                    </div>
+
+                </div>
 
             </div>
-
-
-            <!-- STATUS -->
-
-            <div
-                id="editorStatus"
-                class="editor-status">
-
-                Ready
-
-            </div>
-
 
         </section>
 
-
-    </div>
-
+    </main>
 
 </div>
 
 
-<!-- ==========================================================
-     TOAST
-     ========================================================== -->
-
-<div
-    id="toast"
-    class="toast">
-</div>
-
-
-<!-- ==========================================================
-     NEW SCRIPT MODAL
-     ========================================================== -->
+<!-- =============================================================
+     CREATE NEW SCRIPT MODAL
+     ============================================================= -->
 
 <div
     id="newScriptModal"
-    class="modal-overlay">
-
+    class="modal-backdrop"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="newScriptModalTitle"
+>
 
     <div class="modal">
 
-        <h2>
-            Create New Script
-        </h2>
+        <div class="modal-header">
 
+            <h2
+                id="newScriptModalTitle"
+                class="modal-title"
+            >
+                Create New Script
+            </h2>
 
-        <div
-            id="createFromSite"
-            class="modal-option">
-
-            <strong>
-                Start from an M365Buddy script
-            </strong>
-
-            <span>
-                Choose one of the scripts available on the site
-                and create your own editable copy.
-            </span>
-
-        </div>
-
-
-        <div
-            id="createFromScratch"
-            class="modal-option">
-
-            <strong>
-                Start from scratch
-            </strong>
-
-            <span>
-                Create a completely empty PowerShell script.
-            </span>
+            <button
+                type="button"
+                id="modalCloseButton"
+                class="modal-close"
+                aria-label="Close"
+                title="Close"
+            >
+                ×
+            </button>
 
         </div>
 
 
-        <button
-            id="closeModal"
-            class="modal-close">
+        <!-- FIRST MODAL VIEW -->
 
-            Cancel
+        <div
+            id="createChoiceView"
+            class="modal-body"
+        >
 
-        </button>
+            <p class="modal-description">
+                Choose how you want to create your new script.
+            </p>
+
+            <div class="modal-options">
+
+                <button
+                    type="button"
+                    id="chooseM365BuddyScript"
+                    class="modal-option"
+                >
+
+                    <span class="modal-option-icon">📄</span>
+
+                    <span class="modal-option-content">
+
+                        <span class="modal-option-title">
+                            Start from an M365Buddy script
+                        </span>
+
+                        <span class="modal-option-description">
+                            Select one of the available M365Buddy scripts and
+                            create an editable copy.
+                        </span>
+
+                    </span>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    id="startFromScratch"
+                    class="modal-option"
+                >
+
+                    <span class="modal-option-icon">✏️</span>
+
+                    <span class="modal-option-content">
+
+                        <span class="modal-option-title">
+                            Start from scratch
+                        </span>
+
+                        <span class="modal-option-description">
+                            Create a completely new PowerShell script.
+                        </span>
+
+                    </span>
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- SECOND MODAL VIEW -->
+
+        <div
+            id="siteScriptChoiceView"
+            class="modal-body"
+            hidden
+        >
+
+            <p class="modal-description">
+                Select the M365Buddy script you want to use as your starting
+                point. Selecting a script creates a separate editable copy.
+            </p>
+
+            <div
+                id="modalScriptList"
+                class="modal-script-list"
+            ></div>
+
+        </div>
+
+
+        <!-- MODAL FOOTER -->
+
+        <div class="modal-footer">
+
+            <button
+                type="button"
+                id="modalBackButton"
+                class="tool-button"
+                hidden
+            >
+                ← Back
+            </button>
+
+            <button
+                type="button"
+                id="modalCancelButton"
+                class="tool-button"
+            >
+                Cancel
+            </button>
+
+        </div>
 
     </div>
 
 </div>
 
 
+<!-- =============================================================
+     TOASTS
+     ============================================================= -->
+
+<div
+    id="toastContainer"
+    class="toast-container"
+    aria-live="polite"
+    aria-atomic="true"
+></div>
+
+
 <script>
+"use strict";
 
-/* ============================================================
-   M365BUDDY SCRIPT WORKSPACE V2
-   ============================================================ */
+/* ================================================================
+   CONFIGURATION
+   ================================================================ */
+
+const STORAGE_KEY = "m365buddy_script_workspace_v3";
+const OPEN_TABS_KEY = "m365buddy_script_open_tabs_v3";
+const SETTINGS_KEY = "m365buddy_script_workspace_settings_v3";
 
 
-/* ============================================================
-   ORIGINAL SITE SCRIPTS
-   ============================================================ */
-
-const ORIGINAL_SCRIPTS = {
-
-    "sharepoint-site-inventory": {
-
-        id: "sharepoint-site-inventory",
-
+/*
+ * IMPORTANT:
+ *
+ * This is intentionally a public/sample script.
+ *
+ * Do NOT place:
+ * - tenant IDs
+ * - client IDs
+ * - certificate paths
+ * - certificate passwords
+ * - SMTP passwords
+ * - internal email addresses
+ * - internal SharePoint URLs
+ *
+ * into the public website.
+ *
+ * Your real sanitized download can be connected later.
+ */
+const ORIGINAL_SCRIPTS = [
+    {
+        id: "spo-site-inventory",
         title: "SharePoint Online Site Inventory",
-
-        filename: "sharepoint-online-site-inventory.ps1",
-
+        description: "Export SharePoint Online site information using PnP PowerShell.",
         content:
-`# ============================================================
+`# ================================================================
 # M365Buddy - SharePoint Online Site Inventory
-# ============================================================
+# ================================================================
 
-# Public preview version.
+# Connect to SharePoint Online using your approved authentication
+# method.
 
-$TenantName = "yourtenant"
-$TenantAdminUrl = "https://yourtenant-admin.sharepoint.com"
+$TenantName = "YOUR-TENANT-NAME"
+$TenantAdminUrl = "https://YOUR-TENANT-admin.sharepoint.com"
 
-Write-Host "Connecting to SharePoint Online..." -ForegroundColor Cyan
+# Example:
+# Connect-PnPOnline -Url $TenantAdminUrl -Interactive
 
-# Add your PnP PowerShell connection here.
+Write-Host "Starting SharePoint Online site inventory..." -ForegroundColor Cyan
 
-Write-Host "Collecting SharePoint Online site information..." -ForegroundColor Cyan
+# Retrieve sites.
+$Sites = Get-PnPTenantSite
 
-# Add your site inventory logic here.
+Write-Host "Sites found: $($Sites.Count)" -ForegroundColor Green
 
-Write-Host "Report completed." -ForegroundColor Green
-`
+$Results = foreach ($Site in $Sites) {
 
+    [PSCustomObject]@{
+        SiteName       = $Site.Title
+        SiteUrl        = $Site.Url
+        StorageUsedMB  = $Site.StorageUsageCurrent
+        StorageQuotaMB = $Site.StorageMaximumLevel
+        Template       = $Site.Template
+        Created        = $Site.TimeCreated
     }
+}
 
+# Export the report.
+$OutputPath = Join-Path $PWD "SharePoint-Site-Inventory.csv"
+
+$Results |
+    Export-Csv -Path $OutputPath -NoTypeInformation
+
+Write-Host ""
+Write-Host "Report created:" -ForegroundColor Green
+Write-Host $OutputPath -ForegroundColor Yellow
+`,
+        originalId: null,
+        type: "M365Buddy"
+    }
+];
+
+
+/* ================================================================
+   STATE
+   ================================================================ */
+
+let personalScripts = [];
+let openTabs = [];
+let activeScriptId = null;
+
+let currentSearchTerm = "";
+let currentMatches = [];
+let currentMatchIndex = 0;
+
+let settings = {
+    theme: "dark",
+    fontFamily: "Cascadia Code",
+    fontSize: "13"
 };
 
 
-/* ============================================================
-   STORAGE
-   ============================================================ */
+/* ================================================================
+   DOM REFERENCES
+   ================================================================ */
 
-const STORAGE_KEY =
-    "m365buddy-script-workspace-v2";
+const html = document.documentElement;
 
+const homeButton = document.getElementById("homeButton");
+const themeButton = document.getElementById("themeButton");
 
-const SETTINGS_KEY =
-    "m365buddy-editor-settings-v1";
+const scriptList = document.getElementById("scriptList");
+const scriptCount = document.getElementById("scriptCount");
+const sidebarSearch = document.getElementById("sidebarSearch");
 
+const newScriptButton = document.getElementById("newScriptButton");
 
-/* ============================================================
-   STATE
-   ============================================================ */
+const tabs = document.getElementById("tabs");
 
-let personalScripts =
-    loadPersonalScripts();
+const saveButton = document.getElementById("saveButton");
+const copyButton = document.getElementById("copyButton");
+const downloadButton = document.getElementById("downloadButton");
+const renameButton = document.getElementById("renameButton");
+const resetButton = document.getElementById("resetButton");
+const deleteButton = document.getElementById("deleteButton");
 
+const findInput = document.getElementById("findInput");
+const findCount = document.getElementById("findCount");
+const findPrevButton = document.getElementById("findPrevButton");
+const findNextButton = document.getElementById("findNextButton");
 
-let openTabs = [];
+const fontSelect = document.getElementById("fontSelect");
+const fontSizeSelect = document.getElementById("fontSizeSelect");
 
+const editorContainer = document.getElementById("editorContainer");
+const highlightLayer = document.getElementById("highlightLayer");
+const scriptEditor = document.getElementById("scriptEditor");
+const emptyEditorMessage = document.getElementById("emptyEditorMessage");
 
-let activeScriptId =
-    null;
+const editorStatus = document.getElementById("editorStatus");
+const editorMode = document.getElementById("editorMode");
 
+const newScriptModal = document.getElementById("newScriptModal");
+const modalCloseButton = document.getElementById("modalCloseButton");
+const modalCancelButton = document.getElementById("modalCancelButton");
+const modalBackButton = document.getElementById("modalBackButton");
 
-let searchMatches = [];
+const createChoiceView = document.getElementById("createChoiceView");
+const siteScriptChoiceView = document.getElementById("siteScriptChoiceView");
 
+const chooseM365BuddyScript = document.getElementById("chooseM365BuddyScript");
+const startFromScratch = document.getElementById("startFromScratch");
+const modalScriptList = document.getElementById("modalScriptList");
 
-let currentMatch = 0;
+const toastContainer = document.getElementById("toastContainer");
 
 
-/* ============================================================
-   DOM
-   ============================================================ */
-
-const scriptList =
-    document.getElementById("scriptList");
-
-
-const scriptSearch =
-    document.getElementById("scriptSearch");
-
-
-const tabs =
-    document.getElementById("tabs");
-
-
-const editor =
-    document.getElementById("scriptEditor");
-
-
-const highlightLayer =
-    document.getElementById("highlightLayer");
-
-
-const editorContainer =
-    document.getElementById("editorContainer");
-
-
-const statusBar =
-    document.getElementById("editorStatus");
-
-
-const findInput =
-    document.getElementById("findInput");
-
-
-const findCount =
-    document.getElementById("findCount");
-
-
-const editCopyButton =
-    document.getElementById("editCopyButton");
-
-
-const saveButton =
-    document.getElementById("saveButton");
-
-
-const copyButton =
-    document.getElementById("copyButton");
-
-
-const downloadButton =
-    document.getElementById("downloadButton");
-
-
-const renameButton =
-    document.getElementById("renameButton");
-
-
-const resetButton =
-    document.getElementById("resetButton");
-
-
-const deleteButton =
-    document.getElementById("deleteButton");
-
-
-const newScriptButton =
-    document.getElementById("newScriptButton");
-
-
-const findButton =
-    document.getElementById("findButton");
-
-
-const toast =
-    document.getElementById("toast");
-
-
-const themeSelect =
-    document.getElementById("themeSelect");
-
-
-const fontSelect =
-    document.getElementById("fontSelect");
-
-
-const fontSizeSelect =
-    document.getElementById("fontSizeSelect");
-
-
-const newScriptModal =
-    document.getElementById("newScriptModal");
-
-
-const createFromSite =
-    document.getElementById("createFromSite");
-
-
-const createFromScratch =
-    document.getElementById("createFromScratch");
-
-
-const closeModal =
-    document.getElementById("closeModal");
-
-
-/* ============================================================
-   STORAGE FUNCTIONS
-   ============================================================ */
+/* ================================================================
+   STORAGE HELPERS
+   ================================================================ */
 
 function loadPersonalScripts() {
-
     try {
-
-        const stored =
-            localStorage.getItem(STORAGE_KEY);
+        const stored = localStorage.getItem(STORAGE_KEY);
 
         if (!stored) {
             return [];
         }
 
-        return JSON.parse(stored);
+        const parsed = JSON.parse(stored);
 
-    }
-    catch (error) {
+        if (!Array.isArray(parsed)) {
+            return [];
+        }
 
-        console.error(error);
-
+        return parsed;
+    } catch (error) {
+        console.error("Could not load personal scripts:", error);
         return [];
-
     }
-
 }
 
 
 function savePersonalScripts() {
-
     localStorage.setItem(
         STORAGE_KEY,
         JSON.stringify(personalScripts)
     );
-
 }
 
 
-/* ============================================================
-   SETTINGS
-   ============================================================ */
+function loadOpenTabs() {
+    try {
+        const stored = localStorage.getItem(OPEN_TABS_KEY);
+
+        if (!stored) {
+            return [];
+        }
+
+        const parsed = JSON.parse(stored);
+
+        if (!Array.isArray(parsed)) {
+            return [];
+        }
+
+        return parsed;
+    } catch (error) {
+        console.error("Could not load open tabs:", error);
+        return [];
+    }
+}
+
+
+function saveOpenTabs() {
+    localStorage.setItem(
+        OPEN_TABS_KEY,
+        JSON.stringify(openTabs)
+    );
+}
+
 
 function loadSettings() {
-
     try {
-
-        const stored =
-            localStorage.getItem(SETTINGS_KEY);
+        const stored = localStorage.getItem(SETTINGS_KEY);
 
         if (!stored) {
             return;
         }
 
-        const settings =
-            JSON.parse(stored);
+        const parsed = JSON.parse(stored);
 
-
-        if (settings.theme) {
-
-            themeSelect.value =
-                settings.theme;
-
+        if (parsed && typeof parsed === "object") {
+            settings = {
+                ...settings,
+                ...parsed
+            };
         }
-
-
-        if (settings.font) {
-
-            fontSelect.value =
-                settings.font;
-
-        }
-
-
-        if (settings.fontSize) {
-
-            fontSizeSelect.value =
-                settings.fontSize;
-
-        }
-
+    } catch (error) {
+        console.error("Could not load settings:", error);
     }
-    catch (error) {
-
-        console.error(error);
-
-    }
-
 }
 
 
 function saveSettings() {
-
-    const settings = {
-
-        theme:
-            themeSelect.value,
-
-        font:
-            fontSelect.value,
-
-        fontSize:
-            fontSizeSelect.value
-
-    };
-
-
     localStorage.setItem(
         SETTINGS_KEY,
         JSON.stringify(settings)
     );
-
 }
 
+
+/* ================================================================
+   SCRIPT HELPERS
+   ================================================================ */
+
+function getAllScripts() {
+    return [
+        ...ORIGINAL_SCRIPTS,
+        ...personalScripts
+    ];
+}
+
+
+function getScriptById(id) {
+    return getAllScripts().find(
+        script => script.id === id
+    ) || null;
+}
+
+
+function getOriginalScriptById(id) {
+    return ORIGINAL_SCRIPTS.find(
+        script => script.id === id
+    ) || null;
+}
+
+
+function isPersonalScript(script) {
+    return Boolean(script && !script.originalId);
+}
+
+
+function isEditableCopy(script) {
+    return Boolean(script && script.originalId);
+}
+
+
+function isNewScratchScript(script) {
+    return Boolean(
+        script &&
+        !script.originalId &&
+        script.type === "Personal"
+    );
+}
+
+
+function getNextCopyTitle(originalScript) {
+
+    const baseTitle = originalScript.title;
+
+    let number = 1;
+
+    while (true) {
+
+        const candidate =
+            number === 1
+                ? `${baseTitle} - Copy`
+                : `${baseTitle} - Copy ${number}`;
+
+        const exists = getAllScripts().some(
+            script =>
+                script.title.toLowerCase() ===
+                candidate.toLowerCase()
+        );
+
+        if (!exists) {
+            return candidate;
+        }
+
+        number++;
+    }
+}
+
+
+function createId(prefix = "script") {
+
+    return (
+        prefix +
+        "-" +
+        Date.now().toString(36) +
+        "-" +
+        Math.random()
+            .toString(36)
+            .slice(2, 8)
+    );
+}
+
+
+/* ================================================================
+   THEME
+   ================================================================ */
+
+function applyTheme() {
+
+    html.classList.toggle(
+        "dark",
+        settings.theme === "dark"
+    );
+
+    themeButton.textContent =
+        settings.theme === "dark"
+            ? "☀ Light"
+            : "🌙 Dark";
+}
+
+
+function toggleTheme() {
+
+    settings.theme =
+        settings.theme === "dark"
+            ? "light"
+            : "dark";
+
+    applyTheme();
+    saveSettings();
+
+    renderHighlights();
+
+    showToast(
+        settings.theme === "dark"
+            ? "Dark theme enabled."
+            : "Light theme enabled.",
+        "info"
+    );
+}
+
+
+/* ================================================================
+   EDITOR SETTINGS
+   ================================================================ */
 
 function applyEditorSettings() {
 
-    const font =
-        fontSelect.value;
+    editorContainer.style.setProperty(
+        "--editor-font-family",
+        `"${settings.fontFamily}"`
+    );
 
-    const size =
-        fontSizeSelect.value + "px";
+    editorContainer.style.setProperty(
+        "--editor-font-size",
+        `${settings.fontSize}px`
+    );
 
-
-    editor.style.fontFamily =
-        font;
-
-    highlightLayer.style.fontFamily =
-        font;
-
-
-    editor.style.fontSize =
-        size;
-
-    highlightLayer.style.fontSize =
-        size;
+    fontSelect.value = settings.fontFamily;
+    fontSizeSelect.value = settings.fontSize;
+}
 
 
-    if (
-        themeSelect.value === "light"
-    ) {
+function changeFontFamily() {
 
-        editorContainer.classList.add(
-            "light"
-        );
+    settings.fontFamily = fontSelect.value;
 
-    }
-    else {
-
-        editorContainer.classList.remove(
-            "light"
-        );
-
-    }
-
-
+    applyEditorSettings();
     saveSettings();
 
+    /*
+     * Re-render after font changes so that the highlight layer
+     * and textarea continue using exactly the same typography.
+     */
+    renderHighlights();
 
-    updateHighlights();
-
-}
-
-
-/* ============================================================
-   SCRIPT HELPERS
-   ============================================================ */
-
-function getOriginalScript(id) {
-
-    return ORIGINAL_SCRIPTS[id] || null;
-
-}
-
-
-function getPersonalScript(id) {
-
-    return personalScripts.find(
-        script =>
-            script.id === id
-    ) || null;
-
-}
-
-
-function getScript(id) {
-
-    return (
-        getOriginalScript(id) ||
-        getPersonalScript(id)
+    showToast(
+        `Font changed to ${settings.fontFamily}.`,
+        "info"
     );
-
 }
 
 
-function isOriginal(id) {
+function changeFontSize() {
 
-    return Boolean(
-        getOriginalScript(id)
+    settings.fontSize = fontSizeSelect.value;
+
+    applyEditorSettings();
+    saveSettings();
+
+    renderHighlights();
+
+    showToast(
+        `Font size changed to ${settings.fontSize}px.`,
+        "info"
     );
-
 }
 
 
-/* ============================================================
+/* ================================================================
    SIDEBAR
-   ============================================================ */
+   ================================================================ */
 
-function renderScriptList() {
+function renderSidebar() {
 
     const searchTerm =
-        scriptSearch.value
-            .trim()
-            .toLowerCase();
+        sidebarSearch.value.trim().toLowerCase();
 
+    const originals = ORIGINAL_SCRIPTS.filter(
+        script =>
+            !searchTerm ||
+            script.title.toLowerCase().includes(searchTerm) ||
+            script.description.toLowerCase().includes(searchTerm)
+    );
+
+    const personal = personalScripts.filter(
+        script =>
+            /*
+             * IMPORTANT:
+             *
+             * Editable copies are NOT shown here.
+             *
+             * Only genuine scratch/new scripts are shown.
+             */
+            !script.originalId &&
+            (
+                !searchTerm ||
+                script.title.toLowerCase().includes(searchTerm) ||
+                (script.description || "")
+                    .toLowerCase()
+                    .includes(searchTerm)
+            )
+    );
 
     scriptList.innerHTML = "";
 
+    if (originals.length > 0) {
 
-    /*
-       The sidebar contains:
-
-       1. Public M365Buddy scripts
-       2. User-created scripts
-
-       Editable copies of public scripts are NOT placed here.
-       They are shown in the top tabs instead.
-    */
-
-
-    const originalScripts =
-        Object.values(
-            ORIGINAL_SCRIPTS
-        );
-
-
-    const newScripts =
-        personalScripts.filter(
-            script =>
-                !script.originalId
-        );
-
-
-    const filteredOriginals =
-        originalScripts.filter(
-            script =>
-                script.title
-                    .toLowerCase()
-                    .includes(searchTerm)
-        );
-
-
-    const filteredNewScripts =
-        newScripts.filter(
-            script =>
-                script.title
-                    .toLowerCase()
-                    .includes(searchTerm)
-        );
-
-
-    if (
-        filteredOriginals.length > 0
-    ) {
-
-        const title =
+        const originalLabel =
             document.createElement("div");
 
-        title.className =
-            "script-section-title";
+        originalLabel.className =
+            "script-section-label";
 
-        title.textContent =
+        originalLabel.textContent =
             "M365Buddy Scripts";
 
-        scriptList.appendChild(title);
+        scriptList.appendChild(originalLabel);
 
-
-        filteredOriginals.forEach(
-            addScriptToSidebar
-        );
-
+        originals.forEach(script => {
+            scriptList.appendChild(
+                createSidebarScriptItem(
+                    script,
+                    "M365Buddy"
+                )
+            );
+        });
     }
 
 
-    if (
-        filteredNewScripts.length > 0
-    ) {
+    if (personal.length > 0) {
 
-        const title =
+        const personalLabel =
             document.createElement("div");
 
-        title.className =
-            "script-section-title";
+        personalLabel.className =
+            "script-section-label";
 
-        title.textContent =
+        personalLabel.textContent =
             "My Scripts";
 
-        scriptList.appendChild(title);
+        scriptList.appendChild(personalLabel);
 
-
-        filteredNewScripts.forEach(
-            addScriptToSidebar
-        );
-
+        personal.forEach(script => {
+            scriptList.appendChild(
+                createSidebarScriptItem(
+                    script,
+                    "Personal"
+                )
+            );
+        });
     }
 
 
     if (
-        filteredOriginals.length === 0 &&
-        filteredNewScripts.length === 0
+        originals.length === 0 &&
+        personal.length === 0
     ) {
 
-        scriptList.innerHTML = `
-            <div style="
-                padding:15px;
-                color:#667085;
-                font-size:13px;">
-                No scripts found.
-            </div>
-        `;
+        const empty = document.createElement("div");
 
+        empty.style.padding = "20px 10px";
+        empty.style.color = "var(--muted)";
+        empty.style.fontSize = "11px";
+        empty.textContent = "No scripts found.";
+
+        scriptList.appendChild(empty);
     }
 
+
+    scriptCount.textContent =
+        String(originals.length + personal.length);
 }
 
 
-function addScriptToSidebar(script) {
+function createSidebarScriptItem(script, type) {
 
-    const item =
-        document.createElement("div");
+    const button =
+        document.createElement("button");
 
+    button.type = "button";
+    button.className = "script-item";
 
-    item.className =
-        "script-item";
-
-
-    if (
-        script.id === activeScriptId
-    ) {
-
-        item.classList.add(
-            "active"
-        );
-
+    if (script.id === activeScriptId) {
+        button.classList.add("active");
     }
 
+    const icon =
+        document.createElement("span");
 
-    const type =
-        isOriginal(script.id)
-            ? "Site script"
-            : "New script";
+    icon.className =
+        "script-item-icon";
 
-
-    item.innerHTML = `
-
-        <div class="script-item-title">
-            ${escapeHtml(script.title)}
-        </div>
-
-        <div class="script-item-type">
-            ${type}
-        </div>
-
-    `;
+    icon.textContent =
+        type === "M365Buddy"
+            ? "📄"
+            : "📝";
 
 
-    item.addEventListener(
+    const text =
+        document.createElement("span");
+
+    text.className =
+        "script-item-text";
+
+
+    const name =
+        document.createElement("span");
+
+    name.className =
+        "script-item-name";
+
+    name.textContent =
+        script.title;
+
+
+    const scriptType =
+        document.createElement("span");
+
+    scriptType.className =
+        "script-item-type";
+
+    scriptType.textContent =
+        type;
+
+
+    text.appendChild(name);
+    text.appendChild(scriptType);
+
+    button.appendChild(icon);
+    button.appendChild(text);
+
+    button.addEventListener(
         "click",
         () => openScript(script.id)
     );
 
-
-    scriptList.appendChild(item);
-
+    return button;
 }
 
 
-/* ============================================================
+/* ================================================================
    TABS
-   ============================================================ */
+   ================================================================ */
 
 function renderTabs() {
 
     tabs.innerHTML = "";
 
+    if (openTabs.length === 0) {
+        return;
+    }
 
-    openTabs.forEach(
-        id => {
+    openTabs.forEach(scriptId => {
 
-            const script =
-                getScript(id);
+        const script =
+            getScriptById(scriptId);
 
-
-            if (!script) {
-                return;
-            }
-
-
-            const tab =
-                document.createElement("div");
-
-
-            tab.className =
-                "tab";
-
-
-            if (
-                id === activeScriptId
-            ) {
-
-                tab.classList.add(
-                    "active"
-                );
-
-            }
-
-
-            tab.textContent =
-                script.title;
-
-
-            tab.addEventListener(
-                "click",
-                () => openScript(id)
-            );
-
-
-            tabs.appendChild(tab);
-
+        if (!script) {
+            return;
         }
-    );
 
+        const tab =
+            document.createElement("div");
+
+        tab.className = "tab";
+
+        if (script.id === activeScriptId) {
+            tab.classList.add("active");
+        }
+
+
+        const mainButton =
+            document.createElement("button");
+
+        mainButton.type = "button";
+        mainButton.className = "tab-main";
+        mainButton.title = script.title;
+
+
+        const name =
+            document.createElement("span");
+
+        name.className = "tab-name";
+        name.textContent = script.title;
+
+
+        mainButton.appendChild(name);
+
+
+        if (isEditableCopy(script)) {
+
+            const copyIndicator =
+                document.createElement("span");
+
+            copyIndicator.className =
+                "tab-copy-indicator";
+
+            copyIndicator.textContent =
+                "Copy";
+
+            mainButton.appendChild(
+                copyIndicator
+            );
+        }
+
+
+        mainButton.addEventListener(
+            "click",
+            () => openScript(script.id)
+        );
+
+
+        const closeButton =
+            document.createElement("button");
+
+        closeButton.type = "button";
+        closeButton.className = "tab-close";
+        closeButton.textContent = "×";
+        closeButton.title =
+            "Close tab";
+
+        closeButton.addEventListener(
+            "click",
+            event => {
+
+                event.stopPropagation();
+
+                closeTab(script.id);
+            }
+        );
+
+
+        tab.appendChild(mainButton);
+        tab.appendChild(closeButton);
+
+        tabs.appendChild(tab);
+    });
+
+
+    /*
+     * Keep the active tab visible.
+     */
+    const activeTab =
+        Array.from(
+            tabs.querySelectorAll(".tab")
+        ).find(
+            tab =>
+                tab.classList.contains("active")
+        );
+
+    if (activeTab) {
+
+        requestAnimationFrame(() => {
+
+            activeTab.scrollIntoView({
+                behavior: "smooth",
+                block: "nearest",
+                inline: "nearest"
+            });
+
+        });
+    }
 }
 
 
-/* ============================================================
-   OPEN SCRIPT
-   ============================================================ */
-
-function openScript(id) {
+function openScript(scriptId) {
 
     const script =
-        getScript(id);
-
+        getScriptById(scriptId);
 
     if (!script) {
+        showToast(
+            "The selected script could not be found.",
+            "error"
+        );
+
         return;
     }
 
 
-    activeScriptId =
-        id;
+    if (!openTabs.includes(scriptId)) {
 
+        openTabs.push(scriptId);
 
-    if (
-        !openTabs.includes(id)
-    ) {
-
-        openTabs.push(id);
-
+        saveOpenTabs();
     }
 
 
-    editor.value =
-        script.content;
-
-
-    editor.readOnly =
-        isOriginal(id);
-
-
-    updateToolbar();
-
-
-    renderScriptList();
+    activeScriptId = scriptId;
 
     renderTabs();
-
-    updateHighlights();
-
-
-    setStatus(
-        isOriginal(id)
-            ? "Public script preview. Create an editable copy to modify it."
-            : "Personal script loaded."
-    );
-
+    renderSidebar();
+    loadActiveScriptIntoEditor();
 }
 
 
-/* ============================================================
-   TOOLBAR STATE
-   ============================================================ */
+function closeTab(scriptId) {
 
-function updateToolbar() {
+    const index =
+        openTabs.indexOf(scriptId);
 
-    const original =
-        isOriginal(activeScriptId);
+    if (index === -1) {
+        return;
+    }
 
 
-    editCopyButton.style.display =
-        original
-            ? "inline-block"
-            : "none";
+    openTabs.splice(index, 1);
 
+    saveOpenTabs();
+
+
+    if (activeScriptId === scriptId) {
+
+        if (openTabs.length === 0) {
+
+            activeScriptId = null;
+
+        } else {
+
+            /*
+             * Prefer the previous tab.
+             */
+            const newIndex =
+                Math.max(
+                    0,
+                    Math.min(
+                        index - 1,
+                        openTabs.length - 1
+                    )
+                );
+
+            activeScriptId =
+                openTabs[newIndex];
+        }
+    }
+
+
+    renderTabs();
+    renderSidebar();
+    loadActiveScriptIntoEditor();
+}
+
+
+/* ================================================================
+   ACTIVE SCRIPT
+   ================================================================ */
+
+function getActiveScript() {
+
+    if (!activeScriptId) {
+        return null;
+    }
+
+    return getScriptById(
+        activeScriptId
+    );
+}
+
+
+function loadActiveScriptIntoEditor() {
+
+    const script =
+        getActiveScript();
+
+
+    if (!script) {
+
+        scriptEditor.value = "";
+
+        highlightLayer.innerHTML = "";
+
+        emptyEditorMessage.hidden = false;
+
+        editorStatus.textContent =
+            "No script selected";
+
+        editorMode.textContent =
+            "Ready";
+
+        return;
+    }
+
+
+    emptyEditorMessage.hidden = true;
+
+    scriptEditor.value =
+        script.content || "";
+
+    editorStatus.textContent =
+        `${script.title} • ${script.content.length} characters`;
+
+    if (isEditableCopy(script)) {
+
+        editorMode.textContent =
+            "Editable copy";
+
+    } else if (isNewScratchScript(script)) {
+
+        editorMode.textContent =
+            "Personal script";
+
+    } else {
+
+        editorMode.textContent =
+            "M365Buddy script";
+    }
+
+
+    clearSearch();
+
+    applyEditorSettings();
+
+    /*
+     * Reset scroll positions.
+     */
+    scriptEditor.scrollTop = 0;
+    scriptEditor.scrollLeft = 0;
+
+    highlightLayer.scrollTop = 0;
+    highlightLayer.scrollLeft = 0;
+
+    renderHighlights();
+
+    updateEditorButtons();
+}
+
+
+function updateEditorButtons() {
+
+    const script =
+        getActiveScript();
+
+    const hasScript =
+        Boolean(script);
 
     saveButton.disabled =
-        original;
+        !hasScript;
 
+    copyButton.disabled =
+        !hasScript;
+
+    downloadButton.disabled =
+        !hasScript;
 
     renameButton.disabled =
-        original;
-
+        !hasScript;
 
     resetButton.disabled =
-        original;
-
+        !script || !isEditableCopy(script);
 
     deleteButton.disabled =
-        original;
-
-
-    editor.readOnly =
-        original;
-
+        !script || !isPersonalScript(script);
 }
 
 
-/* ============================================================
-   CREATE EDITABLE COPY
-   ============================================================ */
+/* ================================================================
+   EDITING
+   ================================================================ */
 
-function createEditableCopy() {
+function handleEditorInput() {
 
-    const original =
-        getOriginalScript(
-            activeScriptId
-        );
+    const script =
+        getActiveScript();
 
-
-    if (!original) {
+    if (!script) {
         return;
     }
 
 
     /*
-       Count existing copies.
-    */
-
-    const baseTitle =
-        original.title + " - Copy";
-
-
-    const existingCopies =
-        personalScripts.filter(
-            script =>
-                script.originalId ===
-                original.id
-        );
+     * Update the script in memory.
+     *
+     * The user still needs to click Save to persist changes
+     * to localStorage.
+     */
+    script.content =
+        scriptEditor.value;
 
 
-    let title;
+    editorStatus.textContent =
+        `${script.title} • ${script.content.length} characters • Unsaved changes`;
 
+    editorMode.textContent =
+        "Unsaved changes";
 
-    if (
-        existingCopies.length === 0
-    ) {
-
-        title =
-            baseTitle;
-
-    }
-    else {
-
-        title =
-            baseTitle +
-            " " +
-            (
-                existingCopies.length + 1
-            );
-
-    }
-
-
-    const copy = {
-
-        id:
-            "personal-" +
-            Date.now(),
-
-        title:
-            title,
-
-        filename:
-            original.filename,
-
-        originalId:
-            original.id,
-
-        content:
-            original.content
-
-    };
-
-
-    personalScripts.push(
-        copy
-    );
-
-
-    savePersonalScripts();
-
-
-    openScript(
-        copy.id
-    );
-
-
-    editor.focus();
-
-
-    showToast(
-        "Editable copy created ✓"
-    );
-
-
-    setStatus(
-        "Editable copy created."
-    );
-
+    renderHighlights();
 }
 
 
-/* ============================================================
-   SAVE
-   ============================================================ */
-
 function saveCurrentScript() {
 
-    if (!activeScriptId) {
-        return;
-    }
-
-
-    if (
-        isOriginal(activeScriptId)
-    ) {
-
-        showToast(
-            "Create an editable copy first."
-        );
-
-        return;
-
-    }
-
-
     const script =
-        getPersonalScript(
-            activeScriptId
-        );
-
+        getActiveScript();
 
     if (!script) {
+
+        showToast(
+            "Select a script first.",
+            "warning"
+        );
+
         return;
     }
 
 
     script.content =
-        editor.value;
+        scriptEditor.value;
 
 
     savePersonalScripts();
 
 
+    editorStatus.textContent =
+        `${script.title} • ${script.content.length} characters`;
+
+    if (isEditableCopy(script)) {
+
+        editorMode.textContent =
+            "Editable copy";
+
+    } else if (isNewScratchScript(script)) {
+
+        editorMode.textContent =
+            "Personal script";
+
+    } else {
+
+        editorMode.textContent =
+            "M365Buddy script";
+    }
+
+
+    renderSidebar();
+    renderTabs();
+
+
     showToast(
-        "Saved successfully ✓"
+        `"${script.title}" saved successfully.`,
+        "success"
     );
-
-
-    setStatus(
-        "Saved to this browser."
-    );
-
-
-    updateHighlights();
-
 }
 
 
-/* ============================================================
-   CREATE NEW SCRIPT MODAL
-   ============================================================ */
+/* ================================================================
+   COPY TO CLIPBOARD
+   ================================================================ */
 
-function openNewScriptModal() {
+async function copyCurrentScript() {
 
-    newScriptModal.classList.add(
-        "show"
-    );
+    const script =
+        getActiveScript();
 
-}
-
-
-function closeNewScriptModal() {
-
-    newScriptModal.classList.remove(
-        "show"
-    );
-
-}
-
-
-/* ============================================================
-   CREATE FROM SITE SCRIPT
-   ============================================================ */
-
-function createFromSiteScript() {
-
-    closeNewScriptModal();
-
-
-    const scripts =
-        Object.values(
-            ORIGINAL_SCRIPTS
-        );
-
-
-    if (scripts.length === 0) {
+    if (!script) {
 
         showToast(
-            "No M365Buddy scripts are available."
+            "Select a script first.",
+            "warning"
         );
 
-        return;
-
-    }
-
-
-    const names =
-        scripts
-            .map(
-                (script, index) =>
-                    `${index + 1}. ${script.title}`
-            )
-            .join("\n");
-
-
-    const answer =
-        prompt(
-            "Choose an M365Buddy script:\n\n" +
-            names +
-            "\n\nEnter the number:"
-        );
-
-
-    if (!answer) {
         return;
     }
 
 
-    const index =
-        parseInt(answer, 10) - 1;
+    try {
 
-
-    if (
-        index < 0 ||
-        index >= scripts.length
-    ) {
+        await navigator.clipboard.writeText(
+            scriptEditor.value
+        );
 
         showToast(
-            "Invalid selection."
+            "Script copied to clipboard.",
+            "success"
         );
 
-        return;
+    } catch (error) {
 
+        /*
+         * Fallback for browsers where Clipboard API
+         * is unavailable.
+         */
+        scriptEditor.focus();
+        scriptEditor.select();
+
+        const successful =
+            document.execCommand("copy");
+
+        scriptEditor.setSelectionRange(
+            scriptEditor.value.length,
+            scriptEditor.value.length
+        );
+
+        if (successful) {
+
+            showToast(
+                "Script copied to clipboard.",
+                "success"
+            );
+
+        } else {
+
+            showToast(
+                "Unable to copy automatically.",
+                "error"
+            );
+        }
     }
-
-
-    const original =
-        scripts[index];
-
-
-    /*
-       Use the same copy-numbering logic.
-    */
-
-    const existingCopies =
-        personalScripts.filter(
-            script =>
-                script.originalId ===
-                original.id
-        );
-
-
-    const title =
-        original.title +
-        " - Copy" +
-        (
-            existingCopies.length > 0
-                ? " " +
-                  (
-                      existingCopies.length + 1
-                  )
-                : ""
-        );
-
-
-    const copy = {
-
-        id:
-            "personal-" +
-            Date.now(),
-
-        title:
-            title,
-
-        filename:
-            original.filename,
-
-        originalId:
-            original.id,
-
-        content:
-            original.content
-
-    };
-
-
-    personalScripts.push(
-        copy
-    );
-
-
-    savePersonalScripts();
-
-
-    openScript(
-        copy.id
-    );
-
-
-    showToast(
-        "Script created from M365Buddy script ✓"
-    );
-
 }
 
 
-/* ============================================================
-   CREATE FROM SCRATCH
-   ============================================================ */
+/* ================================================================
+   DOWNLOAD
+   ================================================================ */
 
-function createFromScratchScript() {
+function downloadCurrentScript() {
 
-    closeNewScriptModal();
+    const script =
+        getActiveScript();
 
+    if (!script) {
 
-    const title =
-        prompt(
-            "Enter a name for your new script:"
+        showToast(
+            "Select a script first.",
+            "warning"
         );
 
-
-    if (!title) {
         return;
     }
 
 
-    const filename =
-        title
-            .replace(
-                /[^a-z0-9]+/gi,
-                "-"
-            )
-            .toLowerCase() +
-        ".ps1";
+    const blob =
+        new Blob(
+            [scriptEditor.value],
+            {
+                type: "text/plain;charset=utf-8"
+            }
+        );
 
 
-    const script = {
-
-        id:
-            "personal-" +
-            Date.now(),
-
-        title:
-            title,
-
-        filename:
-            filename,
-
-        content:
-`# ${title}
-
-# Add your PowerShell code here.
-
-`
-
-    };
+    const url =
+        URL.createObjectURL(blob);
 
 
-    personalScripts.push(
-        script
-    );
+    const anchor =
+        document.createElement("a");
+
+    anchor.href = url;
+
+    anchor.download =
+        makeSafeFileName(
+            script.title
+        ) + ".ps1";
 
 
-    savePersonalScripts();
+    document.body.appendChild(anchor);
+
+    anchor.click();
+
+    anchor.remove();
 
 
-    openScript(
-        script.id
-    );
-
-
-    editor.focus();
+    URL.revokeObjectURL(url);
 
 
     showToast(
-        "New script created ✓"
+        "PowerShell script downloaded.",
+        "success"
     );
-
 }
 
 
-/* ============================================================
+function makeSafeFileName(name) {
+
+    return name
+        .replace(/[<>:"/\\|?*]+/g, "-")
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-")
+        .replace(/^-|-$/g, "");
+}
+
+
+/* ================================================================
    RENAME
-   ============================================================ */
+   ================================================================ */
 
 function renameCurrentScript() {
 
     const script =
-        getPersonalScript(
-            activeScriptId
-        );
-
+        getActiveScript();
 
     if (!script) {
+
+        showToast(
+            "Select a script first.",
+            "warning"
+        );
+
         return;
     }
 
 
-    const newTitle =
-        prompt(
+    /*
+     * Do not rename the public M365Buddy original.
+     *
+     * Create an editable copy first.
+     */
+    if (!isPersonalScript(script)) {
+
+        showToast(
+            "M365Buddy scripts are kept as originals. Create an editable copy first.",
+            "info"
+        );
+
+        return;
+    }
+
+
+    const newName =
+        window.prompt(
             "Enter the new script name:",
             script.title
         );
 
 
-    if (!newTitle) {
+    if (newName === null) {
         return;
     }
 
 
-    script.title =
-        newTitle;
+    const trimmed =
+        newName.trim();
+
+    if (!trimmed) {
+
+        showToast(
+            "Script name cannot be empty.",
+            "warning"
+        );
+
+        return;
+    }
 
 
-    savePersonalScripts();
-
-
-    renderScriptList();
-
-    renderTabs();
-
-
-    showToast(
-        "Script renamed ✓"
-    );
-
-}
-
-
-/* ============================================================
-   DELETE
-   ============================================================ */
-
-function deleteCurrentScript() {
-
-    const script =
-        getPersonalScript(
-            activeScriptId
+    const duplicate =
+        getAllScripts().some(
+            item =>
+                item.id !== script.id &&
+                item.title.toLowerCase() ===
+                    trimmed.toLowerCase()
         );
 
 
-    if (!script) {
+    if (duplicate) {
+
+        showToast(
+            "A script with that name already exists.",
+            "warning"
+        );
+
+        return;
+    }
+
+
+    script.title = trimmed;
+
+    savePersonalScripts();
+
+    renderSidebar();
+    renderTabs();
+
+    showToast(
+        `Script renamed to "${trimmed}".`,
+        "success"
+    );
+}
+
+
+/* ================================================================
+   RESET COPY
+   ================================================================ */
+
+function resetCurrentCopy() {
+
+    const script =
+        getActiveScript();
+
+    if (!script || !isEditableCopy(script)) {
+
+        showToast(
+            "Reset is available only for editable copies.",
+            "warning"
+        );
+
+        return;
+    }
+
+
+    const original =
+        getOriginalScriptById(
+            script.originalId
+        );
+
+    if (!original) {
+
+        showToast(
+            "The original M365Buddy script could not be found.",
+            "error"
+        );
+
         return;
     }
 
 
     const confirmed =
-        confirm(
-            `Delete "${script.title}"?`
+        window.confirm(
+            "Reset this editable copy to the original M365Buddy script? Your current changes will be lost."
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    script.content =
+        original.content;
+
+    scriptEditor.value =
+        original.content;
+
+    savePersonalScripts();
+
+    clearSearch();
+    renderHighlights();
+
+    editorStatus.textContent =
+        `${script.title} • ${script.content.length} characters`;
+
+    editorMode.textContent =
+        "Editable copy";
+
+    showToast(
+        "Editable copy reset to the original.",
+        "success"
+    );
+}
+
+
+/* ================================================================
+   DELETE
+   ================================================================ */
+
+function deleteCurrentScript() {
+
+    const script =
+        getActiveScript();
+
+    if (!script || !isPersonalScript(script)) {
+
+        showToast(
+            "The original M365Buddy script cannot be deleted.",
+            "warning"
+        );
+
+        return;
+    }
+
+
+    const confirmed =
+        window.confirm(
+            `Delete "${script.title}"? This cannot be undone.`
         );
 
 
@@ -2347,660 +2879,945 @@ function deleteCurrentScript() {
     personalScripts =
         personalScripts.filter(
             item =>
-                item.id !==
-                activeScriptId
+                item.id !== script.id
         );
-
-
-    openTabs =
-        openTabs.filter(
-            id =>
-                id !==
-                activeScriptId
-        );
-
 
     savePersonalScripts();
 
 
-    const next =
-        openTabs[
-            openTabs.length - 1
-        ];
+    closeTab(script.id);
 
-
-    if (next) {
-
-        openScript(next);
-
-    }
-    else {
-
-        activeScriptId =
-            null;
-
-        editor.value =
-            "";
-
-        highlightLayer.innerHTML =
-            "";
-
-        editor.readOnly =
-            true;
-
-        updateToolbar();
-
-        renderScriptList();
-
-        renderTabs();
-
-        setStatus(
-            "No script selected."
-        );
-
-    }
+    renderSidebar();
 
 
     showToast(
-        "Script deleted."
+        `"${script.title}" deleted.`,
+        "success"
     );
-
 }
 
 
-/* ============================================================
-   RESET
-   ============================================================ */
+/* ================================================================
+   SEARCH / HIGHLIGHTING
+   ================================================================ */
 
-function resetCurrentScript() {
+function escapeHtml(value) {
 
-    const script =
-        getPersonalScript(
-            activeScriptId
-        );
+    return value
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
 
 
-    if (!script) {
+function findAllMatchPositions(text, term) {
+
+    const matches = [];
+
+    if (!term) {
+        return matches;
+    }
+
+
+    const lowerText =
+        text.toLocaleLowerCase();
+
+    const lowerTerm =
+        term.toLocaleLowerCase();
+
+
+    let start = 0;
+
+    while (true) {
+
+        const index =
+            lowerText.indexOf(
+                lowerTerm,
+                start
+            );
+
+        if (index === -1) {
+            break;
+        }
+
+
+        matches.push({
+            start: index,
+            end: index + term.length
+        });
+
+
+        /*
+         * Move forward by the term length so that
+         * overlapping matches do not cause an endless loop.
+         */
+        start =
+            index + Math.max(1, term.length);
+    }
+
+
+    return matches;
+}
+
+
+function buildHighlightHtml(text, term, matches, activeIndex) {
+
+    if (!term || matches.length === 0) {
+
+        /*
+         * Preserve the final newline visually.
+         */
+        return escapeHtml(text) +
+            (text.endsWith("\n") ? " " : "");
+    }
+
+
+    let html = "";
+
+    let lastIndex = 0;
+
+
+    matches.forEach(
+        (match, index) => {
+
+            html += escapeHtml(
+                text.slice(
+                    lastIndex,
+                    match.start
+                )
+            );
+
+
+            const matchText =
+                escapeHtml(
+                    text.slice(
+                        match.start,
+                        match.end
+                    )
+                );
+
+
+            const className =
+                index === activeIndex
+                    ? "current-match"
+                    : "";
+
+
+            html +=
+                `<mark class="${className}">${matchText}</mark>`;
+
+
+            lastIndex =
+                match.end;
+        }
+    );
+
+
+    html += escapeHtml(
+        text.slice(lastIndex)
+    );
+
+
+    /*
+     * Keep final newline height.
+     */
+    if (text.endsWith("\n")) {
+        html += " ";
+    }
+
+
+    return html;
+}
+
+
+function renderHighlights() {
+
+    const text =
+        scriptEditor.value || "";
+
+
+    if (!currentSearchTerm) {
+
+        highlightLayer.innerHTML =
+            escapeHtml(text) +
+            (text.endsWith("\n") ? " " : "");
+
+        syncEditorScroll();
+
         return;
     }
 
 
+    currentMatches =
+        findAllMatchPositions(
+            text,
+            currentSearchTerm
+        );
+
+
+    if (currentMatches.length === 0) {
+
+        currentMatchIndex = 0;
+
+    } else if (
+        currentMatchIndex >=
+        currentMatches.length
+    ) {
+
+        currentMatchIndex =
+            currentMatches.length - 1;
+    }
+
+
+    highlightLayer.innerHTML =
+        buildHighlightHtml(
+            text,
+            currentSearchTerm,
+            currentMatches,
+            currentMatchIndex
+        );
+
+
+    updateFindCount();
+
+    syncEditorScroll();
+
+
+    /*
+     * Scroll the current highlighted match into view.
+     */
+    scrollCurrentMatchIntoView();
+}
+
+
+function performSearch() {
+
+    currentSearchTerm =
+        findInput.value;
+
+    currentMatchIndex = 0;
+
+    currentMatches =
+        findAllMatchPositions(
+            scriptEditor.value,
+            currentSearchTerm
+        );
+
+    renderHighlights();
+
+    updateFindCount();
+
+
+    if (
+        currentSearchTerm &&
+        currentMatches.length === 0
+    ) {
+
+        editorMode.textContent =
+            "No matches";
+
+    } else if (currentSearchTerm) {
+
+        editorMode.textContent =
+            `${currentMatches.length} match${
+                currentMatches.length === 1
+                    ? ""
+                    : "es"
+            }`;
+
+    } else {
+
+        const script =
+            getActiveScript();
+
+        if (script) {
+
+            editorMode.textContent =
+                isEditableCopy(script)
+                    ? "Editable copy"
+                    : isNewScratchScript(script)
+                        ? "Personal script"
+                        : "M365Buddy script";
+        }
+    }
+}
+
+
+function updateFindCount() {
+
+    if (!currentSearchTerm) {
+
+        findCount.textContent =
+            "0 / 0";
+
+        return;
+    }
+
+
+    if (currentMatches.length === 0) {
+
+        findCount.textContent =
+            "0 / 0";
+
+        return;
+    }
+
+
+    findCount.textContent =
+        `${currentMatchIndex + 1} / ${currentMatches.length}`;
+}
+
+
+function moveToNextMatch() {
+
+    if (!currentSearchTerm) {
+        performSearch();
+        return;
+    }
+
+
+    if (currentMatches.length === 0) {
+        return;
+    }
+
+
+    currentMatchIndex =
+        (
+            currentMatchIndex + 1
+        ) %
+        currentMatches.length;
+
+
+    renderHighlights();
+    updateFindCount();
+}
+
+
+function moveToPreviousMatch() {
+
+    if (!currentSearchTerm) {
+        performSearch();
+        return;
+    }
+
+
+    if (currentMatches.length === 0) {
+        return;
+    }
+
+
+    currentMatchIndex =
+        (
+            currentMatchIndex -
+            1 +
+            currentMatches.length
+        ) %
+        currentMatches.length;
+
+
+    renderHighlights();
+    updateFindCount();
+}
+
+
+function clearSearch() {
+
+    currentSearchTerm = "";
+    currentMatches = [];
+    currentMatchIndex = 0;
+
+    findInput.value = "";
+
+    updateFindCount();
+}
+
+
+function scrollCurrentMatchIntoView() {
+
+    if (
+        !currentSearchTerm ||
+        currentMatches.length === 0
+    ) {
+        return;
+    }
+
+
+    const currentMark =
+        highlightLayer.querySelector(
+            "mark.current-match"
+        );
+
+
+    if (!currentMark) {
+        return;
+    }
+
+
+    /*
+     * Scroll the visual highlight layer.
+     *
+     * Because the textarea and highlight layer use exactly
+     * the same dimensions and typography, their scroll positions
+     * remain synchronized.
+     */
+    const markTop =
+        currentMark.offsetTop;
+
+    const markBottom =
+        markTop +
+        currentMark.offsetHeight;
+
+
+    const visibleTop =
+        highlightLayer.scrollTop;
+
+    const visibleBottom =
+        visibleTop +
+        highlightLayer.clientHeight;
+
+
+    if (markTop < visibleTop) {
+
+        highlightLayer.scrollTop =
+            Math.max(
+                0,
+                markTop - 30
+            );
+
+    } else if (
+        markBottom > visibleBottom
+    ) {
+
+        highlightLayer.scrollTop =
+            markBottom -
+            highlightLayer.clientHeight +
+            30;
+    }
+
+
+    syncEditorScroll();
+}
+
+
+/* ================================================================
+   SCROLL SYNCHRONIZATION
+   ================================================================ */
+
+let syncingScroll = false;
+
+
+function syncEditorScroll(source = "editor") {
+
+    if (syncingScroll) {
+        return;
+    }
+
+
+    syncingScroll = true;
+
+
+    if (source === "editor") {
+
+        highlightLayer.scrollTop =
+            scriptEditor.scrollTop;
+
+        highlightLayer.scrollLeft =
+            scriptEditor.scrollLeft;
+
+    } else {
+
+        scriptEditor.scrollTop =
+            highlightLayer.scrollTop;
+
+        scriptEditor.scrollLeft =
+            highlightLayer.scrollLeft;
+    }
+
+
+    requestAnimationFrame(() => {
+        syncingScroll = false;
+    });
+}
+
+
+/* ================================================================
+   CREATE NEW SCRIPT
+   ================================================================ */
+
+function openNewScriptModal() {
+
+    showCreateChoiceView();
+
+    newScriptModal.classList.add(
+        "visible"
+    );
+}
+
+
+function closeNewScriptModal() {
+
+    newScriptModal.classList.remove(
+        "visible"
+    );
+
+    showCreateChoiceView();
+}
+
+
+function showCreateChoiceView() {
+
+    createChoiceView.hidden = false;
+    siteScriptChoiceView.hidden = true;
+
+    modalBackButton.hidden = true;
+    modalCancelButton.hidden = false;
+}
+
+
+function showSiteScriptChoiceView() {
+
+    createChoiceView.hidden = true;
+    siteScriptChoiceView.hidden = false;
+
+    modalBackButton.hidden = false;
+    modalCancelButton.hidden = true;
+
+    renderModalScriptList();
+}
+
+
+function renderModalScriptList() {
+
+    modalScriptList.innerHTML = "";
+
+
+    ORIGINAL_SCRIPTS.forEach(
+        script => {
+
+            const button =
+                document.createElement("button");
+
+            button.type = "button";
+
+            button.className =
+                "modal-script-item";
+
+
+            const icon =
+                document.createElement("span");
+
+            icon.className =
+                "modal-script-item-icon";
+
+            icon.textContent = "📄";
+
+
+            const text =
+                document.createElement("span");
+
+            text.className =
+                "modal-script-item-text";
+
+
+            const name =
+                document.createElement("span");
+
+            name.className =
+                "modal-script-item-name";
+
+            name.textContent =
+                script.title;
+
+
+            const description =
+                document.createElement("span");
+
+            description.className =
+                "modal-script-item-description";
+
+            description.textContent =
+                script.description;
+
+
+            text.appendChild(name);
+            text.appendChild(description);
+
+            button.appendChild(icon);
+            button.appendChild(text);
+
+
+            button.addEventListener(
+                "click",
+                () => createEditableCopy(
+                    script.id
+                )
+            );
+
+
+            modalScriptList.appendChild(button);
+        }
+    );
+}
+
+
+function createEditableCopy(
+    originalId
+) {
+
     const original =
-        getOriginalScript(
-            script.originalId
+        getOriginalScriptById(
+            originalId
         );
 
 
     if (!original) {
 
         showToast(
-            "No original version available."
+            "The selected M365Buddy script could not be found.",
+            "error"
         );
 
-        return;
-
-    }
-
-
-    const confirmed =
-        confirm(
-            "Reset this script to the original M365Buddy version?"
-        );
-
-
-    if (!confirmed) {
         return;
     }
 
 
-    editor.value =
-        original.content;
+    const copy = {
+
+        id: createId("copy"),
+
+        title:
+            getNextCopyTitle(
+                original
+            ),
+
+        description:
+            `Editable copy of ${original.title}`,
+
+        content:
+            original.content,
+
+        originalId:
+            original.id,
+
+        type:
+            "Copy"
+    };
 
 
-    script.content =
-        original.content;
-
+    personalScripts.push(copy);
 
     savePersonalScripts();
 
 
-    updateHighlights();
+    /*
+     * Open the copy in a top tab.
+     *
+     * It is intentionally NOT added to the left sidebar.
+     */
+    openScript(copy.id);
+
+
+    closeNewScriptModal();
 
 
     showToast(
-        "Script reset ✓"
+        `"${copy.title}" created and opened in a new tab.`,
+        "success"
     );
-
-
-    setStatus(
-        "Reset to original version."
-    );
-
 }
 
 
-/* ============================================================
-   COPY
-   ============================================================ */
+function createFromScratch() {
 
-async function copyCurrentScript() {
+    const name =
+        window.prompt(
+            "Enter a name for your new script:",
+            "My PowerShell Script"
+        );
 
-    if (!activeScriptId) {
+
+    if (name === null) {
         return;
     }
 
 
-    try {
+    const trimmed =
+        name.trim();
 
-        await navigator.clipboard.writeText(
-            editor.value
-        );
-
+    if (!trimmed) {
 
         showToast(
-            "Copied to clipboard ✓"
+            "Script name cannot be empty.",
+            "warning"
         );
 
-
-        setStatus(
-            "Script copied to clipboard."
-        );
-
-    }
-    catch (error) {
-
-        editor.focus();
-
-        editor.select();
-
-        document.execCommand(
-            "copy"
-        );
-
-
-        showToast(
-            "Copied to clipboard ✓"
-        );
-
-
-        setStatus(
-            "Script copied to clipboard."
-        );
-
-    }
-
-}
-
-
-/* ============================================================
-   DOWNLOAD
-   ============================================================ */
-
-function downloadCurrentScript() {
-
-    const script =
-        getScript(
-            activeScriptId
-        );
-
-
-    if (!script) {
         return;
     }
 
 
-    const blob =
-        new Blob(
-            [editor.value],
-            {
-                type:
-                    "text/plain;charset=utf-8"
+    const duplicate =
+        getAllScripts().some(
+            script =>
+                script.title.toLowerCase() ===
+                trimmed.toLowerCase()
+        );
+
+
+    if (duplicate) {
+
+        showToast(
+            "A script with that name already exists.",
+            "warning"
+        );
+
+        return;
+    }
+
+
+    const script = {
+
+        id:
+            createId("personal"),
+
+        title:
+            trimmed,
+
+        description:
+            "Personal PowerShell script",
+
+        content:
+`# ${trimmed}
+
+# Start writing your PowerShell script here.
+
+`,
+
+        originalId:
+            null,
+
+        type:
+            "Personal"
+    };
+
+
+    personalScripts.push(script);
+
+    savePersonalScripts();
+
+
+    /*
+     * Scratch scripts DO appear in the left sidebar.
+     */
+    renderSidebar();
+
+    openScript(script.id);
+
+    closeNewScriptModal();
+
+
+    showToast(
+        `"${script.title}" created.`,
+        "success"
+    );
+}
+
+
+/* ================================================================
+   MODAL EVENTS
+   ================================================================ */
+
+newScriptButton.addEventListener(
+    "click",
+    openNewScriptModal
+);
+
+
+modalCloseButton.addEventListener(
+    "click",
+    closeNewScriptModal
+);
+
+
+modalCancelButton.addEventListener(
+    "click",
+    closeNewScriptModal
+);
+
+
+/*
+ * IMPORTANT:
+ *
+ * This only goes back one step.
+ *
+ * It does NOT create a script and it does NOT close the
+ * entire modal operation.
+ */
+modalBackButton.addEventListener(
+    "click",
+    showCreateChoiceView
+);
+
+
+chooseM365BuddyScript.addEventListener(
+    "click",
+    showSiteScriptChoiceView
+);
+
+
+startFromScratch.addEventListener(
+    "click",
+    createFromScratch
+);
+
+
+newScriptModal.addEventListener(
+    "click",
+    event => {
+
+        /*
+         * Clicking outside the modal closes it.
+         */
+        if (
+            event.target ===
+            newScriptModal
+        ) {
+
+            closeNewScriptModal();
+        }
+    }
+);
+
+
+/* ================================================================
+   HOME NAVIGATION
+   ================================================================ */
+
+homeButton.addEventListener(
+    "click",
+    () => {
+
+        /*
+         * A web page cannot inspect arbitrary browser tabs.
+         *
+         * Using a named browsing context means:
+         *
+         * - If M365Buddy home was opened using the same
+         *   "M365BuddyHome" name, the browser can reuse it.
+         *
+         * - Otherwise, the browser opens a new tab/window.
+         *
+         * The current Script Workspace remains open.
+         */
+        window.open(
+            "https://m365buddy.com/",
+            "M365BuddyHome"
+        );
+    }
+);
+
+
+/* ================================================================
+   THEME / SETTINGS EVENTS
+   ================================================================ */
+
+themeButton.addEventListener(
+    "click",
+    toggleTheme
+);
+
+
+fontSelect.addEventListener(
+    "change",
+    changeFontFamily
+);
+
+
+fontSizeSelect.addEventListener(
+    "change",
+    changeFontSize
+);
+
+
+/* ================================================================
+   EDITOR EVENTS
+   ================================================================ */
+
+scriptEditor.addEventListener(
+    "input",
+    handleEditorInput
+);
+
+
+scriptEditor.addEventListener(
+    "scroll",
+    () => syncEditorScroll("editor")
+);
+
+
+highlightLayer.addEventListener(
+    "scroll",
+    () => syncEditorScroll("highlight")
+);
+
+
+/*
+ * Search while typing.
+ */
+findInput.addEventListener(
+    "input",
+    performSearch
+);
+
+
+findInput.addEventListener(
+    "keydown",
+    event => {
+
+        if (event.key === "Enter") {
+
+            event.preventDefault();
+
+            if (event.shiftKey) {
+
+                moveToPreviousMatch();
+
+            } else {
+
+                moveToNextMatch();
             }
-        );
-
-
-    const url =
-        URL.createObjectURL(
-            blob
-        );
-
-
-    const link =
-        document.createElement("a");
-
-
-    link.href =
-        url;
-
-
-    link.download =
-        script.filename ||
-        "script.ps1";
-
-
-    document.body.appendChild(
-        link
-    );
-
-
-    link.click();
-
-
-    link.remove();
-
-
-    URL.revokeObjectURL(
-        url
-    );
-
-
-    showToast(
-        "Script downloaded ✓"
-    );
-
-
-    setStatus(
-        "Script downloaded."
-    );
-
-}
-
-
-/* ============================================================
-   FIND ALL MATCHES
-   ============================================================ */
-
-function findAllMatches() {
-
-    const term =
-        findInput.value;
-
-
-    searchMatches = [];
-
-    currentMatch = 0;
-
-
-    if (!term) {
-
-        findCount.textContent =
-            "";
-
-        updateHighlights();
-
-        return;
-
-    }
-
-
-    const content =
-        editor.value;
-
-
-    const lowerContent =
-        content.toLowerCase();
-
-
-    const lowerTerm =
-        term.toLowerCase();
-
-
-    let position = 0;
-
-
-    while (true) {
-
-        const found =
-            lowerContent.indexOf(
-                lowerTerm,
-                position
-            );
-
-
-        if (found === -1) {
-            break;
         }
 
+        if (event.key === "Escape") {
 
-        searchMatches.push(
-            found
-        );
+            findInput.value = "";
 
+            clearSearch();
 
-        position =
-            found +
-            lowerTerm.length;
+            renderHighlights();
 
+            scriptEditor.focus();
+        }
     }
-
-
-    updateFindCounter();
-
-    updateHighlights();
-
-}
-
-
-/* ============================================================
-   FIND BUTTON
-   ============================================================ */
-
-function findInScript() {
-
-    findAllMatches();
-
-
-    if (
-        searchMatches.length === 0
-    ) {
-
-        showToast(
-            "No matches found."
-        );
-
-        return;
-
-    }
-
-
-    /*
-       Move to first match.
-    */
-
-    currentMatch = 0;
-
-    selectCurrentMatch();
-
-}
-
-
-/* ============================================================
-   SELECT CURRENT MATCH
-   ============================================================ */
-
-function selectCurrentMatch() {
-
-    if (
-        searchMatches.length === 0
-    ) {
-        return;
-    }
-
-
-    const term =
-        findInput.value;
-
-
-    const position =
-        searchMatches[
-            currentMatch
-        ];
-
-
-    editor.focus();
-
-
-    editor.setSelectionRange(
-        position,
-        position + term.length
-    );
-
-
-    updateFindCounter();
-
-
-    /*
-       Scroll editor approximately
-       to selected result.
-    */
-
-    const beforeText =
-        editor.value.substring(
-            0,
-            position
-        );
-
-
-    const lines =
-        beforeText.split("\n").length;
-
-
-    const lineHeight =
-        parseFloat(
-            getComputedStyle(
-                editor
-            ).lineHeight
-        );
-
-
-    editor.scrollTop =
-        Math.max(
-            0,
-            (lines - 3) *
-            lineHeight
-        );
-
-
-    syncHighlightScroll();
-
-}
-
-
-/* ============================================================
-   FIND COUNTER
-   ============================================================ */
-
-function updateFindCounter() {
-
-    if (
-        searchMatches.length === 0
-    ) {
-
-        findCount.textContent =
-            findInput.value
-                ? "0"
-                : "";
-
-        return;
-
-    }
-
-
-    findCount.textContent =
-        `${currentMatch + 1} of ${searchMatches.length}`;
-
-}
-
-
-/* ============================================================
-   HIGHLIGHTS
-   ============================================================ */
-
-function updateHighlights() {
-
-    const content =
-        editor.value;
-
-
-    const term =
-        findInput.value;
-
-
-    if (!term) {
-
-        highlightLayer.textContent =
-            content;
-
-        syncHighlightScroll();
-
-        return;
-
-    }
-
-
-    const escapedContent =
-        escapeHtml(
-            content
-        );
-
-
-    const escapedTerm =
-        escapeHtml(
-            term
-        );
-
-
-    const regex =
-        new RegExp(
-            escapeRegExp(
-                escapedTerm
-            ),
-            "gi"
-        );
-
-
-    const highlighted =
-        escapedContent.replace(
-            regex,
-            match =>
-                `<mark class="highlight">${match}</mark>`
-        );
-
-
-    highlightLayer.innerHTML =
-        highlighted;
-
-
-    syncHighlightScroll();
-
-}
-
-
-/* ============================================================
-   ESCAPE REGEX
-   ============================================================ */
-
-function escapeRegExp(value) {
-
-    return value.replace(
-        /[.*+?^${}()|[\]\\]/g,
-        "\\$&"
-    );
-
-}
-
-
-/* ============================================================
-   SYNC EDITOR / HIGHLIGHT SCROLL
-   ============================================================ */
-
-function syncHighlightScroll() {
-
-    highlightLayer.scrollTop =
-        editor.scrollTop;
-
-    highlightLayer.scrollLeft =
-        editor.scrollLeft;
-
-}
-
-
-/* ============================================================
-   TOAST
-   ============================================================ */
-
-let toastTimer;
-
-
-function showToast(message) {
-
-    clearTimeout(
-        toastTimer
-    );
-
-
-    toast.textContent =
-        message;
-
-
-    toast.classList.add(
-        "show"
-    );
-
-
-    toastTimer =
-        setTimeout(
-            () => {
-
-                toast.classList.remove(
-                    "show"
-                );
-
-            },
-            2200
-        );
-
-}
-
-
-/* ============================================================
-   STATUS
-   ============================================================ */
-
-function setStatus(message) {
-
-    statusBar.textContent =
-        message;
-
-}
-
-
-/* ============================================================
-   ESCAPE HTML
-   ============================================================ */
-
-function escapeHtml(value) {
-
-    return value
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
-}
-
-
-/* ============================================================
-   EVENT HANDLERS
-   ============================================================ */
-
-scriptSearch.addEventListener(
-    "input",
-    renderScriptList
 );
 
 
-editCopyButton.addEventListener(
+findPrevButton.addEventListener(
     "click",
-    createEditableCopy
+    moveToPreviousMatch
 );
 
+
+findNextButton.addEventListener(
+    "click",
+    moveToNextMatch
+);
+
+
+/* ================================================================
+   TOOLBAR EVENTS
+   ================================================================ */
 
 saveButton.addEventListener(
     "click",
@@ -3028,7 +3845,7 @@ renameButton.addEventListener(
 
 resetButton.addEventListener(
     "click",
-    resetCurrentScript
+    resetCurrentCopy
 );
 
 
@@ -3038,244 +3855,199 @@ deleteButton.addEventListener(
 );
 
 
-newScriptButton.addEventListener(
-    "click",
-    openNewScriptModal
-);
+/* ================================================================
+   SIDEBAR SEARCH
+   ================================================================ */
 
-
-createFromSite.addEventListener(
-    "click",
-    createFromSiteScript
-);
-
-
-createFromScratch.addEventListener(
-    "click",
-    createFromScratchScript
-);
-
-
-closeModal.addEventListener(
-    "click",
-    closeNewScriptModal
-);
-
-
-newScriptModal.addEventListener(
-    "click",
-    event => {
-
-        if (
-            event.target ===
-            newScriptModal
-        ) {
-
-            closeNewScriptModal();
-
-        }
-
-    }
-);
-
-
-findButton.addEventListener(
-    "click",
-    findInScript
-);
-
-
-findInput.addEventListener(
+sidebarSearch.addEventListener(
     "input",
-    findAllMatches
+    renderSidebar
 );
 
 
-findInput.addEventListener(
+/* ================================================================
+   KEYBOARD SHORTCUTS
+   ================================================================ */
+
+document.addEventListener(
     "keydown",
     event => {
 
+        /*
+         * Ctrl + S
+         */
         if (
-            event.key === "Enter"
-        ) {
-
-            if (
-                searchMatches.length > 0
-            ) {
-
-                currentMatch =
-                    (
-                        currentMatch + 1
-                    ) %
-                    searchMatches.length;
-
-                selectCurrentMatch();
-
-            }
-            else {
-
-                findInScript();
-
-            }
-
-        }
-
-    }
-);
-
-
-editor.addEventListener(
-    "input",
-    () => {
-
-        updateHighlights();
-
-    }
-);
-
-
-editor.addEventListener(
-    "scroll",
-    syncHighlightScroll
-);
-
-
-themeSelect.addEventListener(
-    "change",
-    applyEditorSettings
-);
-
-
-fontSelect.addEventListener(
-    "change",
-    applyEditorSettings
-);
-
-
-fontSizeSelect.addEventListener(
-    "change",
-    applyEditorSettings
-);
-
-
-/* ============================================================
-   TAB SUPPORT
-   ============================================================ */
-
-editor.addEventListener(
-    "keydown",
-    event => {
-
-        if (
-            event.key === "Tab"
+            (event.ctrlKey || event.metaKey) &&
+            event.key.toLowerCase() === "s"
         ) {
 
             event.preventDefault();
 
-
-            if (
-                editor.readOnly
-            ) {
-                return;
-            }
-
-
-            const start =
-                editor.selectionStart;
-
-
-            const end =
-                editor.selectionEnd;
-
-
-            editor.value =
-                editor.value.substring(
-                    0,
-                    start
-                ) +
-                "    " +
-                editor.value.substring(
-                    end
-                );
-
-
-            editor.selectionStart =
-                editor.selectionEnd =
-                    start + 4;
-
-
-            updateHighlights();
-
+            saveCurrentScript();
         }
 
+
+        /*
+         * Ctrl + F
+         */
+        if (
+            (event.ctrlKey || event.metaKey) &&
+            event.key.toLowerCase() === "f"
+        ) {
+
+            event.preventDefault();
+
+            findInput.focus();
+            findInput.select();
+        }
+
+
+        /*
+         * Escape closes the modal.
+         */
+        if (
+            event.key === "Escape" &&
+            newScriptModal.classList.contains(
+                "visible"
+            )
+        ) {
+
+            closeNewScriptModal();
+        }
     }
 );
 
 
-/* ============================================================
-   INITIALIZE
-   ============================================================ */
+/* ================================================================
+   TOAST SYSTEM
+   ================================================================ */
 
-function initializeWorkspace() {
+function showToast(
+    message,
+    type = "info",
+    duration = 3000
+) {
 
-    loadSettings();
+    const toast =
+        document.createElement("div");
 
-    applyEditorSettings();
+    toast.className =
+        `toast ${type}`;
+
+    toast.textContent =
+        message;
 
 
-    renderScriptList();
+    toastContainer.appendChild(toast);
 
 
-    const params =
-        new URLSearchParams(
-            window.location.search
+    requestAnimationFrame(() => {
+
+        toast.classList.add(
+            "visible"
         );
+    });
 
 
-    const requestedScript =
-        params.get(
-            "script"
-        );
+    window.setTimeout(
+        () => {
 
-
-    if (
-        requestedScript &&
-        getScript(
-            requestedScript
-        )
-    ) {
-
-        openScript(
-            requestedScript
-        );
-
-    }
-    else {
-
-        const first =
-            Object.keys(
-                ORIGINAL_SCRIPTS
-            )[0];
-
-
-        if (first) {
-
-            openScript(
-                first
+            toast.classList.remove(
+                "visible"
             );
 
-        }
+            window.setTimeout(
+                () => toast.remove(),
+                200
+            );
 
-    }
-
+        },
+        duration
+    );
 }
 
 
-initializeWorkspace();
+/* ================================================================
+   INITIALIZATION
+   ================================================================ */
+
+function initialize() {
+
+    /*
+     * Load saved information.
+     */
+    personalScripts =
+        loadPersonalScripts();
+
+    openTabs =
+        loadOpenTabs();
+
+    loadSettings();
+
+
+    /*
+     * Remove stale tab IDs from localStorage.
+     *
+     * This can happen if a personal script was deleted.
+     */
+    openTabs =
+        openTabs.filter(
+            id =>
+                Boolean(
+                    getScriptById(id)
+                )
+        );
+
+
+    saveOpenTabs();
+
+
+    /*
+     * Apply UI settings.
+     */
+    applyTheme();
+    applyEditorSettings();
+
+
+    /*
+     * Render sidebar/tabs.
+     */
+    renderSidebar();
+    renderTabs();
+
+
+    /*
+     * Restore the previously active/open workspace.
+     *
+     * The last open tab is used as the active tab.
+     */
+    if (openTabs.length > 0) {
+
+        activeScriptId =
+            openTabs[
+                openTabs.length - 1
+            ];
+
+        renderTabs();
+        renderSidebar();
+        loadActiveScriptIntoEditor();
+
+    } else {
+
+        loadActiveScriptIntoEditor();
+    }
+
+
+    updateEditorButtons();
+}
+
+
+/*
+ * Start application.
+ */
+initialize();
 
 </script>
 
-
 </body>
-
 </html>
