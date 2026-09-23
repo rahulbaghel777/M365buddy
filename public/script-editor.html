@@ -76,7 +76,7 @@ button {
     display: flex;
     align-items: center;
     padding: 0 18px;
-    gap: 12px;
+    gap: 14px;
 }
 
 .brand {
@@ -732,36 +732,35 @@ body.dark .option:hover {
          TOP HEADER
     ====================================================== -->
 
-    <header class="topbar">
+<header class="topbar">
 
-        <div
-            class="brand"
-            id="brandHome"
-            title="Open M365Buddy home">
-            M365<span>Buddy</span> Script Workspace
-        </div>
+    <button
+        type="button"
+        class="btn"
+        id="homeBtn">
+        ← Back to Home
+    </button>
 
-        <div class="top-actions">
+    <div
+        class="brand"
+        id="brandHome"
+        title="Open M365Buddy home">
+        M365<span>Buddy</span> Script Workspace
+    </div>
 
-            <button
-                type="button"
-                class="btn"
-                id="homeBtn">
-                Home
-            </button>
+    <div class="top-actions">
 
-            <button
-                type="button"
-                class="btn primary"
-                id="newScriptBtn">
-                ＋ Create New Script
-            </button>
+        <button
+            type="button"
+            class="btn"
+            id="themeBtn">
+            Dark
+        </button>
 
-        </div>
+    </div>
 
-    </header>
-
-
+</header>
+    
     <!-- =====================================================
          BODY
     ====================================================== -->
@@ -795,14 +794,22 @@ body.dark .option:hover {
 
             <div class="side-bottom">
 
-                <button
-                    type="button"
-                    class="btn"
-                    id="refreshBtn">
-                    ↻ Refresh List
-                </button>
+    <button
+        type="button"
+        class="btn primary"
+        id="newScriptBtn"
+        style="margin-bottom:8px;">
+        ＋ Add New Script
+    </button>
 
-            </div>
+    <button
+        type="button"
+        class="btn"
+        id="refreshBtn">
+        ↻ Refresh List
+    </button>
+
+</div>
 
         </aside>
 
@@ -925,14 +932,7 @@ body.dark .option:hover {
                     <option value="15">15</option>
                     <option value="16">16</option>
                 </select>
-
-                <button
-                    type="button"
-                    class="btn"
-                    id="themeBtn">
-                    Dark
-                </button>
-
+                
             </div>
 
 
