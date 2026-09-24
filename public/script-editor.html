@@ -192,36 +192,6 @@ button {
     border: 1px solid transparent;
 }
 
-.script-item:hover {
-    background: #f1f5f9;
-}
-
-.script-item.active {
-    background: #eff6ff;
-    border-color: #bfdbfe;
-    color: #1d4ed8;
-}
-
-.script-name {
-    font-size: 13px;
-    font-weight: 600;
-}
-
-.script-meta {
-    font-size: 11px;
-    color: var(--muted);
-    margin-top: 3px;
-}
-
-.side-bottom {
-    padding: 12px;
-    border-top: 1px solid var(--border);
-}
-
-.side-bottom .btn {
-    width: 100%;
-}
-
     /* =========================================================
    SIDEBAR SCRIPT CLOSE BUTTON
 ========================================================= */
@@ -256,7 +226,7 @@ button {
 
     cursor: pointer;
 
-    opacity: 0;
+    opacity: 0.45;
 
     transition:
         opacity 0.15s,
@@ -271,6 +241,36 @@ button {
 .script-close:hover {
     background: #fee2e2;
     color: #dc2626;
+}
+
+.script-item:hover {
+    background: #f1f5f9;
+}
+
+.script-item.active {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+    color: #1d4ed8;
+}
+
+.script-name {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.script-meta {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 3px;
+}
+
+.side-bottom {
+    padding: 12px;
+    border-top: 1px solid var(--border);
+}
+
+.side-bottom .btn {
+    width: 100%;
 }
     
 /* =========================================================
@@ -1518,118 +1518,367 @@ function getActiveTab() {
     );
 }
 
-
-/* =========================================================
-   SIDEBAR
-========================================================= */
-
-function renderScriptList() {
+function renderSidebar(filter) {
 
     const search =
-        sideSearch.value
+        (filter || "")
             .trim()
             .toLowerCase();
 
-    const visibleScripts =
-        state.scripts.filter(
-            function (script) {
 
-                /*
-                 * Editable copies are deliberately not
-                 * shown in the left menu.
-                 */
+    scriptList.innerHTML = "";
 
-                if (
-                    script.originalId
-                ) {
-                    return false;
-                }
 
-                const haystack =
-                    (
-                        script.name +
-                        " " +
-                        (script.description || "")
-                    ).toLowerCase();
+    state.scripts
 
-                return haystack.includes(search);
+        /*
+           Show original M365Buddy scripts and
+           custom scripts.
+
+           Editable copies remain hidden from
+           the left sidebar.
+        */
+        .filter(function (script) {
+
+    return (
+        (
+            script.original ||
+            !script.originalId
+        )
+        &&
+        !script.sidebarHidden
+    );
+
+})
+
+        .filter(function (script) {
+
+            if (!search) {
+                return true;
             }
-        );
 
-    if (!visibleScripts.length) {
+            return (
+                script.name
+                    .toLowerCase()
+                    .includes(search) ||
 
-        scriptList.innerHTML =
-            `
-            <div class="empty">
-                <div>
-                    <div class="empty-title">
-                        No scripts found
-                    </div>
+                (
+                    script.description || ""
+                )
+                    .toLowerCase()
+                    .includes(search)
+            );
 
-                    <div class="empty-text">
-                        Create a new script or change your search.
-                    </div>
-                </div>
-            </div>
-            `;
+        })
 
-        return;
-    }
+        .forEach(function (script) {
 
-    scriptList.innerHTML =
-        visibleScripts.map(
-            function (script) {
+            const item =
+                document.createElement("div");
 
-                const active =
-                    state.openTabs.some(
-                        function (tab) {
-                            return (
-                                tab.scriptId === script.id &&
-                                tab.id === state.activeTabId
-                            );
-                        }
+
+            item.className =
+                "script-item";
+
+
+            /*
+               Highlight the script that is
+               currently open.
+            */
+
+            const activeTab =
+                getActiveTab();
+
+
+            if (
+                activeTab &&
+                activeTab.scriptId === script.id
+            ) {
+
+                item.classList.add("active");
+
+            }
+
+
+            /*
+               Script information.
+            */
+
+            const info =
+                document.createElement("div");
+
+
+            info.className =
+                "script-info";
+
+
+            const name =
+                document.createElement("div");
+
+
+            name.className =
+                "script-name";
+
+
+            name.textContent =
+                script.name;
+
+
+            const description =
+                document.createElement("div");
+
+
+            description.className =
+                "script-description";
+
+
+            description.textContent =
+                script.description ||
+                (
+                    script.original
+                        ? "M365Buddy script"
+                        : "Personal script"
+                );
+
+
+            info.appendChild(name);
+
+            info.appendChild(description);
+
+
+            /*
+               CLOSE BUTTON
+            */
+
+            const close =
+                document.createElement("button");
+
+
+            close.type =
+                "button";
+
+
+            close.className =
+                "script-close";
+
+
+            close.textContent =
+                "×";
+
+
+            close.title =
+                "Close script";
+
+
+            close.setAttribute(
+                "aria-label",
+                "Close " + script.name
+            );
+
+
+            /*
+               IMPORTANT:
+               Prevent the close button click
+               from also opening the script.
+            */
+
+            close.addEventListener(
+                "click",
+                function (event) {
+
+                    event.stopPropagation();
+
+                    closeScriptFromSidebar(
+                        script.id
                     );
 
-                return `
-                    <div
-                        class="script-item ${active ? "active" : ""}"
-                        data-script-id="${escapeHtml(script.id)}">
+                }
+            );
 
-                        <div class="script-name">
-                            ${escapeHtml(script.name)}
-                        </div>
 
-                        <div class="script-meta">
-                            ${script.original ? "M365Buddy script" : "Personal script"}
-                        </div>
+            /*
+               Clicking the script itself opens it.
+            */
 
-                    </div>
-                `;
-            }
-        ).join("");
+            item.addEventListener(
+                "click",
+                function () {
 
-    document
-        .querySelectorAll(".script-item")
-        .forEach(
+                    openScript(
+                        script.id
+                    );
+
+                }
+            );
+
+
+            item.appendChild(info);
+
+            item.appendChild(close);
+
+
+            scriptList.appendChild(item);
+
+        });
+
+
+    /*
+       Empty search result.
+    */
+
+    if (
+        scriptList.children.length === 0
+    ) {
+
+        const empty =
+            document.createElement("div");
+
+
+        empty.style.padding =
+            "18px 12px";
+
+
+        empty.style.color =
+            "#647084";
+
+
+        empty.style.fontSize =
+            "13px";
+
+
+        empty.textContent =
+            "No scripts found.";
+
+
+        scriptList.appendChild(empty);
+
+    }
+
+}
+
+    /* =========================================================
+   CLOSE SCRIPT FROM SIDEBAR
+========================================================= */
+
+function closeScriptFromSidebar(scriptId) {
+
+    const script =
+        getScript(scriptId);
+
+
+    if (!script) {
+
+        return;
+
+    }
+
+
+    /*
+       Find an editor tab belonging to this script.
+    */
+
+    const tab =
+        state.tabs.find(
             function (item) {
 
-                item.addEventListener(
-                    "click",
-                    function () {
-
-                        const scriptId =
-                            item.dataset.scriptId;
-
-                        openScript(
-                            scriptId
-                        );
-                    }
+                return (
+                    item.scriptId ===
+                    scriptId
                 );
 
             }
         );
-}
 
+
+    /*
+       If the script is currently open,
+       close its editor tab.
+    */
+
+    if (tab) {
+
+        closeTab(tab.id);
+
+    }
+
+
+    /*
+       Remove the script from the sidebar
+       by removing it from the current workspace.
+
+       For original M365Buddy scripts we do NOT
+       permanently delete the built-in script.
+    */
+
+    if (script.original) {
+
+        script.sidebarHidden = true;
+
+    }
+
+    else {
+
+        /*
+           Custom scripts are actually removed.
+        */
+
+        state.scripts =
+            state.scripts.filter(
+                function (item) {
+
+                    return (
+                        item.id !==
+                        scriptId
+                    );
+
+                }
+            );
+
+    }
+
+
+    saveState();
+
+
+    renderTabs();
+
+
+    renderSidebar(
+        sideSearch.value
+    );
+
+
+    /*
+       If another tab is active, show it.
+    */
+
+    if (state.activeTabId) {
+
+        loadActiveTab();
+
+    }
+
+    else {
+
+        setEditorContent("");
+
+        setStatus(
+            "No editor tab open"
+        );
+
+        dirtyText.textContent =
+            "";
+
+    }
+
+
+    showToast(
+        script.name +
+        " closed."
+    );
+
+}
+    
 
 /* =========================================================
    TABS
@@ -2198,29 +2447,35 @@ function createPersonalScript(
 
         counter++;
     }
+const script = {
 
-    const script = {
+    id:
+        generateId("script"),
 
-        id:
-            makeId("script"),
+    name:
+        name,
 
-        name:
-            candidate,
+    description:
+        originalId
+            ? "Editable copy"
+            : "Custom script",
 
-        description:
-            originalId
-                ? "Editable copy"
-                : "Custom script",
+    content:
+        content || "",
 
-        content:
-            content || "",
+    original:
+        false,
 
-        original:
-            false,
+    readOnly:
+        false,
 
-        originalId:
-            originalId || null
-    };
+    originalId:
+        originalId || null,
+
+    sidebarHidden:
+        false
+
+};
 
     state.scripts.push(
         script
