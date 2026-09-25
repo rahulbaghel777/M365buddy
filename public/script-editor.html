@@ -76,14 +76,13 @@ button {
     display: flex;
     align-items: center;
     padding: 0 18px;
-    gap: 14px;
+    gap: 12px;
 }
 
 .brand {
     font-size: 18px;
     font-weight: 800;
     white-space: nowrap;
-    cursor: pointer;
 }
 
 .brand span {
@@ -192,55 +191,40 @@ button {
     border: 1px solid transparent;
 }
 
-    /* =========================================================
-   SIDEBAR SCRIPT CLOSE BUTTON
-========================================================= */
-
 .script-item {
     position: relative;
-    padding-right: 34px;
+    padding-right: 38px;
 }
 
 .script-close {
     position: absolute;
-    right: 8px;
+    right: 7px;
     top: 50%;
     transform: translateY(-50%);
-
-    width: 22px;
-    height: 22px;
-
-    border: none;
-    background: transparent;
-
-    color: #94a3b8;
-
+    width: 24px;
+    height: 24px;
+    border: 0;
     border-radius: 5px;
-
-    font-size: 17px;
-    line-height: 20px;
-
+    background: transparent;
+    color: #94a3b8;
+    font-size: 18px;
+    line-height: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-
+    opacity: .65;
     cursor: pointer;
-
-    opacity: 0.45;
-
-    transition:
-        opacity 0.15s,
-        background 0.15s,
-        color 0.15s;
-}
-
-.script-item:hover .script-close {
-    opacity: 1;
 }
 
 .script-close:hover {
     background: #fee2e2;
     color: #dc2626;
+    opacity: 1;
+}
+
+body.dark .script-close:hover {
+    background: #3f1d1d;
+    color: #f87171;
 }
 
 .script-item:hover {
@@ -272,7 +256,7 @@ button {
 .side-bottom .btn {
     width: 100%;
 }
-    
+
 /* =========================================================
    WORKSPACE
 ========================================================= */
@@ -344,10 +328,7 @@ button {
     color: #111827;
 }
 
-/* =========================================================
-   PLUS BUTTON
-   DIRECTLY NEXT TO OPENED SCRIPT TABS
-========================================================= */
+/* PLUS BUTTON IS DIRECTLY NEXT TO TABS */
 
 .add-tab {
     flex: 0 0 35px;
@@ -608,7 +589,7 @@ button {
     transform: translateY(8px);
     pointer-events: none;
     transition: 0.2s;
-    z-index: 1200;
+    z-index: 2000;
 }
 
 .toast.show {
@@ -617,159 +598,99 @@ button {
 }
 
 /* =========================================================
-   EMPTY STATE
-========================================================= */
-
-.empty {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--muted);
-    text-align: center;
-    padding: 30px;
-}
-
-.empty-title {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 8px;
-}
-
-.empty-text {
-    font-size: 13px;
-    line-height: 1.6;
-}
-
-/* =========================================================
    DARK THEME
 ========================================================= */
 
 body.dark {
     --bg: #111827;
-    --panel: #1f2937;
-    --panel-soft: #111827;
-    --border: #374151;
-    --text: #f3f4f6;
-    --muted: #9ca3af;
-    --editor-bg: #111827;
-    --editor-text: #f3f4f6;
+    --panel: #172033;
+    --panel-soft: #1e293b;
+    --border: #334155;
+    --text: #e5e7eb;
+    --muted: #94a3b8;
+    --editor-bg: #0f172a;
+    --editor-text: #e5e7eb;
 }
 
 body.dark .btn,
+body.dark .add-tab,
 body.dark .toolbar input,
 body.dark .toolbar select,
-body.dark .side-search,
-body.dark .modal-input {
-    background: #111827;
-    color: #f3f4f6;
-    border-color: #374151;
+body.dark .side-search {
+    background: #1e293b;
+    color: #e5e7eb;
 }
 
-body.dark .btn:hover {
-    background: #374151;
-}
-
-body.dark .script-item:hover {
-    background: #374151;
-}
-
-body.dark .script-item.active {
-    background: #1e3a5f;
-    border-color: #2563eb;
-    color: #bfdbfe;
-}
-
+body.dark .script-item:hover,
 body.dark .tab {
-    background: #111827;
-    color: #f3f4f6;
+    background: #1e293b;
 }
 
 body.dark .tab.active {
-    background: #1f2937;
-    border-color: #374151;
-    border-bottom-color: #1f2937;
+    background: #172033;
+    border-bottom-color: #172033;
 }
 
-body.dark .add-tab {
-    background: #111827;
-    color: #d1d5db;
-    border-color: #4b5563;
-}
-
-body.dark .add-tab:hover {
-    background: #1e3a5f;
-}
-
-body.dark .editor-wrap {
+body.dark .editor {
     background: #0f172a;
+    color: #e5e7eb;
 }
 
 body.dark .line-numbers {
-    background: #1f2937;
-    border-color: #374151;
-    color: #6b7280;
+    background: #111827;
+    color: #64748b;
+    border-color: #334155;
+}
+
+body.dark .editor-wrap {
+    background: #0b1220;
 }
 
 body.dark .editor[readonly] {
-    background: #172033;
+    background: #111827;
 }
 
 body.dark .modal {
-    background: #1f2937;
+    background: #172033;
+}
+
+body.dark .modal-foot,
+body.dark .modal-head {
+    border-color: #334155;
 }
 
 body.dark .option:hover {
-    background: #374151;
+    background: #1e293b;
 }
 
 /* =========================================================
    MOBILE
 ========================================================= */
 
-@media (max-width: 850px) {
+@media (max-width: 900px) {
 
     .sidebar {
-        width: 220px;
-        min-width: 220px;
+        width: 230px;
+        min-width: 230px;
     }
 
     .toolbar input {
         width: 150px;
     }
-
-    .topbar {
-        padding: 0 10px;
-    }
-
-    .brand {
-        font-size: 15px;
-    }
 }
 
-@media (max-width: 650px) {
+@media (max-width: 700px) {
 
     .sidebar {
         display: none;
     }
 
+    .brand {
+        font-size: 15px;
+    }
+
     .top-actions .btn:first-child {
         display: none;
-    }
-
-    .toolbar {
-        overflow-y: auto;
-        max-height: 100px;
-    }
-
-    .editor-wrap {
-        padding: 5px;
-    }
-
-    .line-numbers {
-        width: 40px;
-        min-width: 40px;
     }
 }
 </style>
@@ -780,44 +701,36 @@ body.dark .option:hover {
 <div class="app">
 
     <!-- =====================================================
-         TOP HEADER
+         HEADER
     ====================================================== -->
 
-<header class="topbar">
+    <header class="topbar">
 
-    <button
-        type="button"
-        class="btn"
-        id="homeBtn">
-        ← Back to Home
-    </button>
+        <div class="brand" id="brandHome" title="Back to M365Buddy home">
+            M365<span>Buddy</span> Script Workspace
+        </div>
 
-    <a
-    href="/articles/sharepoint-online-site-inventory.html"
-    class="btn">
-    Article
-</a>
-    
-    <div
-        class="brand"
-        id="brandHome"
-        title="Open M365Buddy home">
-        M365<span>Buddy</span> Script Workspace
-    </div>
+        <div class="top-actions">
 
-    <div class="top-actions">
+            <button
+                type="button"
+                class="btn"
+                id="homeBtn">
+                Back to Home
+            </button>
 
-        <button
-            type="button"
-            class="btn"
-            id="themeBtn">
-            Dark
-        </button>
+            <button
+                type="button"
+                class="btn primary"
+                id="newScriptBtn">
+                ＋ Add New Script
+            </button>
 
-    </div>
+        </div>
 
-</header>
-    
+    </header>
+
+
     <!-- =====================================================
          BODY
     ====================================================== -->
@@ -851,22 +764,14 @@ body.dark .option:hover {
 
             <div class="side-bottom">
 
-    <button
-        type="button"
-        class="btn primary"
-        id="newScriptBtn"
-        style="margin-bottom:8px;">
-        ＋ Add New Script
-    </button>
+                <button
+                    type="button"
+                    class="btn"
+                    id="refreshBtn">
+                    ↻ Refresh List
+                </button>
 
-    <button
-        type="button"
-        class="btn"
-        id="refreshBtn">
-        ↻ Refresh List
-    </button>
-
-</div>
+            </div>
 
         </aside>
 
@@ -989,7 +894,14 @@ body.dark .option:hover {
                     <option value="15">15</option>
                     <option value="16">16</option>
                 </select>
-                
+
+                <button
+                    type="button"
+                    class="btn"
+                    id="themeBtn">
+                    Dark
+                </button>
+
             </div>
 
 
@@ -1098,22 +1010,10 @@ body.dark .option:hover {
 
 
 <script>
-
 (function () {
-
 "use strict";
 
-/* =========================================================
-   STORAGE
-========================================================= */
-
-const STORAGE_KEY =
-    "m365buddy_script_workspace_functional_v1";
-
-
-/* =========================================================
-   ORIGINAL M365BUDDY SCRIPTS
-========================================================= */
+const STORAGE_KEY = "m365buddy_script_workspace_functional_v2";
 
 const ORIGINAL_SCRIPTS = [
 
@@ -1125,2994 +1025,828 @@ const ORIGINAL_SCRIPTS = [
         description: "PnP PowerShell site inventory example",
 
         content:
-[
-"# ============================================================",
-"# M365Buddy - SharePoint Online Site Inventory",
-"# ============================================================",
-"",
-"# IMPORTANT:",
-"# Replace the placeholder values before running.",
-"#",
-"# Do NOT publish:",
-"# - Client secrets",
-"# - PFX passwords",
-"# - Private keys",
-"# - Internal SMTP credentials",
-"# - Tenant-specific confidential information",
-"",
-"",
-"$TenantName = \"YOUR-TENANT\"",
-"",
-"$TenantAdminUrl =",
-"    \"https://YOUR-TENANT-admin.sharepoint.com\"",
-"",
-"$ClientId =",
-"    \"YOUR-APP-CLIENT-ID\"",
-"",
-"$CertificatePath =",
-"    \"C:\\Path\\To\\SharePointAutomationCert.pfx\"",
-"",
-"$CertificatePassword =",
-"    \"YOUR-PFX-PASSWORD\"",
-"",
-"",
-"$OutputCsv =",
-"    Join-Path $env:USERPROFILE `",
-"    \"Desktop\\SharePoint-Site-Inventory.csv\"",
-"",
-"",
-"# ============================================================",
-"# CONNECT",
-"# ============================================================",
-"",
-"Connect-PnPOnline `",
-"    -Url $TenantAdminUrl `",
-"    -ClientId $ClientId `",
-"    -CertificatePath $CertificatePath `",
-"    -CertificatePassword $CertificatePassword",
-"",
-"",
-"# ============================================================",
-"# GET SITES",
-"# ============================================================",
-"",
-"$Sites =",
-"    Get-PnPTenantSite -Detailed",
-"",
-"",
-"# ============================================================",
-"# BUILD REPORT",
-"# ============================================================",
-"",
-"$Report = foreach ($Site in $Sites) {",
-"",
-"    [PSCustomObject]@{",
-"",
-"        SiteName =",
-"            $Site.Title",
-"",
-"        SiteUrl =",
-"            $Site.Url",
-"",
-"        StorageMB =",
-"            [math]::Round(",
-"                $Site.StorageUsageCurrent,",
-"                2",
-"            )",
-"",
-"        StorageQuotaMB =",
-"            [math]::Round(",
-"                $Site.StorageQuota,",
-"                2",
-"            )",
-"",
-"        Template =",
-"            $Site.Template",
-"",
-"        Created =",
-"            $Site.TimeCreated",
-"",
-"        LastModified =",
-"            $Site.LastContentModifiedDate",
-"    }",
-"}",
-"",
-"",
-"# ============================================================",
-"# EXPORT",
-"# ============================================================",
-"",
-"$Report |",
-"    Export-Csv `",
-"        -Path $OutputCsv `",
-"        -NoTypeInformation",
-"",
-"",
-"Write-Host \"Report created:\"",
-"Write-Host $OutputCsv"
-].join("\n")
+`# ============================================================
+# M365Buddy - SharePoint Online Site Inventory
+# ============================================================
+
+# IMPORTANT:
+# Replace the placeholder values before running.
+#
+# Do NOT publish:
+# - Client secrets
+# - PFX passwords
+# - Private keys
+# - Internal SMTP credentials
+# - Tenant-specific confidential information
+
+
+$TenantName = "YOUR-TENANT"
+
+$TenantAdminUrl =
+    "https://YOUR-TENANT-admin.sharepoint.com"
+
+$ClientId =
+    "YOUR-APP-CLIENT-ID"
+
+$CertificatePath =
+    "C:\\Path\\To\\SharePointAutomationCert.pfx"
+
+$CertificatePassword =
+    "YOUR-PFX-PASSWORD"
+
+
+$OutputCsv =
+    Join-Path $env:USERPROFILE \`
+    "Desktop\\SharePoint-Site-Inventory.csv"
+
+
+# ============================================================
+# CONNECT
+# ============================================================
+
+Connect-PnPOnline \`
+    -Url $TenantAdminUrl \`
+    -ClientId $ClientId \`
+    -CertificatePath $CertificatePath \`
+    -CertificatePassword $CertificatePassword
+
+
+# ============================================================
+# GET SITES
+# ============================================================
+
+$Sites =
+    Get-PnPTenantSite -Detailed
+
+
+# ============================================================
+# BUILD REPORT
+# ============================================================
+
+$Report = foreach ($Site in $Sites) {
+
+    [PSCustomObject]@{
+
+        SiteName =
+            $Site.Title
+
+        SiteUrl =
+            $Site.Url
+
+        StorageMB =
+            [math]::Round(
+                $Site.StorageUsageCurrent,
+                2
+            )
+
+        StorageQuotaMB =
+            [math]::Round(
+                $Site.StorageQuota,
+                2
+            )
+
+        Template =
+            $Site.Template
+
+        Created =
+            $Site.TimeCreated
+
+        LastModified =
+            $Site.LastContentModifiedDate
+    }
+}
+
+
+# ============================================================
+# EXPORT
+# ============================================================
+
+$Report |
+    Sort-Object SiteName |
+    Export-Csv \`
+        -Path $OutputCsv \`
+        -NoTypeInformation \`
+        -Encoding UTF8
+
+
+Write-Host ""
+Write-Host "Report created:" -ForegroundColor Green
+Write-Host $OutputCsv -ForegroundColor Cyan
+`,
+
+        original: true,
+        readOnly: true
+
     }
 
 ];
 
-/* =========================================================
-   STATE
-========================================================= */
 
+
+
+/* =========================================================
+   APPLICATION STATE
+========================================================= */
 let state = {
-    scripts: [],
-    openTabs: [],
-    activeTabId: null,
     theme: "light",
     font: "Consolas",
-    fontSize: "13"
+    fontSize: "13",
+    scripts: [],
+    tabs: [],
+    activeTabId: null
 };
 
-let currentSearchIndex = 0;
+let search = { term: "", matches: [], index: -1 };
+let toastTimer = null;
 
+const editor = document.getElementById("editor");
+const lineNumbers = document.getElementById("lineNumbers");
+const tabbar = document.getElementById("tabbar");
+const addTabBtn = document.getElementById("addTabBtn");
+const scriptList = document.getElementById("scriptList");
+const sideSearch = document.getElementById("sideSearch");
+const modalBackdrop = document.getElementById("modalBackdrop");
+const modalTitle = document.getElementById("modalTitle");
+const modalBody = document.getElementById("modalBody");
+const modalFoot = document.getElementById("modalFoot");
+const modalClose = document.getElementById("modalClose");
+const toast = document.getElementById("toast");
+const statusText = document.getElementById("statusText");
+const dirtyText = document.getElementById("dirtyText");
+const positionText = document.getElementById("positionText");
+const findInput = document.getElementById("findInput");
+const findCount = document.getElementById("findCount");
 
-/* =========================================================
-   DOM REFERENCES
-========================================================= */
-
-const scriptList =
-    document.getElementById("scriptList");
-
-const sideSearch =
-    document.getElementById("sideSearch");
-
-const tabbar =
-    document.getElementById("tabbar");
-
-const addTabBtn =
-    document.getElementById("addTabBtn");
-
-const editor =
-    document.getElementById("editor");
-
-const lineNumbers =
-    document.getElementById("lineNumbers");
-
-const statusText =
-    document.getElementById("statusText");
-
-const dirtyText =
-    document.getElementById("dirtyText");
-
-const positionText =
-    document.getElementById("positionText");
-
-const findInput =
-    document.getElementById("findInput");
-
-const findCount =
-    document.getElementById("findCount");
-
-const modalBackdrop =
-    document.getElementById("modalBackdrop");
-
-const modalTitle =
-    document.getElementById("modalTitle");
-
-const modalBody =
-    document.getElementById("modalBody");
-
-const modalFoot =
-    document.getElementById("modalFoot");
-
-const toast =
-    document.getElementById("toast");
-
-
-/* =========================================================
-   UTILITY
-========================================================= */
-
-function makeId(prefix) {
-
-    return (
-        prefix +
-        "_" +
-        Date.now().toString(36) +
-        "_" +
-        Math.random()
-            .toString(36)
-            .slice(2, 8)
-    );
+function generateId(prefix) {
+    return prefix + "-" + Date.now() + "-" + Math.random().toString(36).slice(2, 8);
 }
-
 
 function escapeHtml(value) {
-
-    return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+    return String(value).replace(/[&<>"']/g, function (c) {
+        return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[c];
+    });
 }
-
 
 function showToast(message) {
-
+    clearTimeout(toastTimer);
     toast.textContent = message;
-
     toast.classList.add("show");
-
-    clearTimeout(showToast.timer);
-
-    showToast.timer =
-        setTimeout(
-            function () {
-                toast.classList.remove("show");
-            },
-            2200
-        );
+    toastTimer = setTimeout(function () { toast.classList.remove("show"); }, 2200);
 }
 
+function setStatus(message) { statusText.textContent = message; }
 
 /* =========================================================
-   STORAGE
+   STORAGE + MIGRATION
 ========================================================= */
-
-function saveState() {
-
-    try {
-
-        localStorage.setItem(
-            STORAGE_KEY,
-            JSON.stringify({
-                scripts: state.scripts,
-                openTabs: state.openTabs,
-                activeTabId: state.activeTabId,
-                theme: state.theme,
-                font: state.font,
-                fontSize: state.fontSize
-            })
-        );
-
-    } catch (error) {
-
-        console.error(error);
-
-        showToast(
-            "Unable to save workspace locally."
-        );
-    }
-}
-
-
 function loadState() {
+    let saved = null;
+    try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
 
-    try {
+    if (saved) {
+        try { state = Object.assign(state, JSON.parse(saved)); } catch (e) { console.warn("Workspace data could not be read.", e); }
+    }
 
-        const raw =
-            localStorage.getItem(STORAGE_KEY);
+    /* Migrate older workspace keys if the new key is empty. */
+    if (!saved) {
+        try {
+            const old = localStorage.getItem("m365buddy_script_workspace_functional_v1");
+            if (old) state = Object.assign(state, JSON.parse(old));
+        } catch (e) {}
+    }
 
-        if (!raw) {
+    if (!Array.isArray(state.scripts)) state.scripts = [];
+    if (!Array.isArray(state.tabs)) state.tabs = [];
+    if (!state.theme) state.theme = "light";
+    if (!state.font) state.font = "Consolas";
+    if (!state.fontSize) state.fontSize = "13";
 
-            state.scripts =
-                ORIGINAL_SCRIPTS.map(
-                    function (script) {
-
-                        return {
-                            ...script,
-                            original: true
-                        };
-                    }
-                );
-
-            state.openTabs = [];
-
-            state.activeTabId = null;
-
-            return;
+    ORIGINAL_SCRIPTS.forEach(function (original) {
+        let script = state.scripts.find(function (s) { return s.id === original.id; });
+        if (!script) {
+            state.scripts.push({
+                id: original.id,
+                name: original.name,
+                description: original.description,
+                content: original.content,
+                original: true,
+                readOnly: true,
+                sidebarHidden: false
+            });
+        } else {
+            script.original = true;
+            script.readOnly = true;
+            if (typeof script.sidebarHidden !== "boolean") script.sidebarHidden = false;
+            /* Keep the published original content authoritative. */
+            script.name = original.name;
+            script.description = original.description;
+            script.content = original.content;
         }
+    });
 
-        const saved =
-            JSON.parse(raw);
-
-        state.scripts =
-            Array.isArray(saved.scripts)
-                ? saved.scripts
-                : [];
-
-        state.openTabs =
-            Array.isArray(saved.openTabs)
-                ? saved.openTabs
-                : [];
-
-        state.activeTabId =
-            saved.activeTabId || null;
-
-        state.theme =
-            saved.theme === "dark"
-                ? "dark"
-                : "light";
-
-        state.font =
-            saved.font || "Consolas";
-
-        state.fontSize =
-            saved.fontSize || "13";
-
-        /*
-         * Make sure the current original M365Buddy
-         * scripts still exist even if the localStorage
-         * was created by an older version.
-         */
-
-        ORIGINAL_SCRIPTS.forEach(
-            function (original) {
-
-                const exists =
-                    state.scripts.some(
-                        function (script) {
-                            return script.id === original.id;
-                        }
-                    );
-
-                if (!exists) {
-
-                    state.scripts.unshift({
-                        ...original,
-                        original: true
-                    });
-                }
-
-            }
-        );
-
-    } catch (error) {
-
-        console.error(error);
-
-        state.scripts =
-            ORIGINAL_SCRIPTS.map(
-                function (script) {
-
-                    return {
-                        ...script,
-                        original: true
-                    };
-                }
-            );
-
-        state.openTabs = [];
-
-        state.activeTabId = null;
-
-        state.theme = "light";
+    /* Remove broken tabs from older versions. */
+    state.tabs = state.tabs.filter(function (tab) {
+        return tab && tab.id && getScript(tab.scriptId);
+    });
+    if (!state.tabs.some(function (tab) { return tab.id === state.activeTabId; })) {
+        state.activeTabId = state.tabs.length ? state.tabs[0].id : null;
     }
-}
-
-
-/* =========================================================
-   SCRIPT HELPERS
-========================================================= */
-
-function getScript(scriptId) {
-
-    return state.scripts.find(
-        function (script) {
-            return script.id === scriptId;
-        }
-    );
-}
-
-
-function getTab(tabId) {
-
-    return state.openTabs.find(
-        function (tab) {
-            return tab.id === tabId;
-        }
-    );
-}
-
-
-function getActiveTab() {
-
-    return getTab(
-        state.activeTabId
-    );
-}
-
-function renderSidebar(filter) {
-
-    const search =
-        (filter || "")
-            .trim()
-            .toLowerCase();
-
-
-    scriptList.innerHTML = "";
-
-
-    state.scripts
-
-        /*
-           Show original M365Buddy scripts and
-           custom scripts.
-
-           Editable copies remain hidden from
-           the left sidebar.
-        */
-        .filter(function (script) {
-
-    return (
-        (
-            script.original ||
-            !script.originalId
-        )
-        &&
-        !script.sidebarHidden
-    );
-
-})
-
-        .filter(function (script) {
-
-            if (!search) {
-                return true;
-            }
-
-            return (
-                script.name
-                    .toLowerCase()
-                    .includes(search) ||
-
-                (
-                    script.description || ""
-                )
-                    .toLowerCase()
-                    .includes(search)
-            );
-
-        })
-
-        .forEach(function (script) {
-
-            const item =
-                document.createElement("div");
-
-
-            item.className =
-                "script-item";
-
-
-            /*
-               Highlight the script that is
-               currently open.
-            */
-
-            const activeTab =
-                getActiveTab();
-
-
-            if (
-                activeTab &&
-                activeTab.scriptId === script.id
-            ) {
-
-                item.classList.add("active");
-
-            }
-
-
-            /*
-               Script information.
-            */
-
-            const info =
-                document.createElement("div");
-
-
-            info.className =
-                "script-info";
-
-
-            const name =
-                document.createElement("div");
-
-
-            name.className =
-                "script-name";
-
-
-            name.textContent =
-                script.name;
-
-
-            const description =
-                document.createElement("div");
-
-
-            description.className =
-                "script-description";
-
-
-            description.textContent =
-                script.description ||
-                (
-                    script.original
-                        ? "M365Buddy script"
-                        : "Personal script"
-                );
-
-
-            info.appendChild(name);
-
-            info.appendChild(description);
-
-
-            /*
-               CLOSE BUTTON
-            */
-
-            const close =
-                document.createElement("button");
-
-
-            close.type =
-                "button";
-
-
-            close.className =
-                "script-close";
-
-
-            close.textContent =
-                "×";
-
-
-            close.title =
-                "Close script";
-
-
-            close.setAttribute(
-                "aria-label",
-                "Close " + script.name
-            );
-
-
-            /*
-               IMPORTANT:
-               Prevent the close button click
-               from also opening the script.
-            */
-
-            close.addEventListener(
-                "click",
-                function (event) {
-
-                    event.stopPropagation();
-
-                    closeScriptFromSidebar(
-                        script.id
-                    );
-
-                }
-            );
-
-
-            /*
-               Clicking the script itself opens it.
-            */
-
-            item.addEventListener(
-                "click",
-                function () {
-
-                    openScript(
-                        script.id
-                    );
-
-                }
-            );
-
-
-            item.appendChild(info);
-
-            item.appendChild(close);
-
-
-            scriptList.appendChild(item);
-
-        });
-
-
-    /*
-       Empty search result.
-    */
-
-    if (
-        scriptList.children.length === 0
-    ) {
-
-        const empty =
-            document.createElement("div");
-
-
-        empty.style.padding =
-            "18px 12px";
-
-
-        empty.style.color =
-            "#647084";
-
-
-        empty.style.fontSize =
-            "13px";
-
-
-        empty.textContent =
-            "No scripts found.";
-
-
-        scriptList.appendChild(empty);
-
-    }
-
-}
-
-    /* =========================================================
-   CLOSE SCRIPT FROM SIDEBAR
-========================================================= */
-
-function closeScriptFromSidebar(scriptId) {
-
-    const script =
-        getScript(scriptId);
-
-
-    if (!script) {
-
-        return;
-
-    }
-
-
-    /*
-       Find an editor tab belonging to this script.
-    */
-
-    const tab =
-        state.tabs.find(
-            function (item) {
-
-                return (
-                    item.scriptId ===
-                    scriptId
-                );
-
-            }
-        );
-
-
-    /*
-       If the script is currently open,
-       close its editor tab.
-    */
-
-    if (tab) {
-
-        closeTab(tab.id);
-
-    }
-
-
-    /*
-       Remove the script from the sidebar
-       by removing it from the current workspace.
-
-       For original M365Buddy scripts we do NOT
-       permanently delete the built-in script.
-    */
-
-    if (script.original) {
-
-        script.sidebarHidden = true;
-
-    }
-
-    else {
-
-        /*
-           Custom scripts are actually removed.
-        */
-
-        state.scripts =
-            state.scripts.filter(
-                function (item) {
-
-                    return (
-                        item.id !==
-                        scriptId
-                    );
-
-                }
-            );
-
-    }
-
 
     saveState();
-
-
-    renderTabs();
-
-
-    renderSidebar(
-        sideSearch.value
-    );
-
-
-    /*
-       If another tab is active, show it.
-    */
-
-    if (state.activeTabId) {
-
-        loadActiveTab();
-
-    }
-
-    else {
-
-        setEditorContent("");
-
-        setStatus(
-            "No editor tab open"
-        );
-
-        dirtyText.textContent =
-            "";
-
-    }
-
-
-    showToast(
-        script.name +
-        " closed."
-    );
-
 }
-    
+
+function saveState() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { console.warn("Workspace could not be saved.", e); }
+}
+
+function getScript(scriptId) {
+    return state.scripts.find(function (script) { return script.id === scriptId; }) || null;
+}
+
+function getActiveTab() {
+    return state.tabs.find(function (tab) { return tab.id === state.activeTabId; }) || null;
+}
+
+function getActiveScript() {
+    const tab = getActiveTab();
+    return tab ? getScript(tab.scriptId) : null;
+}
+
+/* =========================================================
+   EDITOR
+========================================================= */
+function syncActiveContent() {
+    const tab = getActiveTab();
+    if (tab) tab.content = editor.value;
+}
+
+function setEditorContent(content) {
+    editor.value = content || "";
+    updateLineNumbers();
+    updatePosition();
+}
+
+function loadActiveTab() {
+    const tab = getActiveTab();
+    const script = getActiveScript();
+
+    if (!tab || !script) {
+        setEditorContent("");
+        editor.readOnly = false;
+        dirtyText.textContent = "";
+        setStatus("No editor tab open");
+        updateLineNumbers();
+        return;
+    }
+
+    editor.value = tab.content || "";
+    editor.readOnly = !!script.readOnly;
+    editor.scrollTop = 0;
+    editor.scrollLeft = 0;
+    editor.selectionStart = 0;
+    editor.selectionEnd = 0;
+    updateLineNumbers();
+    updatePosition();
+    clearSearch();
+    setStatus(script.readOnly ? "Original M365Buddy script — Read Only" : "Ready to edit");
+    dirtyText.textContent = tab.dirty ? "• Unsaved changes" : "Saved";
+    applyTheme();
+}
+
+function updateLineNumbers() {
+    const count = Math.max(1, editor.value.split("\n").length);
+    let output = "";
+    for (let i = 1; i <= count; i++) output += i + (i < count ? "\n" : "");
+    lineNumbers.textContent = output;
+    lineNumbers.scrollTop = editor.scrollTop;
+}
+
+function updatePosition() {
+    const before = editor.value.slice(0, editor.selectionStart || 0).split("\n");
+    positionText.textContent = "Ln " + before.length + ", Col " + (before[before.length - 1].length + 1);
+}
+
+function updateDirtyStatus() {
+    const tab = getActiveTab();
+    dirtyText.textContent = tab ? (tab.dirty ? "• Unsaved changes" : "Saved") : "";
+}
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+function renderSidebar(filter) {
+    const searchText = String(filter || "").trim().toLowerCase();
+    scriptList.innerHTML = "";
+
+    state.scripts
+        .filter(function (script) {
+            return !script.sidebarHidden && (script.original || !script.originalId);
+        })
+        .filter(function (script) {
+            return !searchText || script.name.toLowerCase().includes(searchText) || String(script.description || "").toLowerCase().includes(searchText);
+        })
+        .forEach(function (script) {
+            const item = document.createElement("div");
+            item.className = "script-item";
+            const active = getActiveTab();
+            if (active && active.scriptId === script.id) item.classList.add("active");
+
+            const info = document.createElement("div");
+            info.innerHTML = '<div class="script-name">' + escapeHtml(script.name) + '</div>' +
+                             '<div class="script-meta">' + escapeHtml(script.description || (script.original ? "M365Buddy script" : "Personal script")) + '</div>';
+
+            const close = document.createElement("button");
+            close.type = "button";
+            close.className = "script-close";
+            close.textContent = "×";
+            close.title = "Close / remove from sidebar";
+            close.setAttribute("aria-label", "Close " + script.name);
+            close.addEventListener("click", function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                closeSidebarScript(script.id);
+            });
+
+            item.appendChild(info);
+            item.appendChild(close);
+            item.addEventListener("click", function () { openScript(script.id); });
+            scriptList.appendChild(item);
+        });
+
+    if (!scriptList.children.length) {
+        const empty = document.createElement("div");
+        empty.style.cssText = "padding:12px;color:#647084;font-size:12px;";
+        empty.textContent = "No scripts found.";
+        scriptList.appendChild(empty);
+    }
+}
+
+function closeSidebarScript(scriptId) {
+    const script = getScript(scriptId);
+    if (!script) return;
+
+    const tab = state.tabs.find(function (t) { return t.scriptId === scriptId; });
+    if (tab) closeTab(tab.id, false);
+
+    if (script.original) {
+        script.sidebarHidden = true;
+    } else {
+        state.scripts = state.scripts.filter(function (s) { return s.id !== scriptId; });
+        state.tabs = state.tabs.filter(function (t) { return t.scriptId !== scriptId; });
+        if (!getActiveTab()) state.activeTabId = state.tabs.length ? state.tabs[state.tabs.length - 1].id : null;
+    }
+
+    saveState();
+    renderTabs();
+    renderSidebar(sideSearch.value);
+    if (state.activeTabId) loadActiveTab(); else setEditorContent("");
+    showToast(script.name + " closed.");
+}
 
 /* =========================================================
    TABS
 ========================================================= */
-
 function renderTabs() {
+    tabbar.querySelectorAll(".tab").forEach(function (tab) { tab.remove(); });
+    state.tabs.forEach(function (tab) {
+        const script = getScript(tab.scriptId);
+        if (!script) return;
 
-    /*
-     * Remove everything except the + button.
-     */
+        const el = document.createElement("div");
+        el.className = "tab" + (tab.id === state.activeTabId ? " active" : "");
 
-    Array.from(
-        tabbar.children
-    ).forEach(
-        function (child) {
+        const label = document.createElement("span");
+        label.className = "tab-label";
+        label.textContent = (tab.dirty ? "● " : "") + script.name;
 
-            if (child !== addTabBtn) {
-                child.remove();
-            }
+        const close = document.createElement("button");
+        close.type = "button";
+        close.className = "tab-close";
+        close.textContent = "×";
+        close.title = "Close editor tab";
+        close.addEventListener("click", function (event) {
+            event.stopPropagation();
+            closeTab(tab.id);
+        });
 
-        }
-    );
-
-    state.openTabs.forEach(
-        function (tab) {
-
-            const script =
-                getScript(tab.scriptId);
-
-            if (!script) {
-                return;
-            }
-
-            const tabElement =
-                document.createElement("div");
-
-            tabElement.className =
-                "tab" +
-                (
-                    tab.id === state.activeTabId
-                        ? " active"
-                        : ""
-                );
-
-            tabElement.dataset.tabId =
-                tab.id;
-
-            const label =
-                document.createElement("span");
-
-            label.className =
-                "tab-label";
-
-            label.textContent =
-                script.name;
-
-            const close =
-                document.createElement("button");
-
-            close.type = "button";
-
-            close.className =
-                "tab-close";
-
-            close.textContent =
-                "×";
-
-            close.title =
-                "Close editor tab";
-
-            tabElement.appendChild(
-                label
-            );
-
-            tabElement.appendChild(
-                close
-            );
-
-            tabElement.addEventListener(
-                "click",
-                function (event) {
-
-                    if (
-                        event.target === close
-                    ) {
-                        return;
-                    }
-
-                    activateTab(
-                        tab.id
-                    );
-                }
-            );
-
-            close.addEventListener(
-                "click",
-                function (event) {
-
-                    event.stopPropagation();
-
-                    closeTab(
-                        tab.id
-                    );
-                }
-            );
-
-            tabbar.insertBefore(
-                tabElement,
-                addTabBtn
-            );
-
-        }
-    );
+        el.appendChild(label);
+        el.appendChild(close);
+        el.addEventListener("click", function () { activateTab(tab.id); });
+        tabbar.insertBefore(el, addTabBtn);
+    });
 }
 
-
-/* =========================================================
-   OPEN SCRIPT
-========================================================= */
-
-function openScript(scriptId) {
-
-    const script =
-        getScript(scriptId);
-
+function openScript(scriptId, options) {
+    options = options || {};
+    const script = getScript(scriptId);
     if (!script) {
-
-        showToast(
-            "Script could not be found."
-        );
-
-        return;
+        showToast("Script is not available.");
+        return false;
     }
 
-    let existingTab =
-        state.openTabs.find(
-            function (tab) {
-                return tab.scriptId === scriptId;
-            }
-        );
-
-    if (!existingTab) {
-
-        existingTab = {
-
-            id: makeId("tab"),
-
-            scriptId: scriptId,
-
-            originalContent:
-                script.content,
-
-            content:
-                script.content,
-
-            dirty: false
-        };
-
-        state.openTabs.push(
-            existingTab
-        );
+    syncActiveContent();
+    let tab = state.tabs.find(function (t) { return t.scriptId === scriptId; });
+    if (!tab) {
+        tab = { id: generateId("tab"), scriptId: script.id, content: script.content || "", dirty: false };
+        state.tabs.push(tab);
     }
-
-    state.activeTabId =
-        existingTab.id;
-
-    renderTabs();
-
-    renderScriptList();
-
-    loadActiveEditor();
-
+    if (options.unhide) script.sidebarHidden = false;
+    state.activeTabId = tab.id;
     saveState();
+    renderTabs();
+    renderSidebar(sideSearch.value);
+    loadActiveTab();
+    return true;
 }
-
-
-/* =========================================================
-   ACTIVATE TAB
-========================================================= */
 
 function activateTab(tabId) {
-
-    const tab =
-        getTab(tabId);
-
-    if (!tab) {
-        return;
-    }
-
-    state.activeTabId =
-        tabId;
-
-    renderTabs();
-
-    renderScriptList();
-
-    loadActiveEditor();
-
+    if (!state.tabs.some(function (t) { return t.id === tabId; })) return;
+    syncActiveContent();
+    state.activeTabId = tabId;
     saveState();
+    renderTabs();
+    renderSidebar(sideSearch.value);
+    loadActiveTab();
 }
 
+function closeTab(tabId, showMessage) {
+    const index = state.tabs.findIndex(function (t) { return t.id === tabId; });
+    if (index < 0) return;
+    const wasActive = state.activeTabId === tabId;
+    state.tabs.splice(index, 1);
 
-/* =========================================================
-   CLOSE TAB
-========================================================= */
-
-function closeTab(tabId) {
-
-    const index =
-        state.openTabs.findIndex(
-            function (tab) {
-                return tab.id === tabId;
-            }
-        );
-
-    if (index === -1) {
-        return;
-    }
-
-    const closingActive =
-        state.activeTabId === tabId;
-
-    state.openTabs.splice(
-        index,
-        1
-    );
-
-    if (closingActive) {
-
-        if (state.openTabs.length) {
-
-            const nextIndex =
-                Math.min(
-                    index,
-                    state.openTabs.length - 1
-                );
-
-            state.activeTabId =
-                state.openTabs[
-                    nextIndex
-                ].id;
-
+    if (wasActive) {
+        if (state.tabs.length) {
+            const next = Math.min(index, state.tabs.length - 1);
+            state.activeTabId = state.tabs[next].id;
         } else {
-
-            state.activeTabId =
-                null;
+            state.activeTabId = null;
         }
     }
 
+    saveState();
     renderTabs();
+    renderSidebar(sideSearch.value);
+    if (state.activeTabId) loadActiveTab(); else {
+        setEditorContent("");
+        dirtyText.textContent = "";
+        setStatus("No editor tab open");
+    }
+    if (showMessage !== false) showToast("Editor tab closed.");
+}
 
-    renderScriptList();
-
-    loadActiveEditor();
-
+/* =========================================================
+   SCRIPT CREATION / COPIES
+========================================================= */
+function createPersonalScript(name, content, originalId) {
+    const script = {
+        id: generateId("script"),
+        name: name || "New Script",
+        description: originalId ? "Editable copy" : "Custom script",
+        content: content || "",
+        original: false,
+        readOnly: false,
+        originalId: originalId || null,
+        sidebarHidden: false
+    };
+    state.scripts.push(script);
+    const tab = { id: generateId("tab"), scriptId: script.id, content: script.content, dirty: false };
+    state.tabs.push(tab);
+    state.activeTabId = tab.id;
     saveState();
+    renderTabs();
+    renderSidebar(sideSearch.value);
+    loadActiveTab();
+    return script;
 }
 
-
-/* =========================================================
-   LOAD ACTIVE EDITOR
-========================================================= */
-
-function loadActiveEditor() {
-
-    const tab =
-        getActiveTab();
-
-    if (!tab) {
-
-        editor.value = "";
-
-        editor.readOnly = true;
-
-        lineNumbers.textContent =
-            "1";
-
-        statusText.textContent =
-            "No script open";
-
-        dirtyText.textContent =
-            "";
-
-        positionText.textContent =
-            "Ln 1, Col 1";
-
-        return;
-    }
-
-    const script =
-        getScript(tab.scriptId);
-
-    if (!script) {
-        return;
-    }
-
-    editor.value =
-        tab.content;
-
-    /*
-     * Original M365Buddy scripts are read-only.
-     * Personal copies/custom scripts are editable.
-     */
-
-    editor.readOnly =
-        !!script.original;
-
-    updateLineNumbers();
-
-    updateStatus();
-
-    updateEditorStyle();
-
-    editor.focus();
-
-    editor.setSelectionRange(
-        0,
-        0
-    );
+function getNextCopyName(source) {
+    const originalName = typeof source === "string" ? source : source.name;
+    const base = originalName.replace(/\s+Copy(?:\s+\d+)?$/i, "").trim();
+    const names = new Set(state.scripts.map(function (s) { return s.name.toLowerCase(); }));
+    let name = base + " Copy";
+    let n = 2;
+    while (names.has(name.toLowerCase())) { name = base + " Copy " + n; n++; }
+    return name;
 }
-
-
-/* =========================================================
-   SAVE CURRENT EDITOR CONTENT
-========================================================= */
-
-function syncEditorToState() {
-
-    const tab =
-        getActiveTab();
-
-    if (!tab) {
-        return;
-    }
-
-    tab.content =
-        editor.value;
-
-    tab.dirty =
-        tab.content !==
-        tab.originalContent;
-}
-
-
-/* =========================================================
-   SAVE BUTTON
-========================================================= */
-
-function saveCurrent() {
-
-    const tab =
-        getActiveTab();
-
-    if (!tab) {
-
-        showToast(
-            "No editor tab is open."
-        );
-
-        return;
-    }
-
-    if (editor.readOnly) {
-
-        showToast(
-            "Original M365Buddy scripts are read-only. Create a copy to edit."
-        );
-
-        return;
-    }
-
-    syncEditorToState();
-
-    const script =
-        getScript(tab.scriptId);
-
-    if (script) {
-
-        script.content =
-            tab.content;
-    }
-
-    tab.originalContent =
-        tab.content;
-
-    tab.dirty = false;
-
-    saveState();
-
-    updateStatus();
-
-    showToast(
-        "Script saved."
-    );
-}
-
-
-/* =========================================================
-   CREATE EDITABLE COPY
-========================================================= */
-
-function getNextCopyName(originalScript) {
-
-    const baseName =
-        originalScript.name;
-
-    let candidate =
-        baseName + " Copy";
-
-    let counter = 2;
-
-    while (
-        state.scripts.some(
-            function (script) {
-                return script.name === candidate;
-            }
-        )
-    ) {
-
-        candidate =
-            baseName +
-            " Copy " +
-            counter;
-
-        counter++;
-    }
-
-    return candidate;
-}
-
 
 function createCopy() {
-
-    const tab =
-        getActiveTab();
-
-    if (!tab) {
-
-        showToast(
-            "Open a script first."
-        );
-
-        return;
-    }
-
-    const source =
-        getScript(tab.scriptId);
-
-    if (!source) {
-        return;
-    }
-
-    const copyName =
-        getNextCopyName(source);
-
-    const copy = {
-
-        id:
-            makeId("script"),
-
-        name:
-            copyName,
-
-        description:
-            "Editable copy",
-
-        content:
-            tab.content,
-
-        originalId:
-            source.original
-                ? source.id
-                : (
-                    source.originalId ||
-                    source.id
-                ),
-
-        original:
-            false
-    };
-
-    state.scripts.push(
-        copy
-    );
-
-    /*
-     * Open the editable copy in its
-     * own editor tab.
-     */
-
-    openScript(
-        copy.id
-    );
-
-    /*
-     * Make sure the copy is editable.
-     */
-
-    const newTab =
-        getActiveTab();
-
-    if (newTab) {
-
-        newTab.content =
-            copy.content;
-
-        newTab.originalContent =
-            copy.content;
-
-        newTab.dirty =
-            false;
-    }
-
-    saveState();
-
-    renderScriptList();
-
-    renderTabs();
-
-    loadActiveEditor();
-
-    showToast(
-        copyName + " created."
-    );
+    syncActiveContent();
+    const current = getActiveScript();
+    if (!current) { showToast("No script is open."); return; }
+    const copy = createPersonalScript(getNextCopyName(current), editor.value, current.original ? current.id : current.originalId);
+    showToast(copy.name + " opened in a new editor tab.");
 }
 
-
 /* =========================================================
-   CREATE PERSONAL SCRIPT
+   MODALS
 ========================================================= */
-
-function createPersonalScript(
-    name,
-    content,
-    originalId
-) {
-
-    let finalName =
-        name.trim();
-
-    if (!finalName) {
-        finalName = "New Script";
-    }
-
-    /*
-     * Avoid duplicate names.
-     */
-
-    let candidate =
-        finalName;
-
-    let counter = 2;
-
-    while (
-        state.scripts.some(
-            function (script) {
-                return script.name === candidate;
-            }
-        )
-    ) {
-
-        candidate =
-            finalName +
-            " " +
-            counter;
-
-        counter++;
-    }
-const script = {
-
-    id:
-        generateId("script"),
-
-    name:
-        name,
-
-    description:
-        originalId
-            ? "Editable copy"
-            : "Custom script",
-
-    content:
-        content || "",
-
-    original:
-        false,
-
-    readOnly:
-        false,
-
-    originalId:
-        originalId || null,
-
-    sidebarHidden:
-        false
-
-};
-
-    state.scripts.push(
-        script
-    );
-
-    /*
-     * Open it immediately as a
-     * completely separate editor tab.
-     */
-
-    openScript(
-        script.id
-    );
-
-    saveState();
-
-    renderScriptList();
-
-    renderTabs();
-
-    loadActiveEditor();
-
-    showToast(
-        candidate + " opened."
-    );
+function showModal(title, body, footer) {
+    modalTitle.textContent = title;
+    modalBody.innerHTML = body;
+    modalFoot.innerHTML = footer;
+    modalBackdrop.classList.add("show");
 }
 
-
-/* =========================================================
-   CREATE NEW SCRIPT MODAL
-========================================================= */
+function closeModal() { modalBackdrop.classList.remove("show"); }
 
 function openCreateModal() {
-
-    modalTitle.textContent =
-        "Create New Script";
-
-    modalBody.innerHTML = `
-
-        <div
-            class="option"
-            id="useM365Option">
-
-            <div class="option-icon">
-                📄
-            </div>
-
-            <div>
-
-                <div class="option-title">
-                    Use an M365Buddy script
-                </div>
-
-                <div class="option-desc">
-                    Start with one of the scripts already
-                    available on M365Buddy.
-                </div>
-
-            </div>
-
-        </div>
-
-        <div
-            class="option"
-            id="customOption">
-
-            <div class="option-icon">
-                ✏️
-            </div>
-
-            <div>
-
-                <div class="option-title">
-                    New Custom Script
-                </div>
-
-                <div class="option-desc">
-                    Start with a completely blank editor
-                    and create your own script.
-                </div>
-
-            </div>
-
-        </div>
-    `;
-
-    modalFoot.innerHTML = `
-
-        <button
-            type="button"
-            class="btn"
-            id="modalCancel">
-            Cancel
-        </button>
-    `;
-
-    modalBackdrop.classList.add(
-        "show"
+    showModal(
+        "Add New Script",
+        '<div class="option" id="existingOption">' +
+            '<div class="option-icon">📄</div><div><div class="option-title">Use an M365Buddy script</div>' +
+            '<div class="option-desc">Create an editable copy of an existing M365Buddy script in a new editor tab.</div></div>' +
+        '</div>' +
+        '<div class="option" id="customOption">' +
+            '<div class="option-icon">＋</div><div><div class="option-title">New Custom Script</div>' +
+            '<div class="option-desc">Create a blank editor tab for a new PowerShell script.</div></div>' +
+        '</div>',
+        '<button type="button" class="btn" id="createCancel">Cancel</button>'
     );
-
-    document
-        .getElementById("useM365Option")
-        .addEventListener(
-            "click",
-            openM365ScriptChooser
-        );
-
-    document
-        .getElementById("customOption")
-        .addEventListener(
-            "click",
-            openCustomScript
-        );
-
-    document
-        .getElementById("modalCancel")
-        .addEventListener(
-            "click",
-            closeModal
-        );
+    document.getElementById("existingOption").addEventListener("click", openExistingScripts);
+    document.getElementById("customOption").addEventListener("click", openCustomScript);
+    document.getElementById("createCancel").addEventListener("click", closeModal);
 }
 
-
-/* =========================================================
-   M365BUDDY SCRIPT CHOOSER
-========================================================= */
-
-function openM365ScriptChooser() {
-
-    modalTitle.textContent =
-        "Choose an M365Buddy Script";
-
-    const scripts =
-        ORIGINAL_SCRIPTS;
-
-    modalBody.innerHTML =
-
-        scripts.map(
-            function (script) {
-
-                return `
-
-                    <div
-                        class="option"
-                        data-original-script="${escapeHtml(script.id)}">
-
-                        <div class="option-icon">
-                            📜
-                        </div>
-
-                        <div>
-
-                            <div class="option-title">
-                                ${escapeHtml(script.name)}
-                            </div>
-
-                            <div class="option-desc">
-                                ${escapeHtml(script.description || "")}
-                            </div>
-
-                        </div>
-
-                    </div>
-                `;
-            }
-        ).join("");
-
-    modalFoot.innerHTML = `
-
-        <button
-            type="button"
-            class="btn"
-            id="modalBack">
-            Back
-        </button>
-
-        <button
-            type="button"
-            class="btn"
-            id="modalCancel">
-            Cancel
-        </button>
-    `;
-
-    document
-        .querySelectorAll(
-            "[data-original-script]"
-        )
-        .forEach(
-            function (option) {
-
-                option.addEventListener(
-                    "click",
-                    function () {
-
-                        const id =
-                            option.dataset.originalScript;
-
-                        const source =
-                            getScript(id);
-
-                        if (!source) {
-                            return;
-                        }
-
-                        /*
-                         * Selecting an existing M365Buddy
-                         * script creates an editable copy
-                         * instead of modifying the original.
-                         */
-
-                        const copyName =
-                            getNextCopyName(
-                                source
-                            );
-
-                        createPersonalScript(
-                            copyName,
-                            source.content,
-                            source.id
-                        );
-
-                        closeModal();
-
-                    }
-                );
-
-            }
-        );
-
-    document
-        .getElementById("modalBack")
-        .addEventListener(
-            "click",
-            openCreateModal
-        );
-
-    document
-        .getElementById("modalCancel")
-        .addEventListener(
-            "click",
-            closeModal
-        );
+function openExistingScripts() {
+    const originals = ORIGINAL_SCRIPTS.map(function (o) { return getScript(o.id); }).filter(Boolean);
+    let body = "";
+    originals.forEach(function (script) {
+        body += '<div class="option existing-choice" data-id="' + escapeHtml(script.id) + '">' +
+            '<div class="option-icon">📄</div><div><div class="option-title">' + escapeHtml(script.name) + '</div>' +
+            '<div class="option-desc">' + escapeHtml(script.description || "M365Buddy script") + '</div></div></div>';
+    });
+    showModal(
+        "Choose M365Buddy Script",
+        body || '<div style="font-size:13px;color:#647084;">No M365Buddy scripts are currently available.</div>',
+        '<button type="button" class="btn" id="existingBack">Back</button><button type="button" class="btn" id="existingCancel">Cancel</button>'
+    );
+    document.getElementById("existingBack").addEventListener("click", openCreateModal);
+    document.getElementById("existingCancel").addEventListener("click", closeModal);
+    document.querySelectorAll(".existing-choice").forEach(function (choice) {
+        choice.addEventListener("click", function () {
+            const source = getScript(choice.dataset.id);
+            if (!source) { showToast("Script is not available."); return; }
+            const copy = createPersonalScript(getNextCopyName(source), source.content, source.id);
+            closeModal();
+            showToast(copy.name + " opened in a new editor tab.");
+            setTimeout(function () { editor.focus(); }, 30);
+        });
+    });
 }
-
-
-/* =========================================================
-   NEW CUSTOM SCRIPT
-========================================================= */
 
 function openCustomScript() {
-
-    modalTitle.textContent =
-        "New Custom Script";
-
-    modalBody.innerHTML = `
-
-        <div
-            style="
-                font-size:13px;
-                color:#647084;
-                margin-bottom:10px;
-            ">
-            Enter a name for your new script.
-        </div>
-
-        <input
-            type="text"
-            class="modal-input"
-            id="customScriptName"
-            placeholder="Example: Get SharePoint Storage Report"
-            autocomplete="off">
-    `;
-
-    modalFoot.innerHTML = `
-
-        <button
-            type="button"
-            class="btn"
-            id="modalCancel">
-            Cancel
-        </button>
-
-        <button
-            type="button"
-            class="btn primary"
-            id="createCustomBtn">
-            Create Editor Tab
-        </button>
-    `;
-
-    modalBackdrop.classList.add(
-        "show"
+    showModal(
+        "New Custom Script",
+        '<label style="display:block;font-size:12px;font-weight:600;margin-bottom:6px;">Script name</label>' +
+        '<input id="customScriptName" class="modal-input" value="New Script" autocomplete="off">' +
+        '<div style="height:12px;"></div><div style="font-size:12px;color:#647084;line-height:1.5;">A blank editor tab will be created. You can type or paste your PowerShell script there.</div>',
+        '<button type="button" class="btn" id="customBack">Back</button>' +
+        '<button type="button" class="btn" id="customCancel">Cancel</button>' +
+        '<button type="button" class="btn primary" id="customCreate">Create Editor Tab</button>'
     );
-
-    const input =
-        document.getElementById(
-            "customScriptName"
-        );
-
+    const input = document.getElementById("customScriptName");
     input.focus();
-
-    document
-        .getElementById("modalCancel")
-        .addEventListener(
-            "click",
-            closeModal
-        );
-
-    document
-        .getElementById("createCustomBtn")
-        .addEventListener(
-            "click",
-            function () {
-
-                const name =
-                    input.value.trim();
-
-                createPersonalScript(
-                    name || "New Script",
-                    "",
-                    null
-                );
-
-                closeModal();
-            }
-        );
-
-    input.addEventListener(
-        "keydown",
-        function (event) {
-
-            if (
-                event.key === "Enter"
-            ) {
-
-                event.preventDefault();
-
-                document
-                    .getElementById(
-                        "createCustomBtn"
-                    )
-                    .click();
-            }
-
-        }
-    );
+    input.select();
+    document.getElementById("customBack").addEventListener("click", openCreateModal);
+    document.getElementById("customCancel").addEventListener("click", closeModal);
+    document.getElementById("customCreate").addEventListener("click", function () {
+        const name = input.value.trim() || "New Script";
+        const script = createPersonalScript(name, "", null);
+        closeModal();
+        showToast(script.name + " opened in a new editor tab.");
+        setTimeout(function () { editor.focus(); }, 30);
+    });
+    input.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") { event.preventDefault(); document.getElementById("customCreate").click(); }
+    });
 }
 
-
 /* =========================================================
-   MODAL CLOSE
+   SAVE / COPY / DOWNLOAD / RENAME / DELETE / RESET
 ========================================================= */
-
-function closeModal() {
-
-    modalBackdrop.classList.remove(
-        "show"
-    );
+function saveCurrent() {
+    syncActiveContent();
+    const tab = getActiveTab();
+    const script = getActiveScript();
+    if (!tab || !script) { showToast("No script is open."); return; }
+    if (script.readOnly) { showToast("Original script is read-only. Use Copy first."); return; }
+    script.content = tab.content;
+    tab.dirty = false;
+    saveState();
+    renderTabs();
+    updateDirtyStatus();
+    setStatus("Saved successfully");
+    showToast("Script saved.");
 }
 
-
-/* =========================================================
-   UPDATE LINE NUMBERS
-========================================================= */
-
-function updateLineNumbers() {
-
-    const lineCount =
-        editor.value.split("\n").length;
-
-    let numbers = "";
-
-    for (
-        let i = 1;
-        i <= lineCount;
-        i++
-    ) {
-
-        numbers +=
-            i +
-            (
-                i < lineCount
-                    ? "\n"
-                    : ""
-            );
-    }
-
-    lineNumbers.textContent =
-        numbers;
+function copyToClipboard() {
+    syncActiveContent();
+    if (!getActiveScript()) { showToast("No script is open."); return; }
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(editor.value).then(function () { showToast("Script copied to clipboard."); }, fallbackCopy);
+    } else fallbackCopy();
 }
-
-
-/* =========================================================
-   KEEP LINE NUMBERS ALIGNED
-========================================================= */
-
-function syncScroll() {
-
-    lineNumbers.scrollTop =
-        editor.scrollTop;
+function fallbackCopy() {
+    editor.focus(); editor.select();
+    try { document.execCommand("copy"); showToast("Script copied to clipboard."); }
+    catch (e) { showToast("Copy failed. Please copy manually."); }
 }
-
-
-/* =========================================================
-   POSITION
-========================================================= */
-
-function updatePosition() {
-
-    const position =
-        editor.selectionStart;
-
-    const before =
-        editor.value.slice(
-            0,
-            position
-        );
-
-    const lines =
-        before.split("\n");
-
-    const line =
-        lines.length;
-
-    const col =
-        lines[
-            lines.length - 1
-        ].length + 1;
-
-    positionText.textContent =
-        "Ln " +
-        line +
-        ", Col " +
-        col;
-}
-
-
-/* =========================================================
-   STATUS
-========================================================= */
-
-function updateStatus() {
-
-    const tab =
-        getActiveTab();
-
-    if (!tab) {
-        return;
-    }
-
-    const script =
-        getScript(tab.scriptId);
-
-    if (!script) {
-        return;
-    }
-
-    statusText.textContent =
-        script.original
-            ? "Original M365Buddy script"
-            : "Editable script";
-
-    dirtyText.textContent =
-        tab.dirty
-            ? "● Unsaved changes"
-            : "Saved";
-
-    updatePosition();
-}
-
-
-/* =========================================================
-   EDITOR CHANGE
-========================================================= */
-
-editor.addEventListener(
-    "input",
-    function () {
-
-        const tab =
-            getActiveTab();
-
-        if (!tab) {
-            return;
-        }
-
-        if (editor.readOnly) {
-            return;
-        }
-
-        syncEditorToState();
-
-        updateLineNumbers();
-
-        updateStatus();
-
-        /*
-         * Save the working content to localStorage
-         * immediately so accidental refreshes do not
-         * lose the editor contents.
-         */
-
-        saveState();
-    }
-);
-
-
-/* =========================================================
-   EDITOR SCROLL
-========================================================= */
-
-editor.addEventListener(
-    "scroll",
-    syncScroll
-);
-
-
-/* =========================================================
-   EDITOR CURSOR
-========================================================= */
-
-editor.addEventListener(
-    "click",
-    updatePosition
-);
-
-editor.addEventListener(
-    "keyup",
-    updatePosition
-);
-
-editor.addEventListener(
-    "select",
-    updatePosition
-);
-
-
-/* =========================================================
-   COPY TO CLIPBOARD
-========================================================= */
-
-async function copyToClipboard() {
-
-    const tab =
-        getActiveTab();
-
-    if (!tab) {
-
-        showToast(
-            "No script is open."
-        );
-
-        return;
-    }
-
-    try {
-
-        await navigator.clipboard.writeText(
-            editor.value
-        );
-
-        showToast(
-            "Script copied to clipboard."
-        );
-
-    } catch (error) {
-
-        /*
-         * Fallback for browsers where Clipboard API
-         * is unavailable.
-         */
-
-        editor.focus();
-
-        editor.select();
-
-        document.execCommand(
-            "copy"
-        );
-
-        editor.setSelectionRange(
-            0,
-            0
-        );
-
-        showToast(
-            "Script copied to clipboard."
-        );
-    }
-}
-
-
-/* =========================================================
-   DOWNLOAD
-========================================================= */
 
 function downloadCurrent() {
-
-    const tab =
-        getActiveTab();
-
-    if (!tab) {
-
-        showToast(
-            "No script is open."
-        );
-
-        return;
-    }
-
-    const script =
-        getScript(tab.scriptId);
-
-    if (!script) {
-        return;
-    }
-
-    const blob =
-        new Blob(
-            [
-                editor.value
-            ],
-            {
-                type:
-                    "text/plain;charset=utf-8"
-            }
-        );
-
-    const url =
-        URL.createObjectURL(
-            blob
-        );
-
-    const anchor =
-        document.createElement(
-            "a"
-        );
-
-    anchor.href =
-        url;
-
-    anchor.download =
-        sanitizeFileName(
-            script.name
-        ) +
-        ".ps1";
-
-    document.body.appendChild(
-        anchor
-    );
-
-    anchor.click();
-
-    anchor.remove();
-
-    URL.revokeObjectURL(
-        url
-    );
-
-    showToast(
-        "PowerShell script downloaded."
-    );
+    syncActiveContent();
+    const script = getActiveScript();
+    if (!script) { showToast("No script is open."); return; }
+    const blob = new Blob([editor.value], {type:"text/plain;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = (script.name.replace(/[\\/:*?"<>|]/g, "_") || "script") + ".ps1";
+    document.body.appendChild(link); link.click(); link.remove(); URL.revokeObjectURL(url);
+    showToast("PowerShell script downloaded.");
 }
-
-
-/* =========================================================
-   FILE NAME
-========================================================= */
-
-function sanitizeFileName(name) {
-
-    return name
-        .replace(
-            /[<>:"/\\|?*]/g,
-            "_"
-        )
-        .trim() ||
-        "script";
-}
-
-
-/* =========================================================
-   RENAME
-========================================================= */
 
 function openRenameModal() {
-
-    const tab =
-        getActiveTab();
-
-    if (!tab) {
-
-        showToast(
-            "No script is open."
-        );
-
-        return;
-    }
-
-    const script =
-        getScript(tab.scriptId);
-
-    if (!script) {
-        return;
-    }
-
-    if (script.original) {
-
-        showToast(
-            "Original M365Buddy scripts cannot be renamed."
-        );
-
-        return;
-    }
-
-    modalTitle.textContent =
-        "Rename Script";
-
-    modalBody.innerHTML = `
-
-        <div
-            style="
-                font-size:13px;
-                color:#647084;
-                margin-bottom:10px;
-            ">
-            Enter the new name.
-        </div>
-
-        <input
-            type="text"
-            class="modal-input"
-            id="renameInput"
-            value="${escapeHtml(script.name)}"
-            autocomplete="off">
-    `;
-
-    modalFoot.innerHTML = `
-
-        <button
-            type="button"
-            class="btn"
-            id="modalCancel">
-            Cancel
-        </button>
-
-        <button
-            type="button"
-            class="btn primary"
-            id="renameConfirm">
-            Rename
-        </button>
-    `;
-
-    modalBackdrop.classList.add(
-        "show"
-    );
-
-    const input =
-        document.getElementById(
-            "renameInput"
-        );
-
-    input.focus();
-
-    input.select();
-
-    document
-        .getElementById("modalCancel")
-        .addEventListener(
-            "click",
-            closeModal
-        );
-
-    document
-        .getElementById("renameConfirm")
-        .addEventListener(
-            "click",
-            function () {
-
-                const newName =
-                    input.value.trim();
-
-                if (!newName) {
-
-                    showToast(
-                        "Please enter a script name."
-                    );
-
-                    return;
-                }
-
-                const duplicate =
-                    state.scripts.some(
-                        function (item) {
-
-                            return (
-                                item.id !== script.id &&
-                                item.name.toLowerCase() ===
-                                    newName.toLowerCase()
-                            );
-                        }
-                    );
-
-                if (duplicate) {
-
-                    showToast(
-                        "A script with this name already exists."
-                    );
-
-                    return;
-                }
-
-                script.name =
-                    newName;
-
-                saveState();
-
-                renderScriptList();
-
-                renderTabs();
-
-                closeModal();
-
-                showToast(
-                    "Script renamed."
-                );
-            }
-        );
+    const script = getActiveScript();
+    if (!script) { showToast("No script is open."); return; }
+    if (script.original) { showToast("Original M365Buddy scripts cannot be renamed."); return; }
+    showModal("Rename Script", '<input id="renameInput" class="modal-input" value="' + escapeHtml(script.name) + '" autocomplete="off">',
+        '<button type="button" class="btn" id="renameCancel">Cancel</button><button type="button" class="btn primary" id="renameSave">Rename</button>');
+    const input = document.getElementById("renameInput"); input.focus(); input.select();
+    document.getElementById("renameCancel").addEventListener("click", closeModal);
+    document.getElementById("renameSave").addEventListener("click", function () {
+        const name = input.value.trim();
+        if (!name) { showToast("Enter a script name."); return; }
+        script.name = name; saveState(); renderTabs(); renderSidebar(sideSearch.value); closeModal(); showToast("Script renamed.");
+    });
+    input.addEventListener("keydown", function(e){ if(e.key === "Enter"){e.preventDefault();document.getElementById("renameSave").click();} });
 }
 
-
-/* =========================================================
-   DELETE
-========================================================= */
-
-function openDeleteModal() {
-
-    const tab =
-        getActiveTab();
-
-    if (!tab) {
-
-        showToast(
-            "No script is open."
-        );
-
-        return;
-    }
-
-    const script =
-        getScript(tab.scriptId);
-
-    if (!script) {
-        return;
-    }
-
-    if (script.original) {
-
-        showToast(
-            "Original M365Buddy scripts cannot be deleted."
-        );
-
-        return;
-    }
-
-    modalTitle.textContent =
-        "Delete Script";
-
-    modalBody.innerHTML = `
-
-        <div
-            style="
-                font-size:13px;
-                line-height:1.6;
-            ">
-
-            Are you sure you want to delete
-
-            <strong>
-                ${escapeHtml(script.name)}
-            </strong>?
-
-            <br><br>
-
-            This removes the personal script from
-            this browser's local workspace.
-
-        </div>
-    `;
-
-    modalFoot.innerHTML = `
-
-        <button
-            type="button"
-            class="btn"
-            id="modalCancel">
-            Cancel
-        </button>
-
-        <button
-            type="button"
-            class="btn danger"
-            id="deleteConfirm">
-            Delete
-        </button>
-    `;
-
-    modalBackdrop.classList.add(
-        "show"
-    );
-
-    document
-        .getElementById("modalCancel")
-        .addEventListener(
-            "click",
-            closeModal
-        );
-
-    document
-        .getElementById("deleteConfirm")
-        .addEventListener(
-            "click",
-            function () {
-
-                state.scripts =
-                    state.scripts.filter(
-                        function (item) {
-                            return item.id !== script.id;
-                        }
-                    );
-
-                state.openTabs =
-                    state.openTabs.filter(
-                        function (item) {
-                            return item.scriptId !== script.id;
-                        }
-                    );
-
-                state.activeTabId =
-                    state.openTabs.length
-                        ? state.openTabs[
-                            state.openTabs.length - 1
-                        ].id
-                        : null;
-
-                saveState();
-
-                renderScriptList();
-
-                renderTabs();
-
-                loadActiveEditor();
-
-                closeModal();
-
-                showToast(
-                    "Script deleted."
-                );
-            }
-        );
+function deleteCurrent() {
+    const script = getActiveScript();
+    if (!script) { showToast("No script is open."); return; }
+    if (script.original) { showToast("Original M365Buddy scripts cannot be deleted. Use the sidebar × to hide one."); return; }
+    showModal("Delete Script", '<div style="font-size:13px;line-height:1.5;">Delete <strong>' + escapeHtml(script.name) + '</strong> and close its editor tab?</div>',
+        '<button type="button" class="btn" id="deleteCancel">Cancel</button><button type="button" class="btn danger" id="deleteConfirm">Delete</button>');
+    document.getElementById("deleteCancel").addEventListener("click", closeModal);
+    document.getElementById("deleteConfirm").addEventListener("click", function () {
+        const id = script.id;
+        state.scripts = state.scripts.filter(function(s){return s.id !== id;});
+        state.tabs = state.tabs.filter(function(t){return t.scriptId !== id;});
+        state.activeTabId = state.tabs.length ? state.tabs[state.tabs.length-1].id : null;
+        saveState(); renderTabs(); renderSidebar(sideSearch.value); closeModal();
+        if (state.activeTabId) loadActiveTab(); else { setEditorContent(""); setStatus("No editor tab open"); }
+        showToast("Script deleted.");
+    });
 }
-
-
-/* =========================================================
-   RESET
-========================================================= */
 
 function resetCurrent() {
-
-    const tab =
-        getActiveTab();
-
-    if (!tab) {
-
-        showToast(
-            "No script is open."
-        );
-
-        return;
-    }
-
-    const script =
-        getScript(tab.scriptId);
-
-    if (!script) {
-        return;
-    }
-
+    const tab = getActiveTab(); const script = getActiveScript();
+    if (!tab || !script) { showToast("No script is open."); return; }
     if (script.original) {
-
-        /*
-         * Original script can simply be reloaded.
-         */
-
-        tab.content =
-            script.content;
-
-        tab.originalContent =
-            script.content;
-
-        tab.dirty = false;
-
-        loadActiveEditor();
-
-        showToast(
-            "Original script reloaded."
-        );
-
-        return;
+        tab.content = script.content; tab.dirty = false; saveState(); loadActiveTab(); showToast("Original script reloaded."); return;
     }
-
-    modalTitle.textContent =
-        "Reset Script";
-
-    modalBody.innerHTML = `
-
-        <div
-            style="
-                font-size:13px;
-                line-height:1.6;
-            ">
-
-            Reset this editor to its last saved version?
-
-            <br><br>
-
-            Any unsaved changes will be discarded.
-
-        </div>
-    `;
-
-    modalFoot.innerHTML = `
-
-        <button
-            type="button"
-            class="btn"
-            id="modalCancel">
-            Cancel
-        </button>
-
-        <button
-            type="button"
-            class="btn primary"
-            id="resetConfirm">
-            Reset
-        </button>
-    `;
-
-    modalBackdrop.classList.add(
-        "show"
-    );
-
-    document
-        .getElementById("modalCancel")
-        .addEventListener(
-            "click",
-            closeModal
-        );
-
-    document
-        .getElementById("resetConfirm")
-        .addEventListener(
-            "click",
-            function () {
-
-                tab.content =
-                    tab.originalContent;
-
-                tab.dirty = false;
-
-                const target =
-                    getScript(
-                        tab.scriptId
-                    );
-
-                if (target) {
-
-                    target.content =
-                        tab.originalContent;
-                }
-
-                saveState();
-
-                loadActiveEditor();
-
-                closeModal();
-
-                showToast(
-                    "Unsaved changes discarded."
-                );
-            }
-        );
+    showModal("Reset Script", '<div style="font-size:13px;line-height:1.5;">Reset this editor to the last saved version? Unsaved changes will be discarded.</div>',
+        '<button type="button" class="btn" id="resetCancel">Cancel</button><button type="button" class="btn primary" id="resetConfirm">Reset</button>');
+    document.getElementById("resetCancel").addEventListener("click", closeModal);
+    document.getElementById("resetConfirm").addEventListener("click", function () {
+        tab.content = script.content; tab.dirty = false; saveState(); closeModal(); loadActiveTab(); showToast("Unsaved changes discarded.");
+    });
 }
-
 
 /* =========================================================
    SEARCH
 ========================================================= */
-
-function getSearchMatches() {
-
-    const term =
-        findInput.value;
-
-    if (!term) {
-
-        findCount.textContent =
-            "";
-
-        return [];
-    }
-
-    const text =
-        editor.value;
-
-    const matches = [];
-
-    let index = 0;
-
-    while (true) {
-
-        const found =
-            text
-                .toLowerCase()
-                .indexOf(
-                    term.toLowerCase(),
-                    index
-                );
-
-        if (found === -1) {
-            break;
-        }
-
-        matches.push(
-            found
-        );
-
-        index =
-            found +
-            term.length;
-    }
-
-    findCount.textContent =
-        matches.length
-            ? matches.length +
-              " match" +
-              (
-                  matches.length === 1
-                      ? ""
-                      : "es"
-              )
-            : "No matches";
-
+function getSearchMatches(term) {
+    if (!term) return [];
+    const text = editor.value.toLowerCase(); const needle = term.toLowerCase(); const matches = [];
+    let pos = 0;
+    while ((pos = text.indexOf(needle, pos)) !== -1) { matches.push(pos); pos += Math.max(1, needle.length); }
     return matches;
 }
-
-
-function findNext() {
-
-    const matches =
-        getSearchMatches();
-
-    if (!matches.length) {
-        return;
-    }
-
-    if (
-        currentSearchIndex >=
-        matches.length
-    ) {
-
-        currentSearchIndex =
-            0;
-    }
-
-    const start =
-        matches[
-            currentSearchIndex
-        ];
-
-    editor.focus();
-
-    editor.setSelectionRange(
-        start,
-        start +
-            findInput.value.length
-    );
-
-    currentSearchIndex++;
-
-    updatePosition();
+function updateSearch() {
+    search.term = findInput.value; search.matches = getSearchMatches(search.term);
+    if (!search.matches.length) { search.index = -1; findCount.textContent = search.term ? "0 matches" : ""; return; }
+    if (search.index < 0 || search.index >= search.matches.length) search.index = 0;
+    findCount.textContent = (search.index + 1) + " / " + search.matches.length;
 }
-
-
-function findPrevious() {
-
-    const matches =
-        getSearchMatches();
-
-    if (!matches.length) {
-        return;
-    }
-
-    currentSearchIndex--;
-
-    if (
-        currentSearchIndex < 0
-    ) {
-
-        currentSearchIndex =
-            matches.length - 1;
-    }
-
-    const start =
-        matches[
-            currentSearchIndex
-        ];
-
-    editor.focus();
-
-    editor.setSelectionRange(
-        start,
-        start +
-            findInput.value.length
-    );
-
-    updatePosition();
+function goToMatch(index) {
+    updateSearch();
+    if (!search.matches.length) { if (search.term) showToast("No matches found."); return; }
+    search.index = (index + search.matches.length) % search.matches.length;
+    const start = search.matches[search.index]; const end = start + search.term.length;
+    editor.focus(); editor.setSelectionRange(start, end); findCount.textContent = (search.index + 1) + " / " + search.matches.length;
 }
-
-
-findInput.addEventListener(
-    "input",
-    function () {
-
-        currentSearchIndex = 0;
-
-        getSearchMatches();
-    }
-);
-
+function findNext(){ goToMatch(search.index + 1); }
+function findPrevious(){ goToMatch(search.index - 1); }
+function clearSearch(){ search={term:"",matches:[],index:-1}; findInput.value=""; findCount.textContent=""; }
 
 /* =========================================================
-   FONT
+   THEME / FONT
 ========================================================= */
-
 function updateEditorStyle() {
-
-    editor.style.fontFamily =
-        state.font;
-
-    editor.style.fontSize =
-        state.fontSize + "px";
-
-    lineNumbers.style.fontFamily =
-        state.font;
-
-    lineNumbers.style.fontSize =
-        state.fontSize + "px";
+    editor.style.fontFamily = state.font;
+    editor.style.fontSize = state.fontSize + "px";
+    lineNumbers.style.fontFamily = state.font;
+    lineNumbers.style.fontSize = state.fontSize + "px";
 }
-
-
-/* =========================================================
-   THEME
-========================================================= */
-
 function applyTheme() {
-
-    document.body.classList.toggle(
-        "dark",
-        state.theme === "dark"
-    );
-
-    /*
-     * The button shows the action that will happen next.
-     */
-
-    document.getElementById(
-        "themeBtn"
-    ).textContent =
-        state.theme === "light"
-            ? "Dark"
-            : "Light";
+    document.body.classList.toggle("dark", state.theme === "dark");
+    const themeBtn = document.getElementById("themeBtn");
+    themeBtn.textContent = state.theme === "light" ? "Dark" : "Light";
+    updateEditorStyle();
 }
-
 
 /* =========================================================
    HOME
 ========================================================= */
+function openHome() { window.location.href = "https://m365buddy.com/"; }
 
-function openHome() {
+/* =========================================================
+   EVENTS
+========================================================= */
+document.getElementById("newScriptBtn").addEventListener("click", openCreateModal);
+addTabBtn.addEventListener("click", function(){ const script=createPersonalScript("New Script", "", null); showToast(script.name + " opened in a new editor tab."); setTimeout(function(){editor.focus();},30); });
+document.getElementById("homeBtn").addEventListener("click", openHome);
+document.getElementById("brandHome").addEventListener("click", openHome);
+document.getElementById("saveBtn").addEventListener("click", saveCurrent);
+document.getElementById("copyBtn").addEventListener("click", copyToClipboard);
+document.getElementById("downloadBtn").addEventListener("click", downloadCurrent);
+document.getElementById("renameBtn").addEventListener("click", openRenameModal);
+document.getElementById("deleteBtn").addEventListener("click", deleteCurrent);
+document.getElementById("resetBtn").addEventListener("click", resetCurrent);
+sideSearch.addEventListener("input", function(){ renderSidebar(sideSearch.value); });
+document.getElementById("refreshBtn").addEventListener("click", function(){ renderSidebar(sideSearch.value); renderTabs(); if(state.activeTabId) loadActiveTab(); showToast("Script list refreshed."); });
+editor.addEventListener("input", function(){ syncActiveContent(); const tab=getActiveTab(); if(tab) tab.dirty=true; updateLineNumbers(); updatePosition(); updateSearch(); updateDirtyStatus(); renderTabs(); saveState(); });
+editor.addEventListener("scroll", function(){ lineNumbers.scrollTop=editor.scrollTop; });
+editor.addEventListener("click", updatePosition); editor.addEventListener("keyup", updatePosition); editor.addEventListener("select", updatePosition);
+editor.addEventListener("keydown", function(event){
+    if(event.key === "Tab"){
+        event.preventDefault(); const start=editor.selectionStart, end=editor.selectionEnd;
+        editor.setRangeText("    ", start, end, "end"); editor.dispatchEvent(new Event("input", {bubbles:true}));
+    }
+});
+findInput.addEventListener("input", updateSearch);
+findInput.addEventListener("keydown", function(event){ if(event.key === "Enter"){event.preventDefault(); event.shiftKey ? findPrevious() : findNext();} if(event.key === "Escape") clearSearch(); });
+document.getElementById("findPrevBtn").addEventListener("click", findPrevious);
+document.getElementById("findNextBtn").addEventListener("click", findNext);
+document.getElementById("fontSelect").addEventListener("change", function(e){state.font=e.target.value;saveState();applyTheme();});
+document.getElementById("fontSizeSelect").addEventListener("change", function(e){state.fontSize=e.target.value;saveState();applyTheme();updateLineNumbers();});
+document.getElementById("themeBtn").addEventListener("click", function(){state.theme=state.theme==="light"?"dark":"light";saveState();applyTheme();showToast(state.theme==="light"?"Light theme enabled.":"Dark theme enabled.");});
+modalClose.addEventListener("click", closeModal);
+modalBackdrop.addEventListener("click", function(e){ if(e.target === modalBackdrop) closeModal(); });
+document.addEventListener("keydown", function(event){
+    if((event.ctrlKey || event.metaKey) && event.key.toLowerCase()==="s"){event.preventDefault();saveCurrent();}
+    if((event.ctrlKey || event.metaKey) && event.key.toLowerCase()==="f"){event.preventDefault();findInput.focus();findInput.select();}
+    if(event.key === "Escape" && modalBackdrop.classList.contains("show")) closeModal();
+});
 
-    /*
-     * Named window allows the browser to reuse an already
-     * opened M365Buddy tab/window when the browser permits it.
-     *
-     * If it does not exist, the browser opens a new tab.
-     */
+/* =========================================================
+   STARTUP
+========================================================= */
+function startApplication() {
+    loadState();
+    document.getElementById("fontSelect").value = state.font;
+    document.getElementById("fontSizeSelect").value = state.fontSize;
+    applyTheme();
 
-    window.open(
-        "https://m365buddy.com/",
-        "M365BuddyHome"
-    );
+    const requested = new URLSearchParams(window.location.search).get("script");
+
+    if (requested) {
+        const requestedScript = getScript(requested);
+        if (requestedScript) {
+            requestedScript.sidebarHidden = false;
+            /* A direct article link should always show the requested script. */
+            state.tabs = state.tabs.filter(function(t){ return getScript(t.scriptId); });
+            saveState();
+            openScript(requested, {unhide:true});
+            return;
+        }
+    }
+
+    /* Restore a valid saved tab first. */
+    const validActive = getActiveTab() && getScript(getActiveTab().scriptId);
+    if (validActive) {
+        renderTabs(); renderSidebar(sideSearch.value); loadActiveTab(); return;
+    }
+
+    /* If stale/invalid tabs existed, remove them before opening a default. */
+    state.tabs = state.tabs.filter(function(t){ return getScript(t.scriptId); });
+    state.activeTabId = state.tabs.length ? state.tabs[0].id : null;
+
+    if (state.activeTabId) {
+        saveState(); renderTabs(); renderSidebar(sideSearch.value); loadActiveTab(); return;
+    }
+
+    /* First visit / no open tab: open the inventory script. */
+    const first = getScript("spo-site-inventory") || state.scripts.find(function(s){ return s.original && !s.sidebarHidden; });
+    if (first) openScript(first.id, {unhide:true});
+    else { renderTabs(); renderSidebar(""); setEditorContent(""); setStatus("No script available"); }
 }
 
-
-/* =========================================================
-   EVENT LISTENERS
-========================================================= */
-
-document
-    .getElementById("newScriptBtn")
-    .addEventListener(
-        "click",
-        openCreateModal
-    );
-
-
-/*
- * IMPORTANT:
- *
- * This + button is directly beside the opened tabs.
- *
- * Clicking it creates a brand-new custom editor tab
- * immediately. It does NOT attach content to the
- * currently opened editor.
- */
-
-addTabBtn.addEventListener(
-    "click",
-    function () {
-
-        createPersonalScript(
-            "New Script",
-            "",
-            null
-        );
-
-    }
-);
-
-
-document
-    .getElementById("homeBtn")
-    .addEventListener(
-        "click",
-        openHome
-    );
-
-
-document
-    .getElementById("brandHome")
-    .addEventListener(
-        "click",
-        openHome
-    );
-
-
-document
-    .getElementById("saveBtn")
-    .addEventListener(
-        "click",
-        saveCurrent
-    );
-
-
-document
-    .getElementById("copyBtn")
-    .addEventListener(
-        "click",
-        copyToClipboard
-    );
-
-
-document
-    .getElementById("downloadBtn")
-    .addEventListener(
-        "click",
-        downloadCurrent
-    );
-
-
-document
-    .getElementById("renameBtn")
-    .addEventListener(
-        "click",
-        openRenameModal
-    );
-
-
-document
-    .getElementById("deleteBtn")
-    .addEventListener(
-        "click",
-        openDeleteModal
-    );
-
-
-document
-    .getElementById("resetBtn")
-    .addEventListener(
-        "click",
-        resetCurrent
-    );
-
-
-document
-    .getElementById("findNextBtn")
-    .addEventListener(
-        "click",
-        findNext
-    );
-
-
-document
-    .getElementById("findPrevBtn")
-    .addEventListener(
-        "click",
-        findPrevious
-    );
-
-
-findInput.addEventListener(
-    "keydown",
-    function (event) {
-
-        if (
-            event.key === "Enter"
-        ) {
-
-            event.preventDefault();
-
-            if (
-                event.shiftKey
-            ) {
-
-                findPrevious();
-
-            } else {
-
-                findNext();
-            }
-        }
-
-    }
-);
-
-
-document
-    .getElementById("fontSelect")
-    .addEventListener(
-        "change",
-        function (event) {
-
-            state.font =
-                event.target.value;
-
-            updateEditorStyle();
-
-            saveState();
-        }
-    );
-
-
-document
-    .getElementById("fontSizeSelect")
-    .addEventListener(
-        "change",
-        function (event) {
-
-            state.fontSize =
-                event.target.value;
-
-            updateEditorStyle();
-
-            saveState();
-        }
-    );
-
-
-document
-    .getElementById("themeBtn")
-    .addEventListener(
-        "click",
-        function () {
-
-            state.theme =
-                state.theme === "light"
-                    ? "dark"
-                    : "light";
-
-            applyTheme();
-
-            saveState();
-        }
-    );
-
-
-sideSearch.addEventListener(
-    "input",
-    renderScriptList
-);
-
-
-document
-    .getElementById("refreshBtn")
-    .addEventListener(
-        "click",
-        function () {
-
-            renderScriptList();
-
-            renderTabs();
-
-            loadActiveEditor();
-
-            showToast(
-                "Script list refreshed."
-            );
-        }
-    );
-
-
-document
-    .getElementById("modalClose")
-    .addEventListener(
-        "click",
-        closeModal
-    );
-
-
-modalBackdrop.addEventListener(
-    "click",
-    function (event) {
-
-        if (
-            event.target ===
-            modalBackdrop
-        ) {
-
-            closeModal();
-        }
-    }
-);
-
-
-/* =========================================================
-   KEYBOARD SHORTCUTS
-========================================================= */
-
-document.addEventListener(
-    "keydown",
-    function (event) {
-
-        /*
-         * Ctrl + S
-         */
-
-        if (
-            event.ctrlKey &&
-            event.key.toLowerCase() === "s"
-        ) {
-
-            event.preventDefault();
-
-            saveCurrent();
-
-            return;
-        }
-
-        /*
-         * Ctrl + F
-         */
-
-        if (
-            event.ctrlKey &&
-            event.key.toLowerCase() === "f"
-        ) {
-
-            event.preventDefault();
-
-            findInput.focus();
-
-            findInput.select();
-
-            return;
-        }
-
-        /*
-         * Escape closes the modal.
-         */
-
-        if (
-            event.key === "Escape"
-        ) {
-
-            if (
-                modalBackdrop.classList.contains(
-                    "show"
-                )
-            ) {
-
-                closeModal();
-            }
-        }
-
-    }
-);
-
-
-/* =========================================================
-   INITIALIZE
-========================================================= */
-
-loadState();
-
-document.getElementById(
-    "fontSelect"
-).value =
-    state.font;
-
-document.getElementById(
-    "fontSizeSelect"
-).value =
-    state.fontSize;
-
-applyTheme();
-
-renderScriptList();
-
-renderTabs();
-
-loadActiveEditor();
+startApplication();
 
 })();
-
 </script>
 
 </body>
