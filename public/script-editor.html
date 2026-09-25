@@ -69,20 +69,35 @@ button {
 ========================================================= */
 
 .topbar {
-    height: 58px;
-    min-height: 58px;
+    height: 80px;
+    min-height: 80px;
     background: var(--panel);
     border-bottom: 1px solid var(--border);
+
     display: flex;
     align-items: center;
-    padding: 0 18px;
-    gap: 12px;
+    justify-content: space-between;
+
+    padding: 8px 18px;
+}
+
+.header-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+.header-left .btn {
+    padding: 4px 8px;
+    font-size: 11px;
 }
 
 .brand {
     font-size: 18px;
     font-weight: 800;
     white-space: nowrap;
+    cursor: pointer;
 }
 
 .brand span {
@@ -90,9 +105,8 @@ button {
 }
 
 .top-actions {
-    margin-left: auto;
     display: flex;
-    gap: 8px;
+    align-items: center;
 }
 
 /* =========================================================
@@ -703,33 +717,38 @@ body.dark .option:hover {
     <!-- =====================================================
          HEADER
     ====================================================== -->
+<header class="topbar">
 
-    <header class="topbar">
+    <div class="header-left">
 
-        <div class="brand" id="brandHome" title="Back to M365Buddy home">
+        <button
+            type="button"
+            class="btn"
+            id="homeBtn">
+            ← Back to Home
+        </button>
+
+        <div
+            class="brand"
+            id="brandHome"
+            title="Open M365Buddy home">
             M365<span>Buddy</span> Script Workspace
         </div>
 
-        <div class="top-actions">
+    </div>
 
-            <button
-                type="button"
-                class="btn"
-                id="homeBtn">
-                Back to Home
-            </button>
+    <div class="top-actions">
 
-            <button
-                type="button"
-                class="btn primary"
-                id="newScriptBtn">
-                ＋ Add New Script
-            </button>
+        <button
+            type="button"
+            class="btn"
+            id="themeBtn">
+            Dark
+        </button>
 
-        </div>
+    </div>
 
-    </header>
-
+</header>
 
     <!-- =====================================================
          BODY
@@ -1222,28 +1241,79 @@ function loadState() {
     if (!state.fontSize) state.fontSize = "13";
 
     ORIGINAL_SCRIPTS.forEach(function (original) {
-        let script = state.scripts.find(function (s) { return s.id === original.id; });
-        if (!script) {
-            state.scripts.push({
-                id: original.id,
-                name: original.name,
-                description: original.description,
-                content: original.content,
-                original: true,
-                readOnly: true,
-                sidebarHidden: false
-            });
-        } else {
-            script.original = true;
-            script.readOnly = true;
-            if (typeof script.sidebarHidden !== "boolean") script.sidebarHidden = false;
-            /* Keep the published original content authoritative. */
-            script.name = original.name;
-            script.description = original.description;
-            script.content = original.content;
-        }
-    });
 
+    let script =
+        state.scripts.find(
+            function (s) {
+                return s.id === original.id;
+            }
+        );
+
+    if (!script) {
+
+        /*
+         * First-time installation.
+         */
+        state.scripts.push({
+
+            id:
+                original.id,
+
+            name:
+                original.name,
+
+            description:
+                original.description,
+
+            content:
+                original.content,
+
+            original:
+                true,
+
+            readOnly:
+                true,
+
+            sidebarHidden:
+                false
+        });
+
+    } else {
+
+        /*
+         * Existing original script.
+         *
+         * IMPORTANT:
+         * Do NOT reset sidebarHidden here.
+         *
+         * If the user closed it, it must remain
+         * closed after browser refresh.
+         */
+        script.original = true;
+
+        script.readOnly = true;
+
+        if (
+            typeof script.sidebarHidden !==
+            "boolean"
+        ) {
+            script.sidebarHidden = false;
+        }
+
+        /*
+         * Keep the published script definition.
+         */
+        script.name =
+            original.name;
+
+        script.description =
+            original.description;
+
+        script.content =
+            original.content;
+    }
+});
+    
     /* Remove broken tabs from older versions. */
     state.tabs = state.tabs.filter(function (tab) {
         return tab && tab.id && getScript(tab.scriptId);
@@ -1381,26 +1451,102 @@ function renderSidebar(filter) {
     }
 }
 
-function closeSidebarScript(scriptId) {
+    function closeSidebarScript(scriptId) {
+
     const script = getScript(scriptId);
-    if (!script) return;
 
-    const tab = state.tabs.find(function (t) { return t.scriptId === scriptId; });
-    if (tab) closeTab(tab.id, false);
+    if (!script) {
+        return;
+    }
 
+    /*
+     * Save any unsaved content before removing
+     * the script's editor tabs.
+     */
+    syncActiveContent();
+
+    /*
+     * Remove EVERY editor tab belonging
+     * to this script.
+     */
+    state.tabs = state.tabs.filter(
+        function (tab) {
+            return tab.scriptId !== scriptId;
+        }
+    );
+
+    /*
+     * Original M365Buddy scripts are not deleted.
+     * They are simply hidden from the sidebar.
+     *
+     * Personal/custom scripts are actually removed.
+     */
     if (script.original) {
+
         script.sidebarHidden = true;
+
     } else {
-        state.scripts = state.scripts.filter(function (s) { return s.id !== scriptId; });
-        state.tabs = state.tabs.filter(function (t) { return t.scriptId !== scriptId; });
-        if (!getActiveTab()) state.activeTabId = state.tabs.length ? state.tabs[state.tabs.length - 1].id : null;
+
+        state.scripts =
+            state.scripts.filter(
+                function (item) {
+                    return item.id !== scriptId;
+                }
+            );
+    }
+
+    /*
+     * The previously active tab may have been
+     * one of the tabs we just removed.
+     */
+    if (
+        !state.activeTabId ||
+        !state.tabs.some(
+            function (tab) {
+                return tab.id === state.activeTabId;
+            }
+        )
+    ) {
+
+        state.activeTabId =
+            state.tabs.length
+                ? state.tabs[state.tabs.length - 1].id
+                : null;
     }
 
     saveState();
+
     renderTabs();
-    renderSidebar(sideSearch.value);
-    if (state.activeTabId) loadActiveTab(); else setEditorContent("");
-    showToast(script.name + " closed.");
+
+    renderSidebar(
+        sideSearch.value
+    );
+
+    if (state.activeTabId) {
+
+        loadActiveTab();
+
+    } else {
+
+        setEditorContent("");
+
+        editor.readOnly = true;
+
+        dirtyText.textContent = "";
+
+        setStatus(
+            "No editor tab open"
+        );
+
+        updateLineNumbers();
+
+        updatePosition();
+    }
+
+    showToast(
+        script.name +
+        " closed."
+    );
 }
 
 /* =========================================================
@@ -1804,50 +1950,163 @@ document.addEventListener("keydown", function(event){
 /* =========================================================
    STARTUP
 ========================================================= */
-function startApplication() {
+
+    function startApplication() {
+
     loadState();
-    document.getElementById("fontSelect").value = state.font;
-    document.getElementById("fontSizeSelect").value = state.fontSize;
+
+    document.getElementById(
+        "fontSelect"
+    ).value =
+        state.font;
+
+    document.getElementById(
+        "fontSizeSelect"
+    ).value =
+        state.fontSize;
+
     applyTheme();
 
-    const requested = new URLSearchParams(window.location.search).get("script");
 
-    if (requested) {
-        const requestedScript = getScript(requested);
-        if (requestedScript) {
-            requestedScript.sidebarHidden = false;
-            /* A direct article link should always show the requested script. */
-            state.tabs = state.tabs.filter(function(t){ return getScript(t.scriptId); });
-            saveState();
-            openScript(requested, {unhide:true});
-            return;
-        }
+    /*
+     * =====================================================
+     * REMOVE INVALID / HIDDEN SCRIPT TABS
+     * =====================================================
+     *
+     * If a script was closed from the sidebar,
+     * its editor tabs must NOT come back after refresh.
+     */
+    state.tabs =
+        state.tabs.filter(
+            function (tab) {
+
+                const script =
+                    getScript(
+                        tab.scriptId
+                    );
+
+                if (!script) {
+                    return false;
+                }
+
+                /*
+                 * Hidden scripts have no open editor tabs.
+                 */
+                if (
+                    script.sidebarHidden
+                ) {
+                    return false;
+                }
+
+                return true;
+            }
+        );
+
+
+    /*
+     * =====================================================
+     * VALIDATE ACTIVE TAB
+     * =====================================================
+     */
+
+    if (
+        state.activeTabId &&
+        state.tabs.some(
+            function (tab) {
+                return (
+                    tab.id ===
+                    state.activeTabId
+                );
+            }
+        )
+    ) {
+
+        /*
+         * Existing valid tab.
+         */
+        saveState();
+
+        renderTabs();
+
+        renderSidebar(
+            sideSearch.value
+        );
+
+        loadActiveTab();
+
+        return;
     }
 
-    /* Restore a valid saved tab first. */
-    const validActive = getActiveTab() && getScript(getActiveTab().scriptId);
-    if (validActive) {
-        renderTabs(); renderSidebar(sideSearch.value); loadActiveTab(); return;
+
+    /*
+     * =====================================================
+     * NO VALID ACTIVE TAB
+     * =====================================================
+     */
+
+    state.activeTabId = null;
+
+
+    /*
+     * If other valid tabs remain, use the
+     * last one.
+     */
+    if (state.tabs.length) {
+
+        state.activeTabId =
+            state.tabs[
+                state.tabs.length - 1
+            ].id;
+
+        saveState();
+
+        renderTabs();
+
+        renderSidebar(
+            sideSearch.value
+        );
+
+        loadActiveTab();
+
+        return;
     }
 
-    /* If stale/invalid tabs existed, remove them before opening a default. */
-    state.tabs = state.tabs.filter(function(t){ return getScript(t.scriptId); });
-    state.activeTabId = state.tabs.length ? state.tabs[0].id : null;
 
-    if (state.activeTabId) {
-        saveState(); renderTabs(); renderSidebar(sideSearch.value); loadActiveTab(); return;
-    }
+    /*
+     * =====================================================
+     * NO TABS
+     * =====================================================
+     *
+     * IMPORTANT:
+     * Do NOT automatically open the Inventory script.
+     *
+     * The user closed it, so it should stay closed.
+     */
 
-    /* First visit / no open tab: open the inventory script. */
-    const first = getScript("spo-site-inventory") || state.scripts.find(function(s){ return s.original && !s.sidebarHidden; });
-    if (first) openScript(first.id, {unhide:true});
-    else { renderTabs(); renderSidebar(""); setEditorContent(""); setStatus("No script available"); }
+    saveState();
+
+    renderTabs();
+
+    renderSidebar(
+        sideSearch.value
+    );
+
+    setEditorContent("");
+
+    editor.readOnly = true;
+
+    dirtyText.textContent = "";
+
+    setStatus(
+        "No editor tab open"
+    );
+
+    updateLineNumbers();
+
+    updatePosition();
 }
-
-startApplication();
-
-})();
-</script>
+    
+ </script>
 
 </body>
 </html>
