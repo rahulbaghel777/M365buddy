@@ -930,6 +930,14 @@ body.dark .option:hover {
                 </button>
 
                 <button
+    type="button"
+    class="btn"
+    id="pasteBtn">
+    Paste
+</button>
+                
+
+                <button
                     type="button"
                     class="btn"
                     id="downloadBtn">
@@ -993,12 +1001,15 @@ body.dark .option:hover {
                 </select>
 
                 <select id="fontSizeSelect">
-                    <option value="12">12</option>
-                    <option value="13" selected>13</option>
-                    <option value="14">14</option>
-                    <option value="15">15</option>
-                    <option value="16">16</option>
-                </select>
+    <option value="10">10</option>
+    <option value="11">11</option>
+    <option value="12" selected>12</option>
+    <option value="13">13</option>
+    <option value="14">14</option>
+    <option value="15">15</option>
+    <option value="16">16</option>
+</select>
+                
                 
             </div>
 
@@ -1258,7 +1269,7 @@ let state = {
     activeTabId: null,
     theme: "light",
     font: "Consolas",
-    fontSize: "13"
+    fontSize: "12"
 };
 
 let currentSearchIndex = 0;
@@ -1433,7 +1444,7 @@ function loadState() {
                     state.font =
                         legacy.font || "Consolas";
                     state.fontSize =
-                        legacy.fontSize || "13";
+                        legacy.fontSize || "12";
 
                     raw = null;
                 } catch (migrationError) {
@@ -1472,7 +1483,7 @@ function loadState() {
                 saved.font || "Consolas";
 
             state.fontSize =
-                saved.fontSize || "13";
+                saved.fontSize || "12";
         }
 
         ORIGINAL_SCRIPTS.forEach(
@@ -1560,7 +1571,7 @@ function loadState() {
         state.activeTabId = null;
         state.theme = "light";
         state.font = "Consolas";
-        state.fontSize = "13";
+        state.fontSize = "12";
         isFirstRun = true;
     }
 }
@@ -1984,57 +1995,23 @@ function activateTab(tabId) {
 
 function closeTab(tabId) {
 
-    const index =
-        state.openTabs.findIndex(
-            function (tab) {
-                return tab.id === tabId;
-            }
-        );
+    const tab =
+        getTab(tabId);
 
-    if (index === -1) {
+    if (!tab) {
         return;
     }
 
-    const closingActive =
-        state.activeTabId === tabId;
-
-    state.openTabs.splice(
-        index,
-        1
+    /*
+     * Closing a top tab should behave the same
+     * as closing the script from the sidebar.
+     *
+     * This keeps both sides synchronized.
+     */
+    closeSidebarScript(
+        tab.scriptId
     );
-
-    if (closingActive) {
-
-        if (state.openTabs.length) {
-
-            const nextIndex =
-                Math.min(
-                    index,
-                    state.openTabs.length - 1
-                );
-
-            state.activeTabId =
-                state.openTabs[
-                    nextIndex
-                ].id;
-
-        } else {
-
-            state.activeTabId =
-                null;
-        }
-    }
-
-    renderTabs();
-
-    renderScriptList();
-
-    loadActiveEditor();
-
-    saveState();
 }
-
-
 /* =========================================================
    LOAD ACTIVE EDITOR
 ========================================================= */
@@ -2649,6 +2626,13 @@ function openCustomScript() {
 
     modalFoot.innerHTML = `
 
+<button
+        type="button"
+        class="btn"
+        id="modalBack">
+        Back
+    </button>
+    
         <button
             type="button"
             class="btn"
@@ -2675,6 +2659,13 @@ function openCustomScript() {
 
     input.focus();
 
+    document
+    .getElementById("modalBack")
+    .addEventListener(
+        "click",
+        openCreateModal
+    );
+    
     document
         .getElementById("modalCancel")
         .addEventListener(
@@ -2965,6 +2956,112 @@ async function copyToClipboard() {
     }
 }
 
+async function pasteFromClipboard() {
+
+    const tab =
+        getActiveTab();
+
+    if (!tab) {
+
+        showToast(
+            "No script is open."
+        );
+
+        return;
+    }
+
+    const script =
+        getScript(tab.scriptId);
+
+    if (!script) {
+        return;
+    }
+
+    if (script.original) {
+
+        showToast(
+            "Original M365Buddy scripts are read-only."
+        );
+
+        return;
+    }
+
+    try {
+
+        const clipboardText =
+            await navigator.clipboard.readText();
+
+        if (!clipboardText) {
+
+            showToast(
+                "Clipboard is empty."
+            );
+
+            return;
+        }
+
+        const start =
+            editor.selectionStart;
+
+        const end =
+            editor.selectionEnd;
+
+        const currentText =
+            editor.value;
+
+        editor.value =
+            currentText.substring(
+                0,
+                start
+            ) +
+            clipboardText +
+            currentText.substring(
+                end
+            );
+
+        /*
+         * Move cursor to the end of
+         * the pasted content.
+         */
+        const newPosition =
+            start +
+            clipboardText.length;
+
+        editor.setSelectionRange(
+            newPosition,
+            newPosition
+        );
+
+        syncEditorToState();
+
+        updateLineNumbers();
+
+        updatePosition();
+
+        updateStatus();
+
+        saveState();
+
+        editor.focus();
+
+        showToast(
+            "Pasted from clipboard."
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Clipboard paste failed:",
+            error
+        );
+
+        showToast(
+            "Clipboard access was blocked. Please allow clipboard permission for this site."
+        );
+    }
+}
+
+    
 
 /* =========================================================
    DOWNLOAD
@@ -3747,6 +3844,12 @@ document
         copyToClipboard
     );
 
+    document
+    .getElementById("pasteBtn")
+    .addEventListener(
+        "click",
+        pasteFromClipboard
+    );
 
 document
     .getElementById("downloadBtn")
