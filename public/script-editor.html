@@ -67,26 +67,25 @@ button {
 /* =========================================================
    TOP HEADER
 ========================================================= */
-
 .topbar {
     height: 72px;
     min-height: 72px;
-    width: 100%;
-    box-sizing: border-box;
-
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-    align-items: center;
-
-    padding: 0 16px;
 
     background: var(--panel);
     border-bottom: 1px solid var(--border);
+
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+
+    align-items: center;
+
+    padding: 0 16px;
 }
 
 .header-left {
     justify-self: start;
-display: flex;
+
+    display: flex;
     align-items: center;
     gap: 8px;
 }
@@ -100,12 +99,17 @@ display: flex;
     cursor: pointer;
 }
 
+.brand span {
+    color: #0078d4 !important;
+}
+
 .top-actions {
     justify-self: end;
 
     display: flex;
     align-items: center;
 }
+    
 /* =========================================================
    BUTTONS
 ========================================================= */
@@ -792,31 +796,31 @@ body.dark .option:hover {
     <!-- =====================================================
          TOP HEADER
     ====================================================== -->
-
 <header class="topbar">
 
     <div class="header-left">
 
         <button
             type="button"
-            class="btn header-home"
+            class="btn"
             id="homeBtn">
             ← Home
         </button>
 
         <a
             href="/articles/sharepoint-online-site-inventory.html"
-            class="btn"
-        >
-            Article
+            class="btn">
+            Articles
         </a>
 
-        <div
-    class="brand"
-    id="brandHome"
-    title="Open M365Buddy home">
-    <span>M365Buddy</span> Script Workspace
-</div>
+    </div>
+
+    <div
+        class="brand"
+        id="brandHome"
+        title="Open M365Buddy home">
+
+        <span>M365Buddy</span> Script Workspace
 
     </div>
 
@@ -1707,6 +1711,16 @@ function renderScriptList() {
                     }
                 );
 
+                item.addEventListener(
+    "dblclick",
+    function (event) {
+        event.stopPropagation();
+
+        openScript(script.id);
+        openRenameModal();
+    }
+);
+
                 const closeButton =
                     item.querySelector(".script-close");
 
@@ -1877,6 +1891,16 @@ function renderTabs() {
                     );
                 }
             );
+
+            tabElement.addEventListener(
+    "dblclick",
+    function (event) {
+        event.stopPropagation();
+
+        activateTab(tab.id);
+        openRenameModal();
+    }
+);
 
             close.addEventListener(
                 "click",
@@ -2148,14 +2172,11 @@ function saveCurrent() {
 /* =========================================================
    CREATE EDITABLE COPY
 ========================================================= */
-
 function getNextCopyName(originalScript) {
 
-    const baseName =
-        originalScript.name;
+    const baseName = originalScript.name;
 
-    let candidate =
-        baseName + " Copy";
+    let candidate = baseName + " (Editable)";
 
     let counter = 2;
 
@@ -2169,114 +2190,15 @@ function getNextCopyName(originalScript) {
 
         candidate =
             baseName +
-            " Copy " +
-            counter;
+            " (Editable " +
+            counter +
+            ")";
 
         counter++;
     }
 
     return candidate;
 }
-
-
-function createCopy() {
-
-    const tab =
-        getActiveTab();
-
-    if (!tab) {
-
-        showToast(
-            "Open a script first."
-        );
-
-        return;
-    }
-
-    const source =
-        getScript(tab.scriptId);
-
-    if (!source) {
-        return;
-    }
-
-    const copyName =
-        getNextCopyName(source);
-
-    const copy = {
-
-        id:
-            makeId("script"),
-
-        name:
-            copyName,
-
-        description:
-            "Editable copy",
-
-        content:
-            tab.content,
-
-        originalId:
-            source.original
-                ? source.id
-                : (
-                    source.originalId ||
-                    source.id
-                ),
-
-        original:
-            false,
-
-        sidebarHidden:
-            false
-    };
-
-    state.scripts.push(
-        copy
-    );
-
-    /*
-     * Open the editable copy in its
-     * own editor tab.
-     */
-
-    openScript(
-        copy.id
-    );
-
-    /*
-     * Make sure the copy is editable.
-     */
-
-    const newTab =
-        getActiveTab();
-
-    if (newTab) {
-
-        newTab.content =
-            copy.content;
-
-        newTab.originalContent =
-            copy.content;
-
-        newTab.dirty =
-            false;
-    }
-
-    saveState();
-
-    renderScriptList();
-
-    renderTabs();
-
-    loadActiveEditor();
-
-    showToast(
-        copyName + " created."
-    );
-}
-
 
 /* =========================================================
    CREATE PERSONAL SCRIPT
