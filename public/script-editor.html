@@ -100,7 +100,7 @@ button {
 }
 
 .brand span {
-    color: #0078d4 !important;
+    color: #0078d4;
 }
 
 .top-actions {
@@ -417,6 +417,10 @@ button {
     width: 220px;
 }
 
+.toolbar input.replace-input {
+    width: 220px;
+}
+
 .toolbar .spacer {
     flex: 1;
 }
@@ -476,6 +480,12 @@ button {
 
 .editor:focus {
     box-shadow: inset 0 0 0 2px rgba(37, 99, 235, 0.12);
+}
+
+/* Find-match highlight: readable in both light and dark themes. */
+.editor::selection {
+    background: #facc15;
+    color: #111827;
 }
 
 .editor[readonly] {
@@ -978,6 +988,13 @@ body.dark .option:hover {
                 <button
                     type="button"
                     class="btn"
+                    id="findBtn">
+                    Find
+                </button>
+
+                <button
+                    type="button"
+                    class="btn"
                     id="findPrevBtn">
                     ↑
                 </button>
@@ -993,6 +1010,27 @@ body.dark .option:hover {
                     id="findCount"
                     style="font-size:12px;color:#647084">
                 </span>
+
+                <input
+                    type="text"
+                    id="replaceInput"
+                    class="replace-input"
+                    placeholder="Replace with..."
+                    autocomplete="off">
+
+                <button
+                    type="button"
+                    class="btn"
+                    id="replaceBtn">
+                    Replace
+                </button>
+
+                <button
+                    type="button"
+                    class="btn"
+                    id="replaceAllBtn">
+                    Replace All
+                </button>
 
                 <div class="spacer"></div>
 
@@ -1314,6 +1352,15 @@ const findInput =
 
 const findCount =
     document.getElementById("findCount");
+
+const replaceInput =
+    document.getElementById("replaceInput");
+
+const replaceBtn =
+    document.getElementById("replaceBtn");
+
+const replaceAllBtn =
+    document.getElementById("replaceAllBtn");
 
 const modalBackdrop =
     document.getElementById("modalBackdrop");
@@ -1712,14 +1759,25 @@ function renderScriptList() {
                 );
 
                 item.addEventListener(
-    "dblclick",
-    function (event) {
-        event.stopPropagation();
+                    "dblclick",
+                    function (event) {
 
-        openScript(script.id);
-        openRenameModal();
-    }
-);
+                        if (
+                            event.target.closest(".script-close")
+                        ) {
+                            return;
+                        }
+
+                        event.preventDefault();
+                        event.stopPropagation();
+
+                        openScript(
+                            item.dataset.scriptId
+                        );
+
+                        openRenameModal();
+                    }
+                );
 
                 const closeButton =
                     item.querySelector(".script-close");
@@ -1893,14 +1951,20 @@ function renderTabs() {
             );
 
             tabElement.addEventListener(
-    "dblclick",
-    function (event) {
-        event.stopPropagation();
+                "dblclick",
+                function (event) {
 
-        activateTab(tab.id);
-        openRenameModal();
-    }
-);
+                    if (event.target === close) {
+                        return;
+                    }
+
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    activateTab(tab.id);
+                    openRenameModal();
+                }
+            );
 
             close.addEventListener(
                 "click",
@@ -2058,6 +2122,8 @@ function loadActiveEditor() {
         positionText.textContent =
             "Ln 1, Col 1";
 
+        updateReplaceControls();
+
         return;
     }
 
@@ -2084,6 +2150,7 @@ function loadActiveEditor() {
     updateStatus();
 
     updateEditorStyle();
+    updateReplaceControls();
 
     editor.focus();
 
@@ -3485,7 +3552,7 @@ function resetCurrent() {
 
 
 /* =========================================================
-   SEARCH
+   SEARCH + REPLACE
 ========================================================= */
 
 function getSearchMatches() {
@@ -3505,26 +3572,24 @@ function getSearchMatches() {
         editor.value;
 
     const matches = [];
+    const lowerText = text.toLowerCase();
+    const lowerTerm = term.toLowerCase();
 
     let index = 0;
 
     while (true) {
 
         const found =
-            text
-                .toLowerCase()
-                .indexOf(
-                    term.toLowerCase(),
-                    index
-                );
+            lowerText.indexOf(
+                lowerTerm,
+                index
+            );
 
         if (found === -1) {
             break;
         }
 
-        matches.push(
-            found
-        );
+        matches.push(found);
 
         index =
             found +
@@ -3535,14 +3600,83 @@ function getSearchMatches() {
         matches.length
             ? matches.length +
               " match" +
-              (
-                  matches.length === 1
-                      ? ""
-                      : "es"
-              )
+              (matches.length === 1 ? "" : "es")
             : "No matches";
 
     return matches;
+}
+
+
+function updateReplaceControls() {
+
+    const disabled =
+        editor.readOnly ||
+        !findInput.value;
+
+    replaceBtn.disabled = disabled;
+    replaceAllBtn.disabled = disabled;
+}
+
+
+function scrollEditorToMatch(start) {
+
+    if (start < 0) {
+        return;
+    }
+
+    /*
+     * A textarea does not expose individual line elements, so calculate
+     * the matching line from the character offset and move the editor
+     * viewport explicitly. This keeps Find/Up/Down useful even when the
+     * browser does not automatically scroll a textarea selection.
+     */
+    const beforeMatch =
+        editor.value.slice(0, start);
+
+    const lineNumber =
+        beforeMatch.split("\n").length - 1;
+
+    const computed =
+        window.getComputedStyle(editor);
+
+    let lineHeight =
+        parseFloat(computed.lineHeight);
+
+    if (!lineHeight || Number.isNaN(lineHeight)) {
+        lineHeight = 20;
+    }
+
+    const targetTop =
+        Math.max(
+            0,
+            lineNumber * lineHeight -
+            (editor.clientHeight / 2) +
+            lineHeight
+        );
+
+    editor.scrollTop = targetTop;
+}
+
+
+function selectAndShowMatch(start) {
+
+    if (start < 0) {
+        return;
+    }
+
+    const length =
+        findInput.value.length;
+
+    editor.focus();
+
+    editor.setSelectionRange(
+        start,
+        start + length
+    );
+
+    scrollEditorToMatch(start);
+    updatePosition();
+    updateReplaceControls();
 }
 
 
@@ -3552,6 +3686,7 @@ function findNext() {
         getSearchMatches();
 
     if (!matches.length) {
+        updateReplaceControls();
         return;
     }
 
@@ -3559,27 +3694,15 @@ function findNext() {
         currentSearchIndex >=
         matches.length
     ) {
-
-        currentSearchIndex =
-            0;
+        currentSearchIndex = 0;
     }
 
     const start =
-        matches[
-            currentSearchIndex
-        ];
+        matches[currentSearchIndex];
 
-    editor.focus();
-
-    editor.setSelectionRange(
-        start,
-        start +
-            findInput.value.length
-    );
+    selectAndShowMatch(start);
 
     currentSearchIndex++;
-
-    updatePosition();
 }
 
 
@@ -3589,33 +3712,217 @@ function findPrevious() {
         getSearchMatches();
 
     if (!matches.length) {
+        updateReplaceControls();
         return;
     }
 
     currentSearchIndex--;
 
-    if (
-        currentSearchIndex < 0
-    ) {
-
+    if (currentSearchIndex < 0) {
         currentSearchIndex =
             matches.length - 1;
     }
 
     const start =
-        matches[
-            currentSearchIndex
-        ];
+        matches[currentSearchIndex];
 
-    editor.focus();
+    selectAndShowMatch(start);
+}
 
-    editor.setSelectionRange(
+
+function findFirst() {
+
+    currentSearchIndex = 0;
+
+    const matches =
+        getSearchMatches();
+
+    if (!matches.length) {
+        updateReplaceControls();
+        return;
+    }
+
+    selectAndShowMatch(matches[0]);
+    currentSearchIndex = 1;
+}
+
+
+function getCurrentMatchStart(matches) {
+
+    const term =
+        findInput.value;
+
+    if (!term || !matches.length) {
+        return -1;
+    }
+
+    const selectedText =
+        editor.value.slice(
+            editor.selectionStart,
+            editor.selectionEnd
+        );
+
+    if (
+        selectedText.toLowerCase() ===
+        term.toLowerCase() &&
+        editor.selectionEnd > editor.selectionStart
+    ) {
+        return editor.selectionStart;
+    }
+
+    let index =
+        currentSearchIndex - 1;
+
+    if (index < 0) {
+        index = matches.length - 1;
+    }
+
+    if (index >= matches.length) {
+        index = 0;
+    }
+
+    return matches[index];
+}
+
+
+function replaceCurrent() {
+
+    if (editor.readOnly) {
+
+        showToast(
+            "Original M365Buddy scripts are read-only. Create a copy to edit."
+        );
+
+        return;
+    }
+
+    const term =
+        findInput.value;
+
+    if (!term) {
+        showToast("Enter text in Find first.");
+        return;
+    }
+
+    const matches =
+        getSearchMatches();
+
+    if (!matches.length) {
+        return;
+    }
+
+    const start =
+        getCurrentMatchStart(matches);
+
+    if (start < 0) {
+        return;
+    }
+
+    const replacement =
+        replaceInput.value;
+
+    editor.setRangeText(
+        replacement,
         start,
-        start +
-            findInput.value.length
+        start + term.length,
+        "select"
     );
 
-    updatePosition();
+    syncEditorToState();
+    updateLineNumbers();
+    updateStatus();
+    saveState();
+
+    /* Move to the next occurrence after the replacement. */
+    const updatedMatches =
+        getSearchMatches();
+
+    if (updatedMatches.length) {
+
+        const next =
+            updatedMatches.findIndex(
+                function (value) {
+                    return value >= start + replacement.length;
+                }
+            );
+
+        currentSearchIndex =
+            next === -1 ? 0 : next;
+
+        findNext();
+
+    } else {
+
+        currentSearchIndex = 0;
+        findCount.textContent = "No matches";
+        updateReplaceControls();
+        editor.focus();
+    }
+
+    showToast("1 occurrence replaced.");
+}
+
+
+function replaceAllMatches() {
+
+    if (editor.readOnly) {
+
+        showToast(
+            "Original M365Buddy scripts are read-only. Create a copy to edit."
+        );
+
+        return;
+    }
+
+    const term =
+        findInput.value;
+
+    if (!term) {
+        showToast("Enter text in Find first.");
+        return;
+    }
+
+    const matches =
+        getSearchMatches();
+
+    if (!matches.length) {
+        return;
+    }
+
+    const replacement =
+        replaceInput.value;
+
+    const escaped =
+        term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+    const regex =
+        new RegExp(escaped, "gi");
+
+    const count =
+        matches.length;
+
+    editor.value =
+        editor.value.replace(
+            regex,
+            replacement
+        );
+
+    syncEditorToState();
+    updateLineNumbers();
+    updateStatus();
+    saveState();
+
+    currentSearchIndex = 0;
+    getSearchMatches();
+    updateReplaceControls();
+    editor.focus();
+
+    showToast(
+        count +
+        " occurrence" +
+        (count === 1 ? "" : "s") +
+        " replaced."
+    );
 }
 
 
@@ -3626,6 +3933,71 @@ findInput.addEventListener(
         currentSearchIndex = 0;
 
         getSearchMatches();
+        updateReplaceControls();
+    }
+);
+
+replaceInput.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (event.key === "Enter") {
+
+            event.preventDefault();
+            replaceCurrent();
+        }
+    }
+);
+
+replaceBtn.addEventListener(
+    "click",
+    replaceCurrent
+);
+
+replaceAllBtn.addEventListener(
+    "click",
+    replaceAllMatches
+);
+
+
+/*
+ * The Find box selects the current match in the textarea so the
+ * user can see exactly which occurrence is active. Prevent Enter
+ * in the editor from replacing that selected match with a newline.
+ * Enter therefore continues to mean "next match" after Find has
+ * moved focus into the editor.
+ */
+editor.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (
+            event.key !== "Enter" ||
+            !findInput.value
+        ) {
+            return;
+        }
+
+        const selected =
+            editor.value.slice(
+                editor.selectionStart,
+                editor.selectionEnd
+            );
+
+        if (
+            selected &&
+            selected.toLowerCase() ===
+                findInput.value.toLowerCase()
+        ) {
+
+            event.preventDefault();
+
+            if (event.shiftKey) {
+                findPrevious();
+            } else {
+                findNext();
+            }
+        }
     }
 );
 
@@ -3797,6 +4169,14 @@ document
     .addEventListener(
         "click",
         resetCurrent
+    );
+
+
+document
+    .getElementById("findBtn")
+    .addEventListener(
+        "click",
+        findFirst
     );
 
 
