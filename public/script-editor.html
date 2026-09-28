@@ -68,8 +68,8 @@ button {
    TOP HEADER
 ========================================================= */
 .topbar {
-    height: 72px;
-    min-height: 72px;
+    height: 56px;
+    min-height: 56px;
 
     background: var(--panel);
     border-bottom: 1px solid var(--border);
@@ -79,7 +79,7 @@ button {
 
     align-items: center;
 
-    padding: 0 16px;
+    padding: 0 12px;
 }
 
 .header-left {
@@ -87,7 +87,7 @@ button {
 
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
 }
 
 .brand {
@@ -115,12 +115,18 @@ button {
 ========================================================= */
 
 .btn {
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     border: 1px solid var(--border);
     background: #ffffff;
     color: var(--text);
-    border-radius: 8px;
-    padding: 8px 12px;
-    font-size: 13px;
+    border-radius: 7px;
+    padding: 0 10px;
+    font-size: 12.5px;
+    line-height: 1;
+    text-decoration: none;
 }
 
 .btn:hover {
@@ -145,6 +151,15 @@ button {
     background: #fef2f2;
 }
 
+.header-left .btn,
+.top-actions .btn {
+    height: 28px;
+    min-height: 28px;
+    padding: 0 8px;
+    font-size: 12px;
+    line-height: 1;
+}
+
 /* =========================================================
    BODY
 ========================================================= */
@@ -160,8 +175,8 @@ button {
 ========================================================= */
 
 .sidebar {
-    width: 285px;
-    min-width: 285px;
+    width: 245px;
+    min-width: 245px;
     background: var(--panel);
     border-right: 1px solid var(--border);
     display: flex;
@@ -170,22 +185,31 @@ button {
 }
 
 .side-head {
-    padding: 16px;
+    padding: 8px 9px;
     border-bottom: 1px solid var(--border);
 }
 
 .side-title {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 700;
-    margin-bottom: 10px;
+    margin-bottom: 6px;
+}
+
+.m365-brand {
+    color: #0078d4;
 }
 
 .side-search {
     width: 100%;
-    padding: 9px 10px;
+    height: 30px;
+    min-height: 30px;
+    box-sizing: border-box;
+    padding: 4px 8px;
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 7px;
     outline: none;
+    font-size: 12px;
+    line-height: 20px;
 }
 
 .side-search:focus {
@@ -193,15 +217,15 @@ button {
 }
 
 .script-list {
-    padding: 10px;
+    padding: 6px;
     overflow-y: auto;
     flex: 1;
 }
 
 .script-item {
-    padding: 11px 12px;
-    border-radius: 8px;
-    margin-bottom: 5px;
+    padding: 9px 10px;
+    border-radius: 7px;
+    margin-bottom: 4px;
     cursor: pointer;
     border: 1px solid transparent;
 }
@@ -222,13 +246,13 @@ button {
 }
 
 .script-meta {
-    font-size: 11px;
+    font-size: 10.5px;
     color: var(--muted);
     margin-top: 3px;
 }
 
 .side-bottom {
-    padding: 12px;
+    padding: 10px;
     border-top: 1px solid var(--border);
 }
 
@@ -304,23 +328,24 @@ button {
 ========================================================= */
 
 .tabbar {
-    height: 46px;
-    min-height: 46px;
+    height: 38px;
+    min-height: 38px;
     background: var(--panel);
     border-bottom: 1px solid var(--border);
     display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 5px 10px;
+    gap: 4px;
+    padding: 3px 8px;
     overflow-x: auto;
 }
 
 .tab {
-    height: 35px;
+    height: 32px;
     display: flex;
     align-items: center;
-    gap: 7px;
-    padding: 0 9px 0 12px;
+    gap: 6px;
+    padding: 0 8px 0 10px;
+    font-size: 12.5px;
     border: 1px solid transparent;
     border-radius: 7px 7px 0 0;
     background: #f1f5f9;
@@ -364,13 +389,13 @@ button {
 ========================================================= */
 
 .add-tab {
-    flex: 0 0 35px;
-    width: 35px;
-    height: 35px;
+    flex: 0 0 34px;
+    width: 34px;
+    height: 34px;
     border: 1px dashed #94a3b8;
     background: #ffffff;
     border-radius: 8px;
-    font-size: 21px;
+    font-size: 19px;
     color: #475569;
     line-height: 30px;
     margin-left: 2px;
@@ -387,42 +412,100 @@ button {
 ========================================================= */
 
 .toolbar {
-    min-height: 50px;
+    min-height: 72px;
     background: var(--panel);
     border-bottom: 1px solid var(--border);
     display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+    padding: 4px 8px;
+    overflow: visible;
+}
+
+.toolbar-row {
+    display: flex;
     align-items: center;
-    gap: 7px;
-    padding: 7px 10px;
-    flex-wrap: wrap;
+    gap: 4px;
+    min-width: 0;
+}
+
+.toolbar-actions {
+    flex: 0 0 auto;
+}
+
+.toolbar-tools {
+    flex: 1 1 auto;
+}
+
+.toolbar-tools #findInput {
+    flex: 1 1 220px;
+    min-width: 150px;
+}
+
+.toolbar-tools .replace-input {
+    flex: 0 1 210px;
+    min-width: 150px;
 }
 
 .toolbar .separator {
-    height: 25px;
+    height: 22px;
     width: 1px;
     background: var(--border);
-    margin: 0 2px;
+    margin: 0 3px;
 }
 
 .toolbar input,
 .toolbar select {
-    height: 34px;
+    height: 32px;
     border: 1px solid var(--border);
     border-radius: 7px;
     background: #ffffff;
-    padding: 0 8px;
+    padding: 0 7px;
+    font-size: 12px;
 }
 
 .toolbar input {
-    width: 220px;
+    width: 175px;
 }
 
 .toolbar input.replace-input {
-    width: 220px;
+    width: 165px;
+}
+
+.toolbar #findInput {
+    flex: 1 1 175px;
+    min-width: 135px;
+    width: auto;
 }
 
 .toolbar .spacer {
-    flex: 1;
+    display: none;
+}
+
+#fontSelect {
+    width: 108px;
+    flex: 0 0 108px;
+}
+
+#fontSizeSelect {
+    width: 58px;
+    flex: 0 0 58px;
+}
+
+#findBtn,
+#findPrevBtn,
+#findNextBtn,
+#replaceBtn,
+#replaceAllBtn {
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+#findPrevBtn,
+#findNextBtn {
+    width: 34px;
+    padding: 0;
 }
 
 /* =========================================================
@@ -432,7 +515,7 @@ button {
 .editor-wrap {
     flex: 1;
     min-height: 0;
-    padding: 10px;
+    padding: 2px;
     background: #eef2f7;
     display: flex;
 }
@@ -455,8 +538,8 @@ button {
     border-right: 1px solid #e2e8f0;
     color: #94a3b8;
     text-align: right;
-    padding: 14px 9px 14px 0;
-    font: 13px/20px Consolas, "Courier New", monospace;
+    padding: 10px 8px 10px 0;
+    font: 12px/19px Consolas, "Courier New", monospace;
     overflow: hidden;
     user-select: none;
     white-space: pre;
@@ -469,8 +552,8 @@ button {
     resize: none;
     border: 0;
     outline: 0;
-    padding: 14px 16px;
-    font: 13px/20px Consolas, "Courier New", monospace;
+    padding: 9px 13px;
+    font: 12px/19px Consolas, "Courier New", monospace;
     color: var(--editor-text);
     background: var(--editor-bg);
     white-space: pre;
@@ -497,8 +580,8 @@ button {
 ========================================================= */
 
 .statusbar {
-    height: 28px;
-    min-height: 28px;
+    height: 26px;
+    min-height: 26px;
     background: var(--panel);
     border-top: 1px solid var(--border);
     display: flex;
@@ -695,6 +778,32 @@ body.dark .btn:hover {
     background: #374151;
 }
 
+/* Keep primary actions blue in dark mode as well. */
+body.dark .btn.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #ffffff;
+}
+
+body.dark .btn.primary:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+}
+
+body.dark .m365-brand {
+    color: #0078d4;
+}
+
+.script-item.original .script-meta {
+    color: #0078d4;
+    font-weight: 600;
+}
+
+.m365-status-brand {
+    color: #0078d4;
+    font-weight: 600;
+}
+
 body.dark .script-item:hover {
     background: #374151;
 }
@@ -768,7 +877,7 @@ body.dark .option:hover {
     }
 
     .brand {
-        font-size: 15px;
+        font-size: 17px;
     }
 }
 
@@ -862,7 +971,7 @@ body.dark .option:hover {
             <div class="side-head">
 
                 <div class="side-title">
-                    M365Buddy Scripts
+                    <span class="m365-brand">M365Buddy</span> Scripts
                 </div>
 
                 <input
@@ -927,6 +1036,8 @@ body.dark .option:hover {
 
             <div class="toolbar">
 
+                <div class="toolbar-row toolbar-actions">
+
                 <button
                     type="button"
                     class="btn"
@@ -977,7 +1088,9 @@ body.dark .option:hover {
                     Reset
                 </button>
 
-                <div class="separator"></div>
+                </div>
+
+                <div class="toolbar-row toolbar-tools">
 
                 <input
                     type="text"
@@ -1032,8 +1145,6 @@ body.dark .option:hover {
                     Replace All
                 </button>
 
-                <div class="spacer"></div>
-
                 <select id="fontSelect">
                     <option value="Consolas">Consolas</option>
                     <option value="Courier New">Courier New</option>
@@ -1049,8 +1160,9 @@ body.dark .option:hover {
     <option value="15">15</option>
     <option value="16">16</option>
 </select>
-                
-                
+
+                </div>
+
             </div>
 
 
@@ -1532,7 +1644,9 @@ function loadState() {
                 saved.font || "Consolas";
 
             state.fontSize =
-                saved.fontSize || "12";
+                ["10", "11", "12", "13", "14", "15", "16"].includes(String(saved.fontSize))
+                    ? String(saved.fontSize)
+                    : "12";
         }
 
         ORIGINAL_SCRIPTS.forEach(
@@ -1717,7 +1831,8 @@ function renderScriptList() {
 
                 return (
                     '<div class="script-item ' +
-                    (active ? 'active' : '') +
+                    (active ? 'active ' : '') +
+                    (script.original ? 'original' : '') +
                     '" data-script-id="' +
                     escapeHtml(script.id) +
                     '">' +
@@ -2806,9 +2921,9 @@ function updateStatus() {
         return;
     }
 
-    statusText.textContent =
+    statusText.innerHTML =
         script.original
-            ? "Original M365Buddy script"
+            ? '<span class="m365-status-brand">Original M365Buddy</span> script'
             : "Editable script";
 
     dirtyText.textContent =
@@ -3221,6 +3336,25 @@ function openRenameModal() {
     input.focus();
 
     input.select();
+
+    input.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (event.key === "Enter") {
+                event.preventDefault();
+                document
+                    .getElementById("renameConfirm")
+                    .click();
+                return;
+            }
+
+            if (event.key === "Escape") {
+                event.preventDefault();
+                closeModal();
+            }
+        }
+    );
 
     document
         .getElementById("modalCancel")
