@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PowerShell Email Works Manually but Fails in Task Scheduler | M365Buddy</title>
+
+    <meta name="description"
+          content="Learn how to troubleshoot a PowerShell script that sends email successfully when run manually but fails to deliver email when executed through Windows Task Scheduler.">
+
+    <meta name="keywords"
+          content="PowerShell, Task Scheduler, SharePoint Online, SMTP, Send-MailMessage, service account, Microsoft 365, automation">
+
+    <meta name="author" content="M365Buddy">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                         Roboto, Helvetica, Arial, sans-serif;
+            background: #f5f7fa;
+            color: #1f2937;
+            line-height: 1.75;
+        }
+
+        a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .article-wrapper {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 22px 80px;
+        }
+
+        .article-header {
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 50px 55px;
+            margin-bottom: 28px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
+        }
+
+        .category {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            margin: 0 0 18px;
+            font-size: clamp(32px, 5vw, 52px);
+            line-height: 1.15;
+            color: #111827;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            font-size: 20px;
+            color: #4b5563;
+            max-width: 850px;
+            margin: 0 0 25px;
+        }
+
+        .article-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .article-meta span {
+            background: #f8fafc;
+            padding: 6px 11px;
+            border-radius: 7px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .article-content {
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 50px 55px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 8px 30px rgba(15, 23, 42, 0.05);
+        }
+
+        h2 {
+            margin-top: 48px;
+            margin-bottom: 18px;
+            font-size: 30px;
+            line-height: 1.25;
+            color: #111827;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            margin-top: 35px;
+            font-size: 22px;
+            color: #1f2937;
+        }
+
+        p {
+            margin: 0 0 18px;
+        }
+
+        ul,
+        ol {
+            margin-bottom: 22px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        code {
+            background: #f1f5f9;
+            color: #be123c;
+            padding: 2px 6px;
+            border-radius: 5px;
+            font-size: 0.92em;
+        }
+
+        pre {
+            background: #111827;
+            color: #e5e7eb;
+            padding: 22px;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 22px 0 28px;
+            border: 1px solid #1f2937;
+        }
+
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+            font-size: 14px;
+            line-height: 1.65;
+        }
+
+        .callout {
+            padding: 20px 22px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid;
+        }
+
+        .callout-important {
+            background: #eff6ff;
+            border-color: #2563eb;
+        }
+
+        .callout-warning {
+            background: #fff7ed;
+            border-color: #f97316;
+        }
+
+        .callout-success {
+            background: #f0fdf4;
+            border-color: #16a34a;
+        }
+
+        .callout-title {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .comparison {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0 30px;
+            font-size: 15px;
+        }
+
+        .comparison th,
+        .comparison td {
+            padding: 13px 15px;
+            border: 1px solid #e5e7eb;
+            text-align: left;
+        }
+
+        .comparison th {
+            background: #f8fafc;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .screenshot-placeholder {
+            margin: 30px 0 35px;
+            border: 2px dashed #94a3b8;
+            border-radius: 14px;
+            background: #f8fafc;
+            min-height: 260px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 35px;
+        }
+
+        .screenshot-placeholder-inner {
+            max-width: 700px;
+        }
+
+        .screenshot-placeholder strong {
+            display: block;
+            font-size: 18px;
+            color: #334155;
+            margin-bottom: 8px;
+        }
+
+        .screenshot-placeholder span {
+            display: block;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        figure {
+            margin: 30px 0 35px;
+        }
+
+        figure img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            border: 1px solid #dbe2ea;
+            box-shadow: 0 8px 25px rgba(15, 23, 42, 0.08);
+        }
+
+        figcaption {
+            margin-top: 10px;
+            color: #64748b;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .toc {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 24px 28px;
+            margin: 30px 0 40px;
+        }
+
+        .toc-title {
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #111827;
+        }
+
+        .toc ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .toc li {
+            margin-bottom: 5px;
+        }
+
+        .step {
+            display: flex;
+            gap: 18px;
+            margin: 25px 0;
+        }
+
+        .step-number {
+            min-width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #2563eb;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .takeaway {
+            background: #111827;
+            color: #f9fafb;
+            border-radius: 16px;
+            padding: 32px;
+            margin-top: 45px;
+        }
+
+        .takeaway h2 {
+            color: #ffffff;
+            border-bottom-color: #374151;
+            margin-top: 0;
+        }
+
+        .footer-note {
+            margin-top: 45px;
+            padding-top: 25px;
+            border-top: 1px solid #e5e7eb;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        @media (max-width: 700px) {
+            .article-header,
+            .article-content {
+                padding: 30px 22px;
+            }
+
+            h1 {
+                font-size: 34px;
+            }
+
+            h2 {
+                font-size: 26px;
+            }
+
+            .article-wrapper {
+                padding: 20px 12px 50px;
+            }
+
+            .step {
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="article-wrapper">
+
+    <!-- ========================= -->
+    <!-- ARTICLE HEADER             -->
+    <!-- ========================= -->
+
+    <header class="article-header">
+
+        <div class="category">
+            PowerShell • SharePoint Online • Troubleshooting
+        </div>
+
+        <h1>
+            PowerShell Email Works Manually but Fails in Task Scheduler
+        </h1>
+
+        <p class="subtitle">
+            A real-world troubleshooting journey involving SharePoint Online,
+            SMTP, Windows Task Scheduler, service accounts, and a deceptively
+            successful PowerShell execution.
+        </p>
+
+        <div class="article-meta">
+            <span>Microsoft 365</span>
+            <span>PowerShell</span>
+            <span>Task Scheduler</span>
+            <span>SharePoint Online</span>
+            <span>Automation</span>
+        </div>
+
+    </header>
+
+
+    <!-- ========================= -->
+    <!-- ARTICLE CONTENT            -->
+    <!-- ========================= -->
+
+    <main class="article-content">
+
+        <div class="callout callout-important">
+            <div class="callout-title">The short version</div>
+
+            <p>
+                The PowerShell script worked perfectly when executed manually,
+                but email delivery failed when the same script was launched
+                through Windows Task Scheduler.
+            </p>
+
+            <p>
+                The SharePoint report itself was not the problem. The key
+                difference was the Windows account used to execute the
+                scheduled task.
+            </p>
+        </div>
+
+
+        <!-- TABLE OF CONTENTS -->
+
+        <nav class="toc">
+
+            <div class="toc-title">
+                In this article
+            </div>
+
+            <ul>
+                <li><a href="#problem">The problem</a></li>
+                <li><a href="#first-investigation">First investigation</a></li>
+                <li><a href="#smtp-test">Testing SMTP independently</a></li>
+                <li><a href="#recipient-mistake">A recipient formatting mistake</a></li>
+                <li><a href="#execution-context">The execution-context clue</a></li>
+                <li><a href="#controlled-test">The controlled Task Scheduler test</a></li>
+                <li><a href="#resolution">Resolution</a></li>
+                <li><a href="#lessons">Lessons learned</a></li>
+                <li><a href="#checklist">Troubleshooting checklist</a></li>
+            </ul>
+
+        </nav>
+
+
+        <!-- ========================= -->
+        <!-- INTRODUCTION              -->
+        <!-- ========================= -->
+
+        <h2 id="problem">
+            The Problem
+        </h2>
+
+        <p>
+            I was working with a PowerShell automation that generated a
+            SharePoint Online site consumption report and emailed the resulting
+            CSV file.
+        </p>
+
+        <p>
+            When I ran the script manually from PowerShell 7, everything worked.
+            The SharePoint inventory was collected, the CSV was generated, and
+            the email arrived successfully.
+        </p>
+
+        <p>
+            However, when the same script was executed through Windows Task
+            Scheduler, something strange happened.
+        </p>
+
+        <ul>
+            <li>The scheduled task completed.</li>
+            <li>SharePoint Online authentication succeeded.</li>
+            <li>The site inventory was generated.</li>
+            <li>The CSV file was created.</li>
+            <li>The script reached the email section.</li>
+            <li><code>Send-MailMessage</code> reported success.</li>
+            <li>Task Scheduler reported <code>0x0</code>.</li>
+            <li>But the email did not arrive.</li>
+        </ul>
+
+
+        <!-- SCREENSHOT 1 -->
+
+        <div class="screenshot-placeholder">
+            <div class="screenshot-placeholder-inner">
+                <strong>
+                    SCREENSHOT PLACEHOLDER #1
+                </strong>
+
+                <span>
+                    Add a screenshot of the failing Task Scheduler task
+                    showing the account used to run the task.
+                </span>
+
+                <span>
+                    Suggested filename:
+                    task-system-account.png
+                </span>
+            </div>
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- FIRST INVESTIGATION       -->
+        <!-- ========================= -->
+
+        <h2 id="first-investigation">
+            First: Was the SharePoint Report Actually Completing?
+        </h2>
+
+        <p>
+            Before troubleshooting SMTP, I needed to determine whether the
+            SharePoint portion of the script was actually completing.
+        </p>
+
+        <p>
+            The scheduled execution successfully retrieved more than 32,000
+            SharePoint sites and generated the final CSV report.
+        </p>
+
+        <pre><code>Connecting to SharePoint Admin Center...
+Connected successfully.
+
+Retrieving SharePoint site inventory...
+
+Total Sites Found: 32611
+
+Processing SharePoint sites...
+Throttle Limit    : 3
+
+Results Count = 32611
+
+Exporting final CSV...
+
+CSV created:
+Mattel-SPOSiteConsumption_20260925_070755.csv</code></pre>
+
+        <p>
+            The report summary was also generated successfully.
+        </p>
+
+        <pre><code>Total Sites          : 32611
+Storage Used         : 526.07 TB
+Allocated Storage    : 159.51 TB
+Over Utilized        : 366.56 TB
+Over Utilized %      : 229.80%</code></pre>
+
+        <p>
+            This was important because it eliminated SharePoint connectivity
+            and report generation as the primary cause.
+        </p>
+
+
+        <!-- ========================= -->
+        <!-- SMTP TEST                 -->
+        <!-- ========================= -->
+
+        <h2 id="smtp-test">
+            Testing the Email Function Independently
+        </h2>
+
+        <p>
+            The next step was to remove SharePoint completely from the equation.
+        </p>
+
+        <p>
+            I used the already-generated CSV and manually tested the same
+            sender, SMTP server, recipient, and attachment.
+        </p>
+
+        <p>
+            The email arrived successfully.
+        </p>
+
+        <div class="callout callout-success">
+
+            <div class="callout-title">
+                What this test proved
+            </div>
+
+            <ul>
+                <li>SMTP connectivity was working.</li>
+                <li>The sender address was accepted.</li>
+                <li>The distribution list could receive email.</li>
+                <li>The attachment was not the problem.</li>
+                <li>The generated CSV was valid.</li>
+            </ul>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- RECIPIENT ERROR            -->
+        <!-- ========================= -->
+
+        <h2 id="recipient-mistake">
+            A Recipient Formatting Mistake
+        </h2>
+
+        <p>
+            During troubleshooting, I temporarily added an individual email
+            address alongside the distribution list.
+        </p>
+
+        <p>
+            Initially, I used this format:
+        </p>
+
+        <pre><code>$To = @(
+    "messaging@example.com,user@example.com"
+)</code></pre>
+
+        <p>
+            This looks reasonable at first glance, but it actually creates one
+            array element containing a comma-separated string.
+        </p>
+
+        <p>
+            PowerShell then produced:
+        </p>
+
+        <pre><code>An invalid character was found in the mail header: ','.</code></pre>
+
+        <p>
+            The correct format is to provide each recipient as a separate
+            array element:
+        </p>
+
+        <pre><code>$To = @(
+    "messaging@example.com"
+    "user@example.com"
+)</code></pre>
+
+        <p>
+            This was a useful finding, but it still wasn't the underlying
+            Task Scheduler delivery problem.
+        </p>
+
+
+        <!-- SCREENSHOT 2 -->
+
+        <div class="screenshot-placeholder">
+            <div class="screenshot-placeholder-inner">
+                <strong>
+                    SCREENSHOT PLACEHOLDER #2
+                </strong>
+
+                <span>
+                    Add a screenshot showing the mail-header error and,
+                    if useful, the incorrect recipient configuration.
+                </span>
+
+                <span>
+                    Suggested filename:
+                    smtp-error.png
+                </span>
+            </div>
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- EXECUTION CONTEXT          -->
+        <!-- ========================= -->
+
+        <h2 id="execution-context">
+            The Important Clue: Execution Context
+        </h2>
+
+        <p>
+            At this point, I compared how the script was being executed
+            manually versus how Windows Task Scheduler was executing it.
+        </p>
+
+        <p>
+            This revealed a significant difference.
+        </p>
+
+        <table class="comparison">
+
+            <thead>
+                <tr>
+                    <th>Environment</th>
+                    <th>Execution account</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td>Manual PowerShell</td>
+                    <td>Administrator/user account</td>
+                    <td>Email delivered</td>
+                </tr>
+
+                <tr>
+                    <td>Task Scheduler</td>
+                    <td>SYSTEM</td>
+                    <td>Email not delivered</td>
+                </tr>
+
+                <tr>
+                    <td>Working scheduled task</td>
+                    <td>Dedicated service account</td>
+                    <td>Email delivered</td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+        <p>
+            The working automation on the same server was configured to use a
+            dedicated service account rather than SYSTEM.
+        </p>
+
+
+        <!-- SCREENSHOT 3 -->
+
+        <div class="screenshot-placeholder">
+            <div class="screenshot-placeholder-inner">
+
+                <strong>
+                    SCREENSHOT PLACEHOLDER #3
+                </strong>
+
+                <span>
+                    Add the Task Scheduler screenshot showing the working
+                    task configured with the service account.
+                </span>
+
+                <span>
+                    Suggested filename:
+                    working-service-account.png
+                </span>
+
+            </div>
+        </div>
+
+
+        <h3>
+            Why does the execution account matter?
+        </h3>
+
+        <p>
+            A PowerShell process launched interactively by an administrator
+            does not necessarily have the same execution context as a process
+            launched by Task Scheduler under SYSTEM.
+        </p>
+
+        <p>
+            The execution identity can affect:
+        </p>
+
+        <ul>
+            <li>Network access</li>
+            <li>Authentication context</li>
+            <li>SMTP relay permissions</li>
+            <li>Security policies</li>
+            <li>Certificate and private-key access</li>
+            <li>File-system permissions</li>
+            <li>Proxy configuration</li>
+            <li>User-specific environment settings</li>
+        </ul>
+
+        <div class="callout callout-warning">
+
+            <div class="callout-title">
+                Important
+            </div>
+
+            <p>
+                Do not assume that because a PowerShell script works under
+                your administrator account, it will behave identically when
+                executed by SYSTEM or a service account.
+            </p>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- CONTROLLED TEST            -->
+        <!-- ========================= -->
+
+        <h2 id="controlled-test">
+            The Controlled Task Scheduler Test
+        </h2>
+
+        <p>
+            Rather than repeatedly running a SharePoint inventory containing
+            tens of thousands of sites, I created a very small PowerShell
+            script that only sent an email.
+        </p>
+
+        <pre><code>$From = "report@example.com"
+$To = "messaging@example.com"
+$SmtpServer = "smtp.example.com"
+
+$Body = @"
+Task Scheduler SMTP Test
+
+Computer : $env:COMPUTERNAME
+User     : $([System.Security.Principal.WindowsIdentity]::GetCurrent().Name)
+Time     : $(Get-Date)
+
+This is a controlled SMTP test.
+"@
+
+Send-MailMessage `
+    -From $From `
+    -To $To `
+    -Subject "Task Scheduler SMTP Test" `
+    -Body $Body `
+    -SmtpServer $SmtpServer `
+    -ErrorAction Stop</code></pre>
+
+        <p>
+            I then configured a temporary Task Scheduler task to run this
+            small test using the same PowerShell version as the production
+            automation, but under the dedicated service account.
+        </p>
+
+        <p>
+            The test email arrived successfully.
+        </p>
+
+        <div class="callout callout-success">
+
+            <div class="callout-title">
+                This was the breakthrough
+            </div>
+
+            <p>
+                The isolated test demonstrated that Task Scheduler itself
+                could send the email successfully when the task ran under the
+                appropriate service-account context.
+            </p>
+
+        </div>
+
+
+        <!-- SCREENSHOT 4 -->
+
+        <div class="screenshot-placeholder">
+            <div class="screenshot-placeholder-inner">
+
+                <strong>
+                    SCREENSHOT PLACEHOLDER #4
+                </strong>
+
+                <span>
+                    Add a screenshot of the controlled SMTP test task,
+                    preferably showing the service account and PowerShell 7.
+                </span>
+
+                <span>
+                    Suggested filename:
+                    task-scheduler-smtp-test.png
+                </span>
+
+            </div>
+        </div>
+
+
+        <!-- SCREENSHOT 5 -->
+
+        <div class="screenshot-placeholder">
+            <div class="screenshot-placeholder-inner">
+
+                <strong>
+                    SCREENSHOT PLACEHOLDER #5
+                </strong>
+
+                <span>
+                    Add a screenshot of the successfully received test email.
+                </span>
+
+                <span>
+                    Suggested filename:
+                    smtp-test-success.png
+                </span>
+
+            </div>
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- RESOLUTION                 -->
+        <!-- ========================= -->
+
+        <h2 id="resolution">
+            Resolution
+        </h2>
+
+        <p>
+            The production SharePoint reporting task was changed from the
+            SYSTEM account to the appropriate dedicated service account.
+        </p>
+
+        <p>
+            The PowerShell 7 action and the SharePoint reporting script itself
+            were left unchanged.
+        </p>
+
+        <p>
+            The recipient configuration remained simple:
+        </p>
+
+        <pre><code>$To = @(
+    "messaging@example.com"
+)</code></pre>
+
+        <p>
+            After the execution account was corrected, the scheduled
+            automation was able to submit the email successfully and the
+            distribution list received the report.
+        </p>
+
+
+        <!-- ========================= -->
+        <!-- LESSONS                    -->
+        <!-- ========================= -->
+
+        <h2 id="lessons">
+            Lessons Learned
+        </h2>
+
+        <h3>1. Task Scheduler success does not mean email delivery success</h3>
+
+        <p>
+            A Task Scheduler result of <code>0x0</code> indicates that the
+            scheduled task completed successfully. It should not be treated
+            as proof that an email reached the recipient's mailbox.
+        </p>
+
+
+        <h3>2. "Email sent successfully" is not end-to-end delivery confirmation</h3>
+
+        <p>
+            A successful <code>Send-MailMessage</code> call indicates that
+            the SMTP operation completed from the PowerShell process's
+            perspective. Downstream mail-flow processing can still affect
+            final delivery.
+        </p>
+
+
+        <h3>3. Test SMTP separately from SharePoint</h3>
+
+        <p>
+            If a SharePoint report takes hours to generate, don't repeatedly
+            execute the entire report just to test email delivery.
+        </p>
+
+        <p>
+            A small SMTP test script can isolate the email path in seconds.
+        </p>
+
+
+        <h3>4. Always compare execution identities</h3>
+
+        <p>
+            When a script behaves differently between manual execution and
+            Task Scheduler, check the identity actually running the process.
+        </p>
+
+        <pre><code>[System.Security.Principal.WindowsIdentity]::GetCurrent().Name</code></pre>
+
+
+        <h3>5. Don't overlook the Task Scheduler Action</h3>
+
+        <p>
+            The account isn't the only thing that can differ. Also compare:
+        </p>
+
+        <ul>
+            <li>PowerShell version</li>
+            <li>Program/script path</li>
+            <li>Arguments</li>
+            <li>Start in directory</li>
+            <li>Environment variables</li>
+            <li>Run whether user is logged on or not</li>
+            <li>Run with highest privileges</li>
+        </ul>
+
+
+        <!-- ========================= -->
+        <!-- CHECKLIST                  -->
+        <!-- ========================= -->
+
+        <h2 id="checklist">
+            Troubleshooting Checklist
+        </h2>
+
+        <ol>
+
+            <li>
+                Run the PowerShell script manually.
+            </li>
+
+            <li>
+                Confirm that the SharePoint operation completes.
+            </li>
+
+            <li>
+                Confirm that the expected CSV/report is generated.
+            </li>
+
+            <li>
+                Send the generated attachment manually.
+            </li>
+
+            <li>
+                Test SMTP without involving SharePoint.
+            </li>
+
+            <li>
+                Check the Task Scheduler execution account.
+            </li>
+
+            <li>
+                Compare the PowerShell version used by manual and scheduled
+                execution.
+            </li>
+
+            <li>
+                Create a minimal SMTP test under the exact Task Scheduler
+                account.
+            </li>
+
+            <li>
+                Test the distribution list separately from the full
+                automation.
+            </li>
+
+            <li>
+                Only after identifying the difference should you modify the
+                production task.
+            </li>
+
+        </ol>
+
+
+        <!-- ========================= -->
+        <!-- FINAL TAKEAWAY             -->
+        <!-- ========================= -->
+
+        <div class="takeaway">
+
+            <h2>
+                Final Takeaway
+            </h2>
+
+            <p>
+                When a PowerShell script works perfectly when run manually but
+                behaves differently under Windows Task Scheduler, don't
+                troubleshoot only the script.
+            </p>
+
+            <p>
+                Troubleshoot the <strong>execution environment</strong> as
+                well.
+            </p>
+
+            <p>
+                In this case, SharePoint Online, CSV generation, SMTP
+                connectivity and the email code were all functioning. The
+                important difference was the account under which the scheduled
+                task was running.
+            </p>
+
+            <p>
+                A small, isolated SMTP test made it possible to identify the
+                difference without repeatedly running the complete SharePoint
+                inventory.
+            </p>
+
+        </div>
+
+
+        <div class="footer-note">
+
+            <strong>M365Buddy</strong> — Practical Microsoft 365,
+            SharePoint Online, PowerShell and automation guides.
+
+            <br><br>
+
+            <em>
+                Screenshots and examples in this article should be sanitized
+                before publication. Never publish passwords, certificate
+                details, internal server names, private IP addresses,
+                tenant identifiers or internal email addresses.
+            </em>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>
