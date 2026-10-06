@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M365Buddy Scripts</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<style>
+:root{
+  --bg:#f5f7fb;--panel:#fff;--panel-soft:#f8fafc;--border:#d9dee8;
+  --text:#172033;--muted:#647084;--accent:#2563eb;--accent-hover:#1d4ed8;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 "Segoe UI",Arial,sans-serif}
+a{color:inherit;text-decoration:none}
+header{height:58px;background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:20}
+.nav{height:100%;max-width:1250px;margin:auto;padding:0 18px;display:flex;align-items:center;justify-content:space-between}
+.nav-left,.nav-right{display:flex;align-items:center;gap:18px}
+.nav a{font-size:13px}
+.nav a:hover{color:var(--accent)}
+.brand{font-weight:800;color:var(--accent)!important;font-size:15px!important}
+.page{max-width:1120px;margin:34px auto;padding:0 18px}
+.hero{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:32px}
+.eyebrow{display:inline-block;background:#eff6ff;border:1px solid #bfdbfe;color:var(--accent);padding:4px 9px;border-radius:999px;font-size:11px;font-weight:800}
+h1{font-size:32px;line-height:1.2;margin:12px 0 8px}
+.hero p{color:var(--muted);max-width:780px;margin:0}
+.section{margin-top:28px}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:12px}
+.section-head h2{margin:0;font-size:21px}
+.section-head span{color:var(--muted);font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:19px;display:flex;flex-direction:column;min-height:190px}
+.card:hover{border-color:#b8c3d6;box-shadow:0 3px 12px rgba(15,23,42,.05)}
+.card h3{margin:0 0 7px;font-size:17px}
+.card p{margin:0 0 14px;color:var(--muted);font-size:13px;flex:1}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.tag{background:var(--panel-soft);border:1px solid var(--border);border-radius:6px;padding:3px 7px;font-size:10px;color:var(--muted)}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--border);background:#fff;border-radius:7px;padding:7px 11px;font-size:12px;font-weight:750}
+.btn:hover{background:var(--panel-soft)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{background:var(--accent-hover)}
+.callout{margin-top:24px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:9px;padding:13px 15px;font-size:13px}
+footer{margin-top:34px;border-top:1px solid var(--border);padding:18px 0;color:var(--muted);font-size:12px}
+@media(max-width:700px){
+  .grid{grid-template-columns:1fr}
+  .hero{padding:23px}
+  h1{font-size:26px}
+  .nav-left{gap:11px}
+}
+</style>
+</head>
+<body>
+<header>
+<nav class="nav">
+  <div class="nav-left">
+    <a href="https://m365buddy.com/">Home</a>
+    <a href="https://m365buddy.com/articles">Articles</a>
+    <a href="https://m365buddy.com/scripts/">Scripts</a>
+  </div>
+  <div class="nav-right">
+    <a class="brand" href="https://m365buddy.com/">M365Buddy</a>
+  </div>
+</nav>
+</header>
+
+<main class="page">
+<section class="hero">
+  <span class="eyebrow">PowerShell · SharePoint · Microsoft 365</span>
+  <h1>M365Buddy Scripts</h1>
+  <p>A practical collection of PowerShell and Microsoft 365 automation scripts. Open a script to review the current source, copy it, download it, or open it in the M365Buddy Script Editor.</p>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <h2>SharePoint</h2>
+    <span>PowerShell automation</span>
+  </div>
+
+  <div class="grid">
+    <article class="card">
+      <h3>SharePoint Online Site Inventory</h3>
+      <p>Generate a SharePoint Online site inventory and storage report using PnP PowerShell, Microsoft Entra ID certificate authentication and CSV export.</p>
+      <div class="tags">
+        <span class="tag">PowerShell 7+</span>
+        <span class="tag">PnP PowerShell</span>
+        <span class="tag">SharePoint Online</span>
+        <span class="tag">CSV</span>
+      </div>
+      <div class="actions">
+        <a class="btn primary" href="/scripts/sharepoint-site-inventory-viewer.html">View Script</a>
+        <a class="btn" href="/scripts/SharePoint/SharePoint_Site_Inventory.ps1" download>Download .PS1</a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<div class="callout">
+  <strong>More scripts are coming.</strong>
+  This page is the central M365Buddy script library. New scripts can be added by creating another script detail page and adding a card here.
+</div>
+
+<footer>
+  M365Buddy · SharePoint Online · PowerShell · Microsoft 365
+</footer>
+</main>
+</body>
+</html>
