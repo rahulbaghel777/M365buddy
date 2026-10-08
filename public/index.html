@@ -1,337 +1,332 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M365Buddy — Simplifying Microsoft 365 Problems</title>
+<style>
+:root{
+  --bg:#f5f7fb;--panel:#fff;--panel-soft:#f8fafc;--border:#d9dee8;
+  --text:#172033;--muted:#647084;--accent:#2563eb;--accent-hover:#1d4ed8;
+  --shadow:0 8px 24px rgba(15,23,42,.07)
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Segoe UI",Arial,sans-serif;font-size:15px;line-height:1.65}
+a{color:var(--accent);text-decoration:none}
+button,input{font:inherit}
 
-    <title>M365Buddy | Microsoft 365, SharePoint and PowerShell</title>
+/* Header */
+.header{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--border)}
+.header-inner{
+  max-width:1500px;margin:auto;padding:10px 22px;min-height:64px;
+  display:grid;grid-template-columns:auto minmax(320px,760px) auto;
+  align-items:center;gap:22px
+}
+.nav{display:flex;align-items:center;gap:4px}
+.nav a{padding:8px 13px;border-radius:7px;color:var(--text);font-weight:500;white-space:nowrap}
+.nav a:hover,.nav a.active{background:#eaf1ff;color:var(--accent)}
+.brand{display:flex;align-items:center;gap:10px;color:var(--text);font-size:20px;font-weight:700;white-space:nowrap;justify-self:end}
+.brand-mark{width:30px;height:30px;border-radius:8px;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:14px}
 
-    <meta
-        name="description"
-        content="M365Buddy provides Microsoft 365, SharePoint, PowerShell, automation and technical tutorials."
-    >
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link rel="stylesheet" href="style.css">
+/* Search */
+.search-wrap{position:relative;min-width:0}
+.search-input{
+  width:100%;height:44px;padding:0 17px 0 43px;border:1px solid #d2d9e4;border-radius:10px;
+  outline:0;background:#fff;box-shadow:0 2px 7px rgba(15,23,42,.06);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23647084' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-4-4'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:15px center
+}
+.search-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.search-results{
+  position:absolute;left:0;right:0;top:50px;background:#fff;border:1px solid var(--border);
+  border-radius:9px;box-shadow:var(--shadow);overflow:hidden;display:none;z-index:200
+}
+.search-results.show{display:block}
+.result{display:block;padding:12px 15px;border-bottom:1px solid #edf0f5;color:var(--text)}
+.result:hover{background:var(--panel-soft)}
+.result-title{font-weight:650;color:var(--accent)}
+.result-meta{font-size:12px;color:var(--muted)}
+.result-desc{font-size:13px;color:var(--muted)}
+
+/* Main */
+.container{max-width:1200px;margin:auto;padding:42px 22px 65px}
+.hero{text-align:center;padding:28px 0 35px}
+.eyebrow{display:inline-flex;padding:5px 11px;border-radius:999px;background:#eaf1ff;color:var(--accent);font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.hero h1{font-size:clamp(38px,6vw,62px);line-height:1.08;letter-spacing:-.04em;margin:16px 0 12px}
+.hero h1 span{color:var(--accent)}
+.hero p{max-width:760px;margin:0 auto;color:var(--muted);font-size:18px;line-height:1.7}
+.hero-search{max-width:780px;margin:25px auto 0;position:relative}
+.hero-search .search-input{height:52px;font-size:16px;border-radius:11px;padding-left:47px}
+.hero-search .search-results{top:59px;text-align:left}
+
+/* Sections */
+.section{margin-top:42px}
+.section-heading{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:15px}
+.section-heading h2{font-size:24px;margin:0;letter-spacing:-.015em}
+.section-heading p{margin:0;color:var(--muted);font-size:13px}
+.link{font-size:13px;font-weight:600;white-space:nowrap}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{
+  display:block;background:#fff;border:1px solid var(--border);border-radius:10px;padding:21px;
+  box-shadow:0 1px 3px rgba(15,23,42,.05);transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease
+}
+.card:hover{transform:translateY(-2px);border-color:#bfd0f2;box-shadow:var(--shadow)}
+.card-icon{width:38px;height:38px;border-radius:9px;background:#eaf1ff;color:var(--accent);display:grid;place-items:center;font-weight:700;margin-bottom:14px}
+.card h3{font-size:18px;line-height:1.3;margin:0 0 7px;color:var(--text)}
+.card p{margin:0;color:var(--muted);font-size:14px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:13px}
+.tag{font-size:11px;color:#536176;background:#f1f4f8;border-radius:999px;padding:3px 8px}
+
+.list{background:#fff;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.list-item{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:17px 19px;border-bottom:1px solid #edf0f5}
+.list-item:last-child{border-bottom:0}
+.list-item:hover{background:var(--panel-soft)}
+.list-main{min-width:0}
+.list-title{font-weight:650;color:var(--text)}
+.list-desc{font-size:13px;color:var(--muted);margin-top:2px}
+.list-meta{flex:0 0 auto;font-size:12px;color:var(--muted)}
+.pill{display:inline-block;background:#eef4ff;color:var(--accent);padding:4px 8px;border-radius:999px;font-size:11px;font-weight:600}
+
+.cta{
+  margin-top:42px;background:#fff;border:1px solid var(--border);border-radius:11px;padding:27px 29px;
+  display:flex;align-items:center;justify-content:space-between;gap:25px
+}
+.cta h2{margin:0 0 5px;font-size:21px}.cta p{margin:0;color:var(--muted)}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:9px 15px;border-radius:7px;font-size:14px;font-weight:600;border:1px solid transparent;white-space:nowrap}
+.btn.primary{background:var(--accent);color:#fff}.btn.primary:hover{background:var(--accent-hover)}
+.btn.secondary{background:#fff;border-color:var(--border);color:var(--text)}
+
+.footer{border-top:1px solid var(--border);padding:30px 22px;text-align:center;color:var(--muted);font-size:13px}
+
+@media(max-width:950px){
+  .header-inner{grid-template-columns:auto minmax(220px,1fr) auto;gap:12px}
+  .cards{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:700px){
+  .header-inner{grid-template-columns:1fr auto;min-height:auto;padding:10px 16px}
+  .nav{order:3;grid-column:1/-1;overflow:auto}
+  .brand{grid-column:2;grid-row:1}
+  .search-wrap{grid-column:1;grid-row:1}
+  .header .search-wrap{display:none}
+  .container{padding:28px 16px 50px}
+  .hero{padding-top:20px}
+  .hero h1{font-size:40px}
+  .hero p{font-size:16px}
+  .cards{grid-template-columns:1fr}
+  .section-heading{align-items:start;flex-direction:column;gap:5px}
+  .list-item{align-items:flex-start;flex-direction:column;gap:8px}
+  .cta{flex-direction:column;align-items:flex-start}
+}
+</style>
 </head>
-
 <body>
 
-    <!-- Header -->
-    <header class="site-header">
-        <div class="container navbar">
-
-            <a href="index.html" class="logo">
-                M365<span>Buddy</span>
-            </a>
-
-            <nav>
-                <ul class="nav-links">
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#topics">Topics</a></li>
-                    <li><a href="#resources">Resources</a></li>
-                    <li><a href="#about">About</a></li>
-                    <a href="/articles.html">
-    Articles
-</a>
-
-<a href="/script-editor">
-    Script Editor
-</a>
-                </ul>
-            </nav>
-
-        </div>
-    </header>
-
-
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="container">
-
-            <div class="hero-content">
-                <h1>
-                    Learn Microsoft 365.
-                    Build Better Solutions.
-                </h1>
-
-                <p>
-                    Practical articles, PowerShell scripts, SharePoint
-                    solutions and automation tutorials for Microsoft 365
-                    administrators and developers.
-                </p>
-
-                <a href="#topics" class="button">
-                    Explore Topics
-                </a>
-
-                <a href="#resources" class="button button-secondary">
-                    View Resources
-                </a>
-            </div>
-
-        </div>
-
-        <div class="hero-actions">
-
-    <a
-        href="/articles/sharepoint-online-site-inventory.html"
-        class="btn">
-        Read the Article
-    </a>
-
-    <a
-        href="/script-editor"
-        class="btn primary">
-        Open Script Editor
-    </a>
-
-</div>
-    </section>
-
-
-    <!-- Topics Section -->
-    <section class="section" id="topics">
-        <div class="container">
-
-            <div class="section-heading">
-                <h2>Explore M365Buddy</h2>
-
-                <p>
-                    Learn practical Microsoft 365 technologies through
-                    simple explanations, examples and real-world solutions.
-                </p>
-            </div>
-
-            <div class="card-grid">
-
-                <article class="card">
-                    <div class="card-icon">☁️</div>
-
-                    <h3>SharePoint Online</h3>
-
-                    <p>
-                        SharePoint administration, site management,
-                        permissions, governance and troubleshooting.
-                    </p>
-
-                    <a href="#resources" class="card-link">
-                        Explore SharePoint →
-                    </a>
-                </article>
-
-
-                <article class="card">
-                    <div class="card-icon">⚡</div>
-
-                    <h3>PowerShell</h3>
-
-                    <p>
-                        Practical PowerShell and PnP PowerShell scripts
-                        for Microsoft 365 administration and automation.
-                    </p>
-
-                    <a href="#resources" class="card-link">
-                        Explore PowerShell →
-                    </a>
-                </article>
-
-
-                <article class="card">
-                    <div class="card-icon">🔧</div>
-
-                    <h3>Microsoft 365</h3>
-
-                    <p>
-                        Tutorials covering Microsoft 365 services,
-                        Teams, Entra ID, Power Automate and more.
-                    </p>
-
-                    <a href="#resources" class="card-link">
-                        Explore Microsoft 365 →
-                    </a>
-                </article>
-
-
-                <article class="card">
-                    <div class="card-icon">📊</div>
-
-                    <h3>Power BI</h3>
-
-                    <p>
-                        Reports, dashboards, data preparation and
-                        useful Power BI tips for administrators.
-                    </p>
-
-                    <a href="#resources" class="card-link">
-                        Explore Power BI →
-                    </a>
-                </article>
-
-
-                <article class="card">
-                    <div class="card-icon">🔗</div>
-
-                    <h3>Microsoft Graph</h3>
-
-                    <p>
-                        Learn how to work with Microsoft Graph APIs,
-                        automation and Microsoft 365 data.
-                    </p>
-
-                    <a href="#resources" class="card-link">
-                        Explore Graph →
-                    </a>
-                </article>
-
-
-                <article class="card">
-                    <div class="card-icon">💡</div>
-
-                    <h3>Development Tutorials</h3>
-
-                    <p>
-                        Beginner-friendly tutorials for SPFx,
-                        web development and Microsoft 365 solutions.
-                    </p>
-
-                    <a href="#resources" class="card-link">
-                        Explore Development →
-                    </a>
-                </article>
-
-            </div>
-
-        </div>
-    </section>
-
-
-    <!-- Resources Section -->
-    <section class="section about-section" id="resources">
-        <div class="container">
-
-            <div class="section-heading">
-                <h2>Resources Coming Soon</h2>
-
-                <p>
-                    This section will contain practical articles,
-                    downloadable scripts, tutorials and useful references.
-                </p>
-            </div>
-
-            <div class="card-grid">
-
-                <article class="card">
-                    <div class="card-icon">📝</div>
-
-                    <h3>Articles</h3>
-
-                    <p>
-                        Step-by-step technical articles for Microsoft 365,
-                        SharePoint and automation.
-                    </p>
-
-                    <span class="card-link">
-                        Coming soon
-                    </span>
-                </article>
-
-                <section class="articles">
-
-    <h2>Latest Article</h2>
-
-    <div class="article-card">
-
-        <h3>
-            SharePoint Online Site Inventory with PnP PowerShell
-        </h3>
-
-        <p>
-            Learn how to retrieve SharePoint Online sites and
-            export important site information using PnP PowerShell.
-        </p>
-
-        <a
-            href="/articles/sharepoint-online-site-inventory.html"
-            class="btn">
-            Read Article →
-        </a>
-
+<header class="header">
+  <div class="header-inner">
+    <nav class="nav">
+      <a href="#" class="active">Home</a>
+      <a href="#articles">Articles</a>
+      <a href="#scripts">Scripts</a>
+    </nav>
+
+    <div class="search-wrap">
+      <input id="headerSearch" class="search-input"
+        placeholder="Search M365Buddy — articles, scripts, everything..."
+        autocomplete="off">
+      <div id="headerResults" class="search-results"></div>
     </div>
 
-</section>
+    <a class="brand" href="#"><span class="brand-mark">M</span>M365Buddy</a>
+  </div>
+</header>
 
-                <article class="card">
-                    <div class="card-icon">💻</div>
+<main class="container">
 
-                    <h3>PowerShell Scripts</h3>
+  <section class="hero">
+    <div class="eyebrow">Microsoft 365 Solutions</div>
+    <h1>Simplifying <span>Microsoft 365</span> problems.</h1>
+    <p>
+      Practical guides, PowerShell scripts and administrator-focused solutions
+      to help you solve Microsoft 365 problems faster.
+    </p>
 
-                    <p>
-                        Ready-to-use scripts for administration,
-                        reporting and repetitive tasks.
-                    </p>
+    <div class="hero-search search-wrap">
+      <input id="heroSearch" class="search-input"
+        placeholder="What are you trying to solve?"
+        autocomplete="off">
+      <div id="heroResults" class="search-results"></div>
+    </div>
+  </section>
 
-                    <span class="card-link">
-                        Coming soon
-                    </span>
-                </article>
+  <section class="section">
+    <div class="section-heading">
+      <div>
+        <h2>Popular Solutions</h2>
+        <p>Start with a Microsoft 365 area.</p>
+      </div>
+      <a class="link" href="#articles">View all articles →</a>
+    </div>
 
+    <div class="cards">
+      <a class="card" href="#sharepoint">
+        <div class="card-icon">SP</div>
+        <h3>SharePoint</h3>
+        <p>Site management, storage, permissions, lifecycle, versioning and administration.</p>
+        <div class="tags"><span class="tag">Administration</span><span class="tag">PowerShell</span></div>
+      </a>
 
-                <article class="card">
-                    <div class="card-icon">🎥</div>
+      <a class="card" href="#onedrive">
+        <div class="card-icon">OD</div>
+        <h3>OneDrive</h3>
+        <p>Storage, sync, sharing, administration and practical troubleshooting.</p>
+        <div class="tags"><span class="tag">Admin</span><span class="tag">Troubleshooting</span></div>
+      </a>
 
-                    <h3>Video Tutorials</h3>
+      <a class="card" href="#powerplatform">
+        <div class="card-icon">PP</div>
+        <h3>Power Platform</h3>
+        <p>Power Apps, Power Automate, Power BI and practical automation solutions.</p>
+        <div class="tags"><span class="tag">Automation</span><span class="tag">Governance</span></div>
+      </a>
+    </div>
+  </section>
 
-                    <p>
-                        Video tutorials and demonstrations covering
-                        Microsoft 365 and SharePoint solutions.
-                    </p>
+  <section class="section" id="articles">
+    <div class="section-heading">
+      <div>
+        <h2>Latest Articles</h2>
+        <p>Practical documentation for Microsoft 365 administrators.</p>
+      </div>
+      <a class="link" href="#articles">View all →</a>
+    </div>
 
-                    <span class="card-link">
-                        Coming soon
-                    </span>
-                </article>
-
-            </div>
-
+    <div class="list">
+      <a class="list-item" href="#site-inventory">
+        <div class="list-main">
+          <div class="list-title">Export All SharePoint Online Sites Using PnP PowerShell</div>
+          <div class="list-desc">Generate a SharePoint Online site inventory and storage usage report.</div>
         </div>
-    </section>
+        <span class="pill">SharePoint</span>
+      </a>
 
-
-    <!-- About Section -->
-    <section class="section" id="about">
-        <div class="container">
-
-            <div class="about-content">
-                <h2>About M365Buddy</h2>
-
-                <p>
-                    M365Buddy is a learning and resource website focused
-                    on Microsoft 365, SharePoint, PowerShell, automation
-                    and practical technical solutions.
-                </p>
-            </div>
-
+      <a class="list-item" href="#entra">
+        <div class="list-main">
+          <div class="list-title">Register an Entra ID App for PnP PowerShell Certificate Authentication</div>
+          <div class="list-desc">Configure application registration, certificate authentication and permissions.</div>
         </div>
-    </section>
+        <span class="pill">Entra ID</span>
+      </a>
 
-
-    <!-- Footer -->
-    <footer class="site-footer">
-        <div class="container footer-content">
-
-            <p>
-                © 2026 M365Buddy. All rights reserved.
-            </p>
-
-            <ul class="footer-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#topics">Topics</a></li>
-                <li><a href="#about">About</a></li>
-            </ul>
-
+      <a class="list-item" href="#storage">
+        <div class="list-main">
+          <div class="list-title">SharePoint Storage Management</div>
+          <div class="list-desc">Understand storage consumption, allocation and reporting.</div>
         </div>
-    </footer>
+        <span class="pill">SharePoint</span>
+      </a>
+    </div>
+  </section>
 
+  <section class="section" id="scripts">
+    <div class="section-heading">
+      <div>
+        <h2>Popular Scripts</h2>
+        <p>Ready-to-use automation for common administration tasks.</p>
+      </div>
+      <a class="link" href="#scripts">View all →</a>
+    </div>
+
+    <div class="list">
+      <a class="list-item" href="#site-inventory-script">
+        <div class="list-main">
+          <div class="list-title">SharePoint Site Inventory PowerShell Script</div>
+          <div class="list-desc">Collect SharePoint site details, storage and ownership information.</div>
+        </div>
+        <span class="pill">PowerShell</span>
+      </a>
+
+      <a class="list-item" href="#version-report">
+        <div class="list-main">
+          <div class="list-title">SharePoint Version Report</div>
+          <div class="list-desc">Generate version counts and version storage information.</div>
+        </div>
+        <span class="pill">PowerShell</span>
+      </a>
+
+      <a class="list-item" href="#recycle-bin">
+        <div class="list-main">
+          <div class="list-title">SharePoint Recycle Bin Report</div>
+          <div class="list-desc">Report first-stage and second-stage recycle bin usage.</div>
+        </div>
+        <span class="pill">PowerShell</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div>
+      <h2>Can't find what you're looking for?</h2>
+      <p>Search the M365Buddy knowledge base for an article, script or solution.</p>
+    </div>
+    <a class="btn primary" href="#top">Search M365Buddy</a>
+  </section>
+
+</main>
+
+<footer class="footer">
+  M365Buddy · Simplifying Microsoft 365 problems
+</footer>
+
+<script>
+const INDEX=[
+ {title:"SharePoint Online Site Inventory",type:"Article",category:"SharePoint",url:"#site-inventory",description:"Export SharePoint Online sites, storage information and ownership details using PnP PowerShell.",keywords:["SharePoint","site inventory","storage","PnP PowerShell","PowerShell"]},
+ {title:"Entra ID App for PnP PowerShell Certificate Authentication",type:"Article",category:"Microsoft Entra",url:"#entra",description:"Configure Entra ID application registration and certificate authentication.",keywords:["Entra ID","certificate","authentication","PnP PowerShell","permissions"]},
+ {title:"SharePoint Storage Management",type:"Article",category:"SharePoint",url:"#storage",description:"Understand SharePoint storage consumption and reporting.",keywords:["SharePoint","storage","capacity","storage report"]},
+ {title:"SharePoint Site Inventory PowerShell Script",type:"Script",category:"SharePoint",url:"#site-inventory-script",description:"Collect SharePoint site details, storage and ownership information.",keywords:["SharePoint","PowerShell","inventory","storage"]},
+ {title:"SharePoint Version Report",type:"Script",category:"SharePoint",url:"#version-report",description:"Generate version counts and storage information.",keywords:["SharePoint","PowerShell","version","version history","storage"]},
+ {title:"SharePoint Recycle Bin Report",type:"Script",category:"SharePoint",url:"#recycle-bin",description:"Report first-stage and second-stage recycle bin usage.",keywords:["SharePoint","PowerShell","Recycle Bin","storage"]}
+];
+
+function setupSearch(input,box){
+ input.addEventListener("input",()=>{
+  const q=input.value.trim().toLowerCase();
+  box.innerHTML="";
+  if(!q){box.classList.remove("show");return}
+  const words=q.split(/\s+/);
+  const found=INDEX.map(x=>{
+   let score=0;
+   words.forEach(w=>{
+    if(x.title.toLowerCase().includes(w))score+=10;
+    if(x.category.toLowerCase().includes(w))score+=6;
+    if(x.type.toLowerCase().includes(w))score+=4;
+    if(x.description.toLowerCase().includes(w))score+=3;
+    if(x.keywords.join(" ").toLowerCase().includes(w))score+=5;
+   });
+   return{x,score};
+  }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,8);
+
+  if(!found.length){
+   box.innerHTML='<div class="result"><div class="result-title">No results found</div><div class="result-desc">Try a different Microsoft 365 topic or problem.</div></div>';
+  }else{
+   found.forEach(({x})=>{
+    const a=document.createElement("a");
+    a.className="result";a.href=x.url;
+    a.innerHTML='<div class="result-title">'+x.title+'</div><div class="result-meta">'+x.type+' · '+x.category+'</div><div class="result-desc">'+x.description+'</div>';
+    box.appendChild(a);
+   });
+  }
+  box.classList.add("show");
+ });
+}
+setupSearch(document.getElementById("headerSearch"),document.getElementById("headerResults"));
+setupSearch(document.getElementById("heroSearch"),document.getElementById("heroResults"));
+document.addEventListener("click",e=>{
+ document.querySelectorAll(".search-results").forEach(box=>{
+  const input=box.previousElementSibling;
+  if(!box.contains(e.target)&&e.target!==input)box.classList.remove("show");
+ });
+});
+</script>
 </body>
 </html>
