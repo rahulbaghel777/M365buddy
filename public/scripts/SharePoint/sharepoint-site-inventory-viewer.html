@@ -1,145 +1,228 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SharePoint Site Inventory Script | M365Buddy</title>
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<style>
-:root{
-  --bg:#f5f7fb;--panel:#fff;--panel-soft:#f8fafc;--border:#d9dee8;
-  --text:#172033;--muted:#647084;--accent:#2563eb;--accent-hover:#1d4ed8;
-  --code-bg:#0f172a;--code-text:#e2e8f0;
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>M365Buddy — SharePoint Site Inventory Script</title><style>
+*{box-sizing:border-box}body{margin:0;background:#f7faff;color:#263b5c;font:13px/1.55 "Segoe UI",Arial,sans-serif}a{text-decoration:none;color:inherit}
+.m365-header{height:62px;background:linear-gradient(105deg,#07346f,#0873c9);position:sticky;top:0;z-index:100;color:#fff}
+.m365-header-inner{height:100%;max-width:1400px;margin:auto;padding:0 18px;display:grid;grid-template-columns:225px minmax(260px,1fr) 150px;gap:14px;align-items:center}
+.m365-nav{display:flex;align-items:center;gap:2px}
+.m365-nav a{display:flex;align-items:center;min-height:36px;padding:0 11px;border-radius:8px;color:#fff!important;font-size:13px;font-weight:700;text-decoration:none}
+.m365-nav a:hover,.m365-nav a.active{background:rgba(255,255,255,.12)}
+.m365-search{position:relative;width:min(100%,480px);justify-self:center}
+.m365-search input{width:100%;height:36px;border:1px solid rgba(255,255,255,.42);border-radius:9px;background:rgba(255,255,255,.07);color:#fff;padding:0 12px 0 42px;outline:0;font-size:12px}
+.m365-search input::placeholder{color:#e3effb}
+.m365-search input:focus{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.12)}
+.m365-search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:17px;height:17px;color:#fff;pointer-events:none}
+.m365-search-icon svg{width:100%;height:100%}
+.m365-brand{justify-self:end;color:#fff!important;text-decoration:none;font-size:23px;font-weight:800;letter-spacing:-.4px;white-space:nowrap}
+.m365-brand span{color:#9bd3ff}
+.m365-results{display:none;position:absolute;left:0;right:0;top:42px;background:#fff;border:1px solid #d5dfeb;border-radius:9px;box-shadow:0 10px 28px rgba(15,23,42,.18);overflow:hidden;z-index:500}
+.m365-results.show{display:block}
+.m365-result{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 11px;border-bottom:1px solid #edf1f6;color:#172033!important;text-decoration:none!important;background:#fff}
+.m365-result:hover{background:#eff6ff}
+.m365-result-title{font-size:11.5px;font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.m365-result-desc{font-size:10px;color:#647084;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.m365-result-type{font-size:9.5px;color:#2563eb;background:#eff6ff;border:1px solid #bfdbfe;border-radius:999px;padding:2px 6px;white-space:nowrap}
+.m365-result-empty{padding:11px;color:#647084;font-size:11px}
+@media(max-width:900px){
+  .m365-header{height:auto;padding:7px 0}
+  .m365-header-inner{grid-template-columns:1fr auto;gap:6px 10px}
+  .m365-search{grid-column:1/-1;grid-row:2;width:100%}
 }
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 "Segoe UI",Arial,sans-serif}
-a{color:inherit;text-decoration:none}
-header{height:58px;background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:20}
-.nav{height:100%;max-width:1350px;margin:auto;padding:0 18px;display:flex;align-items:center;justify-content:space-between}
-.nav-left,.nav-right{display:flex;align-items:center;gap:18px}
-.nav a{font-size:13px}
-.nav a:hover{color:var(--accent)}
-.brand{font-weight:800;color:var(--accent)!important;font-size:15px!important}
-.page{max-width:1250px;margin:26px auto;padding:0 18px}
-.top{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:21px;display:flex;justify-content:space-between;align-items:center;gap:18px}
-.title-wrap h1{margin:0 0 5px;font-size:24px;line-height:1.25}
-.subtitle{color:var(--muted);font-size:12.5px}
-.actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-.btn{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--border);background:#fff;color:var(--text);border-radius:7px;padding:8px 12px;font-size:12px;font-weight:750;cursor:pointer}
-.btn:hover{background:var(--panel-soft)}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
-.btn.primary:hover{background:var(--accent-hover)}
-.btn.dark{background:#172033;border-color:#172033;color:#fff}
-.btn:disabled{opacity:.7;cursor:default}
-.viewer{margin-top:14px;background:var(--code-bg);border:1px solid #1e293b;border-radius:11px;overflow:hidden}
-.viewer-bar{height:39px;background:#172033;color:#cbd5e1;display:flex;align-items:center;padding:0 13px;font:12px Consolas,monospace;border-bottom:1px solid #263449}
-.code-scroll{height:600px;overflow:auto}
-.code{margin:0;padding:14px 0;color:var(--code-text);font:12.5px/1.6 Consolas,"Courier New",monospace;white-space:pre;min-width:max-content}
-.line{display:block;padding-right:22px}
-.line:hover{background:rgba(255,255,255,.045)}
-.num{display:inline-block;width:58px;margin-right:16px;padding-right:12px;text-align:right;color:#64748b;user-select:none;border-right:1px solid #263449}
-.status{margin-top:12px;color:var(--muted);font-size:12px}
-.notice{margin-top:15px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:9px;padding:12px 14px;font-size:12.5px}
-@media(max-width:800px){
-  .top{display:block}
-  .actions{justify-content:flex-start;margin-top:14px}
-  .code-scroll{height:500px}
-}
-</style>
-</head>
-<body>
-<header>
-<nav class="nav">
-  <div class="nav-left">
-    <a href="https://m365buddy.com/">Home</a>
-    <a href="https://m365buddy.com/articles">Articles</a>
-    <a href="https://m365buddy.com/scripts/">Scripts</a>
+
+.page{max-width:1250px;margin:18px auto;padding:0 18px 35px}.top{background:#fff;border:1px solid #d7e1ee;border-radius:11px;padding:18px;display:flex;justify-content:space-between;gap:15px;align-items:center;box-shadow:0 2px 10px rgba(20,55,95,.07)}h1{font-size:23px;color:#071a3d;margin:0 0 4px}.muted{color:#617492;font-size:12px}.actions{display:flex;gap:7px;flex-wrap:wrap}button,.btn{display:inline-flex;align-items:center;border:1px solid #d7e1ee;background:#fff;border-radius:7px;padding:7px 10px;font-size:11px;font-weight:750;cursor:pointer;color:#263b5c}.primary{background:#0878ee!important;border-color:#0878ee!important;color:#fff!important}.dark{background:#172033!important;border-color:#172033!important;color:#fff!important}.viewer{margin-top:13px;background:#0b1830;border:1px solid #1e293b;border-radius:10px;overflow:hidden}.bar{height:38px;background:#172033;color:#cbd5e1;padding:0 12px;display:flex;align-items:center;font:11px Consolas,monospace}.scroll{height:600px;overflow:auto}pre{margin:0;padding:13px 0;color:#e2e8f0;font:12px/1.6 Consolas,"Cascadia Mono",monospace;min-width:max-content}.line{display:block;padding-right:20px}.line:hover{background:rgba(255,255,255,.045)}.num{display:inline-block;width:56px;margin-right:14px;padding-right:10px;text-align:right;color:#64748b;border-right:1px solid #263449;user-select:none}.status{margin-top:10px;color:#617492;font-size:11px}.notice{margin-top:12px;padding:11px 13px;border:1px solid #c8def7;background:#eef7ff;border-radius:8px;font-size:11.5px}@media(max-width:800px){.top{display:block}.actions{margin-top:12px}.scroll{height:500px}}
+</style></head><body>
+<header class="m365-header">
+  <div class="m365-header-inner">
+    <nav class="m365-nav" aria-label="Main navigation">
+      <a href="/" data-nav="home">Home</a>
+      <a href="/articles/" data-nav="articles">Articles</a>
+      <a href="/scripts/" data-nav="scripts">Scripts</a>
+    </nav>
+    <div class="m365-search">
+      <span class="m365-search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg></span>
+      <input type="search" data-m365-search placeholder="Search M365Buddy..." autocomplete="off" aria-label="Search M365Buddy">
+    </div>
+    <a class="m365-brand" href="/">M365<span>Buddy</span></a>
   </div>
-  <div class="nav-right">
-    <a class="brand" href="https://m365buddy.com/">M365Buddy</a>
-  </div>
-</nav>
 </header>
-
-<main class="page">
-  <section class="top">
-    <div class="title-wrap">
-      <h1>SharePoint Online Site Inventory</h1>
-      <div class="subtitle">PowerShell script · SharePoint Online · PnP PowerShell</div>
-    </div>
-    <div class="actions">
-      <button class="btn primary" id="copyBtn" type="button">Copy Script</button>
-      <a class="btn" href="/script-editor.html?script=%2Fscripts%2FSharePoint%2FSharePoint_Site_Inventory.ps1">Open in Script Editor</a>
-      <a class="btn dark" href="/scripts/SharePoint/SharePoint_Site_Inventory.ps1" download>Download .PS1</a>
-    </div>
-  </section>
-
-  <section class="viewer" aria-label="PowerShell script viewer">
-    <div class="viewer-bar">scripts / SharePoint / SharePoint_Site_Inventory.ps1</div>
-    <div class="code-scroll">
-      <pre class="code" id="code">Loading script...</pre>
-    </div>
-  </section>
-
-  <div class="status" id="status">Loading the published script...</div>
-
-  <div class="notice">
-    <strong>Source of truth:</strong> This viewer loads the same <code>.ps1</code> file used by the Download button. The script is not duplicated inside this HTML page.
-  </div>
-</main>
-
+<main class="page"><section class="top"><div><h1>SharePoint Online Site Inventory</h1><div class="muted">PowerShell · PnP PowerShell · SharePoint Online</div></div><div class="actions"><button id="copy" class="primary">Copy Script</button><a class="btn" href="/M365buddy-script-editor.html?script=%2Fscripts%2FSharePoint%2FSharePoint_Site_Inventory.ps1">Open in Script Editor</a><button id="download" class="dark">Download .PS1</button></div></section><section class="viewer"><div class="bar">scripts / SharePoint / SharePoint_Site_Inventory.ps1</div><div class="scroll"><pre id="code">Loading script...</pre></div></section><div id="status" class="status">Loading published script...</div><div class="notice"><b>Source of truth:</b> This page loads <code>/scripts/SharePoint/SharePoint_Site_Inventory.ps1</code>. The Download button uses the same content.</div></main>
 <script>
-const scriptPath="/scripts/SharePoint/SharePoint_Site_Inventory.ps1";
-const code=document.getElementById("code");
-const status=document.getElementById("status");
-const copyBtn=document.getElementById("copyBtn");
-let source="";
+(function(){
+const fallback=`# ============================================================
+# M365Buddy - SharePoint Online Site Inventory
+# ============================================================
 
-function escapeHtml(value){
-  return value.replace(/&/g,"&amp;")
-             .replace(/</g,"&lt;")
-             .replace(/>/g,"&gt;");
+# IMPORTANT:
+# Replace the placeholder values before running.
+#
+# Do NOT publish:
+# - Client secrets
+# - PFX passwords
+# - Private keys
+# - Internal SMTP credentials
+# - Tenant-specific confidential information
+
+
+$TenantName = "YOUR-TENANT"
+
+$TenantAdminUrl =
+    "https://YOUR-TENANT-admin.sharepoint.com"
+
+$ClientId =
+    "YOUR-APP-CLIENT-ID"
+
+$CertificatePath =
+    "C:\\Path\\To\\SharePointAutomationCert.pfx"
+
+$CertificatePassword =
+    "YOUR-PFX-PASSWORD"
+
+
+$OutputCsv =
+    Join-Path $env:USERPROFILE \`
+    "Desktop\\SharePoint-Site-Inventory.csv"
+
+
+# ============================================================
+# CONNECT
+# ============================================================
+
+Connect-PnPOnline \`
+    -Url $TenantAdminUrl \`
+    -ClientId $ClientId \`
+    -CertificatePath $CertificatePath \`
+    -CertificatePassword $CertificatePassword
+
+
+# ============================================================
+# GET SITES
+# ============================================================
+
+$Sites =
+    Get-PnPTenantSite -Detailed
+
+
+# ============================================================
+# BUILD REPORT
+# ============================================================
+
+$Report = foreach ($Site in $Sites) {
+
+    [PSCustomObject]@{
+
+        SiteName =
+            $Site.Title
+
+        SiteUrl =
+            $Site.Url
+
+        StorageMB =
+            [math]::Round(
+                $Site.StorageUsageCurrent,
+                2
+            )
+
+        StorageQuotaMB =
+            [math]::Round(
+                $Site.StorageQuota,
+                2
+            )
+
+        Template =
+            $Site.Template
+
+        Created =
+            $Site.TimeCreated
+
+        LastModified =
+            $Site.LastContentModifiedDate
+    }
 }
 
-function renderScript(text){
-  const lines=text.replace(/\r\n/g,"\n").split("\n");
-  code.innerHTML=lines.map((line,index)=>{
-    return '<span class="line"><span class="num">'+String(index+1).padStart(4," ")+"</span>"+escapeHtml(line)+"</span>";
-  }).join("");
-  status.textContent=lines.length+" lines · Loaded from the published .ps1 file.";
-}
 
-fetch(scriptPath,{cache:"no-store"})
-  .then(response=>{
-    if(!response.ok) throw new Error("HTTP "+response.status);
-    return response.text();
-  })
-  .then(text=>{
-    source=text;
-    renderScript(text);
-  })
-  .catch(error=>{
-    code.textContent="Unable to load the script.";
-    status.textContent="Script could not be loaded: "+error.message;
-  });
+# ============================================================
+# EXPORT
+# ============================================================
 
-copyBtn.addEventListener("click",async()=>{
-  if(!source){
-    status.textContent="The script is still loading.";
-    return;
-  }
+$Report |
+    Export-Csv \`
+        -Path $OutputCsv \`
+        -NoTypeInformation
+
+
+Write-Host "Report created:"
+Write-Host $OutputCsv`; const path="/scripts/SharePoint/SharePoint_Site_Inventory.ps1",code=document.getElementById("code"),status=document.getElementById("status"),copy=document.getElementById("copy"),download=document.getElementById("download");let source="";
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function render(t){source=t;code.innerHTML=t.replace(/\r\n/g,"\n").split("\n").map((x,i)=>'<span class="line"><span class="num">'+String(i+1).padStart(4," ")+"</span>"+esc(x)+"</span>").join("");status.textContent=t.split(/\r?\n/).length+" lines · Published script loaded.";}
+fetch(path,{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.text()}).then(render).catch(e=>{render(fallback);status.textContent="Preview fallback loaded. Production uses the published .ps1 file.";});
+copy.addEventListener("click",async()=>{if(!source)return;try{if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(source);else{const t=document.createElement("textarea");t.value=source;t.style.position="fixed";t.style.opacity="0";document.body.appendChild(t);t.select();document.execCommand("copy");t.remove();}copy.textContent="Copied ✓";status.textContent="Script copied to clipboard.";setTimeout(()=>copy.textContent="Copy Script",1500)}catch(e){status.textContent="Copy failed. Select the script manually."}});
+download.addEventListener("click",()=>{
+  if(!source)return;
   try{
-    await navigator.clipboard.writeText(source);
-    copyBtn.textContent="Copied ✓";
-    status.textContent="Script copied to clipboard.";
-    setTimeout(()=>{
-      copyBtn.textContent="Copy Script";
-      status.textContent="Script loaded.";
-    },1800);
-  }catch(error){
-    status.textContent="Copy failed. Please select and copy the script manually.";
+    const u=URL.createObjectURL(new Blob([source],{type:"text/plain;charset=utf-8"}));
+    const a=document.createElement("a");a.href=u;a.download="SharePoint_Site_Inventory.ps1";a.style.display="none";
+    document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),3000);
+    download.textContent="Downloaded ✓";
+  }catch(e){
+    const a=document.createElement("a");a.href=path;a.download="SharePoint_Site_Inventory.ps1";a.target="_blank";a.click();
   }
+  setTimeout(()=>download.textContent="Download .PS1",1800);
 });
-</script>
-</body>
-</html>
+})();
+</script><script>
+(function(){
+"use strict";
+const M365_INDEX = [{"title": "Export All SharePoint Online Sites Using PnP PowerShell", "type": "Article", "category": "SharePoint", "url": "/articles/sharepoint-online-site-inventory.html", "description": "Generate a SharePoint Online site inventory and storage usage report using PnP PowerShell.", "keywords": ["sharepoint", "site inventory", "storage", "pnp powershell", "powershell", "csv"]}, {"title": "Register an Entra ID App for PnP PowerShell Certificate Authentication", "type": "Article", "category": "Microsoft Entra", "url": "/articles/entra-id-pnp-certificate-authentication.html", "description": "Configure an Entra ID application, certificate, permissions and authentication for PnP PowerShell.", "keywords": ["entra id", "certificate", "app registration", "pnp powershell", "admin consent"]}, {"title": "SharePoint Storage Management", "type": "Article", "category": "SharePoint", "url": "/articles/sharepoint-storage-management.html", "description": "Understand SharePoint Online storage consumption and practical storage governance.", "keywords": ["sharepoint", "storage", "quota", "capacity", "usage", "report"]}, {"title": "SharePoint Site Lifecycle Management", "type": "Article", "category": "SharePoint", "url": "/articles/sharepoint-site-lifecycle.html", "description": "Manage inactive SharePoint sites with lifecycle and ownership processes.", "keywords": ["sharepoint", "lifecycle", "inactive sites", "attestation", "governance"]}, {"title": "SharePoint Version Management", "type": "Article", "category": "SharePoint", "url": "/articles/sharepoint-version-management.html", "description": "Understand SharePoint version history, version limits and storage governance.", "keywords": ["sharepoint", "versions", "version history", "version limit", "storage"]}, {"title": "Email PowerShell Reports Using Microsoft Graph", "type": "Article", "category": "Microsoft 365", "url": "/articles/powershell-report-delivery-microsoft-graph.html", "description": "Replace SMTP delivery with Microsoft Graph for PowerShell reports.", "keywords": ["smtp", "email", "graph", "sendmail", "powershell", "exchange online"]}, {"title": "Email PowerShell Reports Using Power Automate", "type": "Article", "category": "Power Automate", "url": "/articles/powershell-report-delivery-power-automate.html", "description": "Use Power Automate and Microsoft 365 Outlook to email PowerShell CSV reports.", "keywords": ["smtp", "email", "power automate", "outlook", "powershell", "csv"]}, {"title": "SharePoint Site Inventory PowerShell Script", "type": "Script", "category": "SharePoint", "url": "/scripts/SharePoint/sharepoint-site-inventory-viewer.html", "description": "View the published SharePoint Online site inventory PowerShell script.", "keywords": ["sharepoint", "powershell", "site inventory", "script"]}, {"title": "SharePoint Version Report", "type": "Script", "category": "SharePoint", "url": "/scripts/SharePoint/sharepoint-version-report.html", "description": "SharePoint Online version usage reporting script.", "keywords": ["sharepoint", "version report", "powershell"]}, {"title": "SharePoint Recycle Bin Report", "type": "Script", "category": "SharePoint", "url": "/scripts/SharePoint/sharepoint-recycle-bin-report.html", "description": "SharePoint Online recycle bin reporting script.", "keywords": ["sharepoint", "recycle bin", "powershell"]}, {"title": "SharePoint Storage Report", "type": "Script", "category": "SharePoint", "url": "/scripts/", "description": "SharePoint Online storage reporting scripts.", "keywords": ["sharepoint", "storage report", "powershell"]}];
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));}
+function scoreItem(item,q){
+  const Q=q.toLowerCase();
+  const title=item.title.toLowerCase(), text=(item.title+" "+item.type+" "+item.category+" "+item.description+" "+item.keywords.join(" ")).toLowerCase();
+  if(!text.includes(Q)) return 0;
+  let s=1;
+  if(title===Q)s+=100;
+  if(title.includes(Q))s+=60;
+  if(item.category.toLowerCase().includes(Q))s+=30;
+  if(item.type.toLowerCase().includes(Q))s+=20;
+  if(item.description.toLowerCase().includes(Q))s+=15;
+  s+=item.keywords.filter(k=>k.toLowerCase().includes(Q)).length*10;
+  return s;
+}
+function searchItems(q,type){
+  q=(q||"").trim();
+  if(!q)return [];
+  return M365_INDEX.map(x=>({...x,score:scoreItem(x,q)})).filter(x=>x.score>0 && (!type||type==="All"||x.type===type)).sort((a,b)=>b.score-a.score);
+}
+function wireGlobalSearch(){
+  document.querySelectorAll("[data-m365-search]").forEach(input=>{
+    const wrap=input.closest(".m365-search")||input.parentElement;
+    let box=wrap.querySelector(".m365-results");
+    if(!box){box=document.createElement("div");box.className="m365-results";wrap.appendChild(box);}
+    function render(){
+      const q=input.value.trim(), items=searchItems(q).slice(0,7);
+      if(!q){box.classList.remove("show");box.innerHTML="";return;}
+      box.classList.add("show");
+      if(!items.length){box.innerHTML='<div class="m365-result-empty">No matching articles or scripts.</div>';return;}
+      box.innerHTML=items.map(x=>'<a class="m365-result" href="'+x.url+'"><div style="min-width:0"><div class="m365-result-title">'+esc(x.title)+'</div><div class="m365-result-desc">'+esc(x.description)+'</div></div><span class="m365-result-type">'+esc(x.type)+'</span></a>').join("");
+    }
+    input.addEventListener("input",render);
+    input.addEventListener("focus",render);
+    input.addEventListener("keydown",function(e){
+      if(e.key==="Enter"){e.preventDefault();const q=input.value.trim();if(q)location.href="/search.html?q="+encodeURIComponent(q);}
+      if(e.key==="Escape"){input.value="";box.classList.remove("show");}
+    });
+  });
+  document.addEventListener("click",function(e){
+    document.querySelectorAll(".m365-results").forEach(box=>{if(!box.parentElement.contains(e.target))box.classList.remove("show");});
+  });
+}
+function markNav(){
+  const p=location.pathname;
+  document.querySelectorAll(".m365-nav a[data-nav]").forEach(a=>{
+    const n=a.dataset.nav;
+    if((n==="home" && (p==="/"||p.endsWith("/index.html"))) ||
+       (n==="articles" && p.startsWith("/articles")) ||
+       (n==="scripts" && p.startsWith("/scripts"))) a.classList.add("active");
+  });
+}
+document.addEventListener("DOMContentLoaded",function(){wireGlobalSearch();markNav();});
+window.M365BuddySearch={index:M365_INDEX,search:searchItems};
+})();
+</script></body></html>
