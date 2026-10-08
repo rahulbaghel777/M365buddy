@@ -1,0 +1,131 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>M365Buddy — Search</title><style>
+*{box-sizing:border-box}body{margin:0;background:#f7faff;color:#263b5c;font:13px/1.55 "Segoe UI",Arial,sans-serif}a{color:inherit;text-decoration:none}
+
+.m365-header{height:62px;background:linear-gradient(105deg,#07346f,#0873c9);position:sticky;top:0;z-index:100;color:#fff}
+.m365-header-inner{height:100%;max-width:1400px;margin:auto;padding:0 18px;display:grid;grid-template-columns:225px minmax(260px,1fr) 150px;gap:14px;align-items:center}
+.m365-nav{display:flex;align-items:center;gap:2px}
+.m365-nav a{display:flex;align-items:center;min-height:36px;padding:0 11px;border-radius:8px;color:#fff!important;font-size:13px;font-weight:700;text-decoration:none}
+.m365-nav a:hover,.m365-nav a.active{background:rgba(255,255,255,.12)}
+.m365-search{position:relative;width:min(100%,480px);justify-self:center}
+.m365-search input{width:100%;height:36px;border:1px solid rgba(255,255,255,.42);border-radius:9px;background:rgba(255,255,255,.07);color:#fff;padding:0 12px 0 42px;outline:0;font-size:12px}
+.m365-search input::placeholder{color:#e3effb}
+.m365-search input:focus{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.12)}
+.m365-search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:17px;height:17px;color:#fff;pointer-events:none}
+.m365-search-icon svg{width:100%;height:100%}
+.m365-brand{justify-self:end;color:#fff!important;text-decoration:none;font-size:23px;font-weight:800;letter-spacing:-.4px;white-space:nowrap}
+.m365-brand span{color:#9bd3ff}
+.m365-results{display:none;position:absolute;left:0;right:0;top:42px;background:#fff;border:1px solid #d5dfeb;border-radius:9px;box-shadow:0 10px 28px rgba(15,23,42,.18);overflow:hidden;z-index:500}
+.m365-results.show{display:block}
+.m365-result{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 11px;border-bottom:1px solid #edf1f6;color:#172033!important;text-decoration:none!important;background:#fff}
+.m365-result:hover{background:#eff6ff}
+.m365-result-title{font-size:11.5px;font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.m365-result-desc{font-size:10px;color:#647084;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.m365-result-type{font-size:9.5px;color:#2563eb;background:#eff6ff;border:1px solid #bfdbfe;border-radius:999px;padding:2px 6px;white-space:nowrap}
+.m365-result-empty{padding:11px;color:#647084;font-size:11px}
+@media(max-width:900px){
+  .m365-header{height:auto;padding:7px 0}
+  .m365-header-inner{grid-template-columns:1fr auto;gap:6px 10px}
+  .m365-search{grid-column:1/-1;grid-row:2;width:100%}
+}
+
+.search-page{max-width:1120px;margin:22px auto;padding:0 18px 36px}.search-head{background:#fff;border:1px solid #d7e1ee;border-radius:11px;padding:20px;box-shadow:0 2px 10px rgba(20,55,95,.07);margin-bottom:14px}
+.ey{display:inline-block;background:#edf6ff;border:1px solid #c9e0fa;color:#0878ee;padding:3px 8px;border-radius:999px;font-size:9.5px;font-weight:800}h1{font-size:25px;line-height:1.2;color:#071a3d;margin:10px 0 5px}.summary{color:#617492;margin:0}
+.search-main{position:relative;margin-top:14px}.search-main input{width:100%;height:40px;border:1px solid #cbd9e8;border-radius:8px;padding:0 12px 0 40px;outline:0;font-size:12px}.search-main svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:17px;height:17px;color:#68809d;pointer-events:none}
+.search-main input:focus{border-color:#69a6e9;box-shadow:0 0 0 3px rgba(8,120,238,.08)}.toolbar{display:flex;justify-content:space-between;align-items:center;margin:12px 0}.filters{display:flex;gap:5px}.filter{border:1px solid #d7e1ee;background:#fff;border-radius:7px;padding:6px 10px;font-size:11px;cursor:pointer;color:#263b5c}.filter.active{background:#eaf4ff;border-color:#b9d9fb;color:#0878ee;font-weight:700}.count{font-size:10.5px;color:#617492}.results{display:grid;gap:9px}.result{display:block;background:#fff;border:1px solid #d7e1ee;border-radius:9px;padding:13px 14px;box-shadow:0 2px 10px rgba(20,55,95,.07)}.result:hover{border-color:#b9d9fb;background:#fbfdff}.result-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.result-title{font-size:14px;font-weight:750;color:#071a3d}.type{font-size:9.5px;color:#0878ee;background:#edf6ff;border:1px solid #c9e0fa;border-radius:999px;padding:3px 7px;white-space:nowrap}.meta{font-size:10px;color:#617492;margin-top:3px}.desc{font-size:11.5px;color:#516781;margin-top:6px}.empty{background:#fff;border:1px solid #d7e1ee;border-radius:9px;padding:22px;color:#617492}
+</style></head><body>
+<header class="m365-header">
+  <div class="m365-header-inner">
+    <nav class="m365-nav" aria-label="Main navigation">
+      <a href="/" data-nav="home">Home</a>
+      <a href="/articles/" data-nav="articles">Articles</a>
+      <a href="/scripts/" data-nav="scripts">Scripts</a>
+    </nav>
+    <div class="m365-search">
+      <span class="m365-search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg></span>
+      <input type="search" data-m365-search placeholder="Search M365Buddy..." autocomplete="off" aria-label="Search M365Buddy">
+    </div>
+    <a class="m365-brand" href="/">M365<span>Buddy</span></a>
+  </div>
+</header>
+
+<main class="search-page"><section class="search-head"><span class="ey">M365Buddy Search</span><h1>Search results</h1><p class="summary" id="summary">Search articles, scripts and Microsoft 365 solutions.</p>
+<div class="search-main"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg><input id="resultsSearch" type="search" placeholder="Search articles, scripts and solutions..." autocomplete="off"></div></section>
+<div class="toolbar"><div class="filters"><button class="filter active" data-filter="All">All</button><button class="filter" data-filter="Article">Articles</button><button class="filter" data-filter="Script">Scripts</button></div><div class="count" id="count"></div></div>
+<section class="results" id="results"></section></main>
+<script>
+(function(){
+const input=document.getElementById("resultsSearch"),results=document.getElementById("results"),summary=document.getElementById("summary"),count=document.getElementById("count");let active="All";
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));}
+function render(){
+ const q=input.value.trim(), items=window.M365BuddySearch.search(q,active);
+ count.textContent=q?items.length+" result"+(items.length===1?"":"s"):"";
+ summary.textContent=q?'Results matching “'+q+'”.':"Search articles, scripts and Microsoft 365 solutions.";
+ if(!q){results.innerHTML='<div class="empty">Enter a search term above to find matching articles and scripts.</div>';return;}
+ if(!items.length){results.innerHTML='<div class="empty">No matching results found. Try SharePoint, PowerShell, storage, Entra ID or SMTP.</div>';return;}
+ results.innerHTML=items.map(x=>'<a class="result" href="'+x.url+'"><div class="result-top"><div class="result-title">'+esc(x.title)+'</div><span class="type">'+esc(x.type)+'</span></div><div class="meta">'+esc(x.category)+'</div><div class="desc">'+esc(x.description)+'</div></a>').join("");
+}
+document.querySelectorAll(".filter").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".filter").forEach(x=>x.classList.remove("active"));b.classList.add("active");active=b.dataset.filter;render();}));
+input.addEventListener("input",render);input.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();const q=input.value.trim();if(q)history.replaceState(null,"","/search.html?q="+encodeURIComponent(q));render();}});
+const q=new URLSearchParams(location.search).get("q")||"";input.value=q;
+document.addEventListener("DOMContentLoaded",()=>setTimeout(render,0));
+})();
+</script>
+<script>
+(function(){
+"use strict";
+const M365_INDEX = [{"title": "Export All SharePoint Online Sites Using PnP PowerShell", "type": "Article", "category": "SharePoint", "url": "/articles/sharepoint-online-site-inventory.html", "description": "Generate a SharePoint Online site inventory and storage usage report using PnP PowerShell.", "keywords": ["sharepoint", "site inventory", "storage", "pnp powershell", "powershell", "csv"]}, {"title": "Register an Entra ID App for PnP PowerShell Certificate Authentication", "type": "Article", "category": "Microsoft Entra", "url": "/articles/entra-id-pnp-certificate-authentication.html", "description": "Configure an Entra ID application, certificate, permissions and authentication for PnP PowerShell.", "keywords": ["entra id", "certificate", "app registration", "pnp powershell", "admin consent"]}, {"title": "SharePoint Storage Management", "type": "Article", "category": "SharePoint", "url": "/articles/sharepoint-storage-management.html", "description": "Understand SharePoint Online storage consumption and practical storage governance.", "keywords": ["sharepoint", "storage", "quota", "capacity", "usage", "report"]}, {"title": "SharePoint Site Lifecycle Management", "type": "Article", "category": "SharePoint", "url": "/articles/sharepoint-site-lifecycle.html", "description": "Manage inactive SharePoint sites with lifecycle and ownership processes.", "keywords": ["sharepoint", "lifecycle", "inactive sites", "attestation", "governance"]}, {"title": "SharePoint Version Management", "type": "Article", "category": "SharePoint", "url": "/articles/sharepoint-version-management.html", "description": "Understand SharePoint version history, version limits and storage governance.", "keywords": ["sharepoint", "versions", "version history", "version limit", "storage"]}, {"title": "Email PowerShell Reports Using Microsoft Graph", "type": "Article", "category": "Microsoft 365", "url": "/articles/powershell-report-delivery-microsoft-graph.html", "description": "Replace SMTP delivery with Microsoft Graph for PowerShell reports.", "keywords": ["smtp", "email", "graph", "sendmail", "powershell", "exchange online"]}, {"title": "Email PowerShell Reports Using Power Automate", "type": "Article", "category": "Power Automate", "url": "/articles/powershell-report-delivery-power-automate.html", "description": "Use Power Automate and Microsoft 365 Outlook to email PowerShell CSV reports.", "keywords": ["smtp", "email", "power automate", "outlook", "powershell", "csv"]}, {"title": "SharePoint Site Inventory PowerShell Script", "type": "Script", "category": "SharePoint", "url": "/scripts/SharePoint/sharepoint-site-inventory-viewer.html", "description": "View the published SharePoint Online site inventory PowerShell script.", "keywords": ["sharepoint", "powershell", "site inventory", "script"]}, {"title": "SharePoint Version Report", "type": "Script", "category": "SharePoint", "url": "/scripts/SharePoint/sharepoint-version-report.html", "description": "SharePoint Online version usage reporting script.", "keywords": ["sharepoint", "version report", "powershell"]}, {"title": "SharePoint Recycle Bin Report", "type": "Script", "category": "SharePoint", "url": "/scripts/SharePoint/sharepoint-recycle-bin-report.html", "description": "SharePoint Online recycle bin reporting script.", "keywords": ["sharepoint", "recycle bin", "powershell"]}, {"title": "SharePoint Storage Report", "type": "Script", "category": "SharePoint", "url": "/scripts/", "description": "SharePoint Online storage reporting scripts.", "keywords": ["sharepoint", "storage report", "powershell"]}];
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));}
+function scoreItem(item,q){
+  const Q=q.toLowerCase();
+  const title=item.title.toLowerCase(), text=(item.title+" "+item.type+" "+item.category+" "+item.description+" "+item.keywords.join(" ")).toLowerCase();
+  if(!text.includes(Q)) return 0;
+  let s=1;
+  if(title===Q)s+=100;
+  if(title.includes(Q))s+=60;
+  if(item.category.toLowerCase().includes(Q))s+=30;
+  if(item.type.toLowerCase().includes(Q))s+=20;
+  if(item.description.toLowerCase().includes(Q))s+=15;
+  s+=item.keywords.filter(k=>k.toLowerCase().includes(Q)).length*10;
+  return s;
+}
+function searchItems(q,type){
+  q=(q||"").trim();
+  if(!q)return [];
+  return M365_INDEX.map(x=>({...x,score:scoreItem(x,q)})).filter(x=>x.score>0 && (!type||type==="All"||x.type===type)).sort((a,b)=>b.score-a.score);
+}
+function wireGlobalSearch(){
+  document.querySelectorAll("[data-m365-search]").forEach(input=>{
+    const wrap=input.closest(".m365-search")||input.parentElement;
+    let box=wrap.querySelector(".m365-results");
+    if(!box){box=document.createElement("div");box.className="m365-results";wrap.appendChild(box);}
+    function render(){
+      const q=input.value.trim(), items=searchItems(q).slice(0,7);
+      if(!q){box.classList.remove("show");box.innerHTML="";return;}
+      box.classList.add("show");
+      if(!items.length){box.innerHTML='<div class="m365-result-empty">No matching articles or scripts.</div>';return;}
+      box.innerHTML=items.map(x=>'<a class="m365-result" href="'+x.url+'"><div style="min-width:0"><div class="m365-result-title">'+esc(x.title)+'</div><div class="m365-result-desc">'+esc(x.description)+'</div></div><span class="m365-result-type">'+esc(x.type)+'</span></a>').join("");
+    }
+    input.addEventListener("input",render);
+    input.addEventListener("focus",render);
+    input.addEventListener("keydown",function(e){
+      if(e.key==="Enter"){e.preventDefault();const q=input.value.trim();if(q)location.href="/search.html?q="+encodeURIComponent(q);}
+      if(e.key==="Escape"){input.value="";box.classList.remove("show");}
+    });
+  });
+  document.addEventListener("click",function(e){
+    document.querySelectorAll(".m365-results").forEach(box=>{if(!box.parentElement.contains(e.target))box.classList.remove("show");});
+  });
+}
+function markNav(){
+  const p=location.pathname;
+  document.querySelectorAll(".m365-nav a[data-nav]").forEach(a=>{
+    const n=a.dataset.nav;
+    if((n==="home" && (p==="/"||p.endsWith("/index.html"))) ||
+       (n==="articles" && p.startsWith("/articles")) ||
+       (n==="scripts" && p.startsWith("/scripts"))) a.classList.add("active");
+  });
+}
+document.addEventListener("DOMContentLoaded",function(){wireGlobalSearch();markNav();});
+window.M365BuddySearch={index:M365_INDEX,search:searchItems};
+})();
+</script></body></html>
