@@ -1,0 +1,110 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>M365Buddy — SharePoint Site Lifecycle Management</title><style>
+:root{--nav1:#07346f;--nav2:#0873c9;--blue:#0878ee;--ink:#071a3d;--text:#263b5c;--muted:#617492;--line:#d7e1ee;--soft:#f4f8fd;--code:#0b1830;--shadow:0 2px 10px rgba(20,55,95,.07)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#fff;color:var(--text);font:13px/1.55 Inter,"Segoe UI",Arial,sans-serif}a{color:var(--blue);text-decoration:none}
+header{height:62px;background:linear-gradient(105deg,var(--nav1),var(--nav2));position:sticky;top:0;z-index:20;color:#fff}
+.nav{height:100%;max-width:1400px;margin:auto;padding:0 18px;display:grid;grid-template-columns:225px 1fr 320px;gap:14px;align-items:center}.nav div{display:flex;align-items:center;gap:4px}.nav div:nth-child(2){justify-content:center}.nav a{display:flex;align-items:center;min-height:36px;padding:0 12px;border-radius:8px;color:#fff!important;font-size:13px;font-weight:650}.nav a:hover{background:rgba(255,255,255,.11)}.brand{font-size:23px!important;font-weight:800!important;padding:0!important}
+
+.global-search{position:relative;width:100%}
+.global-results{display:none;position:absolute;left:0;right:0;top:42px;background:#fff;border:1px solid #d5dfeb;border-radius:9px;box-shadow:0 10px 28px rgba(15,23,42,.16);overflow:hidden;z-index:30}
+.global-results.show{display:block}
+.global-result{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 11px;border-bottom:1px solid #edf1f6;color:#172033!important;font-size:11.5px}
+.global-result:last-child{border-bottom:0}
+.global-result:hover{background:#eff6ff}
+.global-result-title{font-weight:700}
+.global-result-type{font-size:9.5px;color:#2563eb;background:#eff6ff;border:1px solid #bfdbfe;border-radius:999px;padding:2px 6px;white-space:nowrap}
+.global-empty{padding:11px;color:#647084;font-size:11px}
+.global-search{position:relative;width:100%}.global-search input{width:100%;height:36px;border:1px solid rgba(255,255,255,.42);border-radius:9px;background:rgba(255,255,255,.07);color:#fff;padding:0 12px 0 42px;outline:0;font-size:12px}.global-search input::placeholder{color:#e3effb}.global-search input:focus{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.12)}.global-search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:17px;height:17px}.global-search-icon svg{width:100%;height:100%}
+.layout{max-width:1400px;margin:18px auto;display:grid;grid-template-columns:220px minmax(0,1fr) 210px;gap:18px;padding:0 18px}.side{position:sticky;top:78px;height:max-content;background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px;box-shadow:var(--shadow)}.side b{display:block;color:#4d6380;font-size:10px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}.side a{display:block;padding:6px 8px;color:#617492;font-size:11.5px;border-radius:7px}.side a:hover{background:#f1f7ff;color:var(--blue)}.side a.active{background:#eaf4ff;color:var(--blue);font-weight:700}
+.hero,.article{background:#fff;border:1px solid var(--line);border-radius:11px}.hero{padding:22px;margin-bottom:13px}.ey{display:inline-block;background:#edf6ff;border:1px solid #c9e0fa;color:var(--blue);padding:3px 8px;border-radius:999px;font-size:9.5px;font-weight:800}.hero h1{font-size:28px;line-height:1.18;letter-spacing:-.7px;margin:10px 0 7px;color:var(--ink)}.sub{color:var(--muted);font-size:13.5px;margin:0}.tags{margin-top:11px}.tag{display:inline-block;background:#f5f8fc;border:1px solid var(--line);padding:3px 7px;border-radius:6px;font-size:9.5px;color:#617492;margin:0 4px 4px 0}
+.article{padding:24px}.article h2{font-size:19px;line-height:1.25;color:var(--ink);margin:28px 0 8px;scroll-margin-top:74px}.article h3{font-size:14px;color:var(--ink);margin:18px 0 6px}.article p{margin:7px 0}.article ul{padding-left:20px}.article li{margin:4px 0}.article pre{background:var(--code);color:#e2e8f0;padding:12px;border-radius:7px;overflow:auto;font:11px/1.55 Consolas,monospace}.article code{background:#edf2f7;padding:1px 4px;border-radius:4px;font:11px Consolas,monospace}.call{padding:11px 13px;border:1px solid #c8def7;background:#eef7ff;border-radius:8px;margin:13px 0}.call.ok{background:#f0fdf4;border-color:#bbf7d0}.call.warn{background:#fffbeb;border-color:#fde68a}.card{background:var(--soft);border:1px solid var(--line);border-radius:9px;padding:13px;margin:15px 0}.actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}.btn{display:inline-block;border:1px solid var(--line);background:#fff;border-radius:6px;padding:6px 10px;font-size:11px;font-weight:750;color:var(--text)}.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}.btn.dark{background:#172033;border-color:#172033;color:#fff}table{width:100%;border-collapse:collapse;font-size:11.5px}th,td{border:1px solid var(--line);padding:6px 7px;text-align:left}th{background:#f5f8fc}footer{margin-top:24px;border-top:1px solid var(--line);padding-top:14px;color:var(--muted);font-size:10.5px}
+.article-search-box{display:flex;gap:5px;margin-bottom:8px}.article-search-wrap{position:relative;flex:1}.article-search-wrap input{width:100%;height:34px;border:1px solid #cbd9e8;border-radius:7px;padding:0 8px 0 34px;outline:0;font-size:11px}.article-search-wrap input:focus{border-color:#69a6e9;box-shadow:0 0 0 3px rgba(8,120,238,.08)}.article-search-wrap svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:#68809d}.match-btn{width:31px;height:34px;border:1px solid #cbd9e8;background:#fff;border-radius:7px;color:#36516f;cursor:pointer;font-size:13px}.search-count{font-size:10px;color:#72859e;margin-bottom:10px}.match-highlight{outline:2px solid #8ab9ec;outline-offset:1px;background:#fff8cc}.current-match{outline:2px solid #0878ee;outline-offset:1px;background:#fff2a8}
+@media(max-width:1150px){.layout{grid-template-columns:minmax(0,1fr) 200px}.left{display:none}.nav{grid-template-columns:200px 1fr 280px}}@media(max-width:900px){.layout{grid-template-columns:1fr}.right{display:none}.nav{grid-template-columns:1fr auto}.global-search{grid-column:1/-1;grid-row:2;margin-bottom:8px}header{height:auto;padding-bottom:8px}}@media(max-width:760px){.layout{display:block;margin:12px auto;padding:0 12px}.hero,.article{padding:18px}.hero h1{font-size:24px}}
+
+/* M365Buddy common compact header */
+.m365-common-header{height:62px;background:linear-gradient(105deg,#07346f,#0873c9);position:sticky;top:0;z-index:50;color:#fff}
+.m365-common-header-inner{height:100%;max-width:1400px;margin:auto;padding:0 18px;display:grid;grid-template-columns:225px minmax(260px,1fr) 150px;gap:14px;align-items:center}
+.m365-common-nav{display:flex;align-items:center;gap:2px}
+.m365-common-nav a{display:flex;align-items:center;min-height:36px;padding:0 11px;border-radius:8px;color:#fff!important;font-size:13px;font-weight:700;text-decoration:none}
+.m365-common-nav a:hover,.m365-common-nav a.active{background:rgba(255,255,255,.11)}
+.m365-common-search{position:relative;width:min(100%,480px);justify-self:center}
+.m365-common-search input{width:100%;height:36px;border:1px solid rgba(255,255,255,.42);border-radius:9px;background:rgba(255,255,255,.07);color:#fff;padding:0 12px 0 42px;outline:0;font-size:12px}
+.m365-common-search input::placeholder{color:#e3effb}
+.m365-common-search input:focus{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.12)}
+.m365-common-search .search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:17px;height:17px;color:#fff;pointer-events:none}
+.m365-common-search .search-icon svg{width:100%;height:100%}
+.m365-common-brand{justify-self:end;color:#fff!important;text-decoration:none;font-size:23px;font-weight:800;letter-spacing:-.4px;white-space:nowrap}
+.m365-common-brand span{color:#9bd3ff}
+.global-results{display:none;position:absolute;left:0;right:0;top:42px;background:#fff;border:1px solid #d5dfeb;border-radius:9px;box-shadow:0 10px 28px rgba(15,23,42,.18);overflow:hidden;z-index:100}
+.global-results.show{display:block}
+.global-result{display:flex!important;align-items:center;justify-content:space-between;gap:12px;padding:10px 11px;border-bottom:1px solid #edf1f6;color:#172033!important;text-decoration:none!important;background:#fff}
+.global-result:hover{background:#eff6ff}
+.global-result-copy{min-width:0}
+.global-result-title{font-size:11.5px;font-weight:750;color:#172033;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.global-result-description{font-size:10px;color:#647084;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.global-result-type{font-size:9.5px;color:#2563eb;background:#eff6ff;border:1px solid #bfdbfe;border-radius:999px;padding:2px 6px;white-space:nowrap}
+.global-empty{padding:11px;color:#647084;font-size:11px;background:#fff}
+@media(max-width:900px){
+  .m365-common-header{height:auto;padding:7px 0}
+  .m365-common-header-inner{grid-template-columns:1fr auto;gap:6px 10px}
+  .m365-common-search{grid-column:1/-1;grid-row:2;width:100%}
+}
+
+
+.m365-header{height:62px;background:linear-gradient(105deg,#07346f,#0873c9);position:sticky;top:0;z-index:100;color:#fff}
+.m365-header-inner{height:100%;max-width:1400px;margin:auto;padding:0 18px;display:grid;grid-template-columns:225px minmax(260px,1fr) 150px;gap:14px;align-items:center}
+.m365-nav{display:flex;align-items:center;gap:2px}
+.m365-nav a{display:flex;align-items:center;min-height:36px;padding:0 11px;border-radius:8px;color:#fff!important;font-size:13px;font-weight:700;text-decoration:none}
+.m365-nav a:hover,.m365-nav a.active{background:rgba(255,255,255,.12)}
+.m365-search{position:relative;width:min(100%,480px);justify-self:center}
+.m365-search input{width:100%;height:36px;border:1px solid rgba(255,255,255,.42);border-radius:9px;background:rgba(255,255,255,.07);color:#fff;padding:0 12px 0 42px;outline:0;font-size:12px}
+.m365-search input::placeholder{color:#e3effb}
+.m365-search input:focus{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.12)}
+.m365-search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:17px;height:17px;color:#fff;pointer-events:none}
+.m365-search-icon svg{width:100%;height:100%}
+.m365-brand{justify-self:end;color:#fff!important;text-decoration:none;font-size:23px;font-weight:800;letter-spacing:-.4px;white-space:nowrap}
+.m365-brand span{color:#9bd3ff}
+.m365-results{display:none;position:absolute;left:0;right:0;top:42px;background:#fff;border:1px solid #d5dfeb;border-radius:9px;box-shadow:0 10px 28px rgba(15,23,42,.18);overflow:hidden;z-index:500}
+.m365-results.show{display:block}
+.m365-result{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 11px;border-bottom:1px solid #edf1f6;color:#172033!important;text-decoration:none!important;background:#fff}
+.m365-result:hover{background:#eff6ff}
+.m365-result-title{font-size:11.5px;font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.m365-result-desc{font-size:10px;color:#647084;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.m365-result-type{font-size:9.5px;color:#2563eb;background:#eff6ff;border:1px solid #bfdbfe;border-radius:999px;padding:2px 6px;white-space:nowrap}
+.m365-result-empty{padding:11px;color:#647084;font-size:11px}
+@media(max-width:900px){
+  .m365-header{height:auto;padding:7px 0}
+  .m365-header-inner{grid-template-columns:1fr auto;gap:6px 10px}
+  .m365-search{grid-column:1/-1;grid-row:2;width:100%}
+}
+</style></head><body>
+<header class="m365-header">
+  <div class="m365-header-inner"><nav class="m365-nav" aria-label="Main navigation"><a href="/" data-nav="home">Home</a><a href="/articles/" data-nav="articles">Articles</a><a href="/scripts/" data-nav="scripts">Scripts</a></nav>
+  <div class="m365-search"><span class="m365-search-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg></span><input type="search" data-m365-search placeholder="Search M365Buddy..." autocomplete="off"></div>
+  <a class="m365-brand" href="/">M365<span>Buddy</span></a></div>
+</header>
+<div class="layout"><aside class="side left">
+<b>All Articles</b>
+<a href="/articles/sharepoint-online-site-inventory.html">SharePoint Online Site Inventory</a>
+<a href="/articles/entra-id-pnp-certificate-authentication.html">Entra ID Certificate Authentication</a>
+<a href="/articles/sharepoint-storage-management.html">SharePoint Storage Management</a>
+<a href="/articles/sharepoint-site-lifecycle.html">SharePoint Site Lifecycle Management</a>
+<a href="/articles/sharepoint-version-management.html">SharePoint Version Management</a>
+<a href="/articles/powershell-report-delivery-microsoft-graph.html">PowerShell + Microsoft Graph Email</a>
+<a href="/articles/powershell-report-delivery-power-automate.html">PowerShell + Power Automate Email</a>
+</aside><main id="top">
+<section class="hero"><span class="ey">SharePoint Online</span><h1>SharePoint Site Lifecycle Management</h1><p class="sub">Practical guidance for inactive-site review, ownership, attestation and lifecycle governance.</p></section>
+<article class="article"><h2>Why site lifecycle management matters</h2><p>Inactive SharePoint sites continue to consume storage and create ownership and security risks. A lifecycle process gives owners an opportunity to confirm whether a site is still required.</p><h2>Typical lifecycle process</h2><ol><li>Identify inactive sites.</li><li>Notify owners.</li><li>Request attestation.</li><li>Archive or delete where approved.</li><li>Monitor exceptions.</li></ol><h2>Useful controls</h2><p>Use SharePoint lifecycle policies, ownership reviews, retention requirements and reporting together. Do not delete a site solely because it has low recent activity when retention or business requirements apply.</p>
+<section class="card"><h2 style="margin-top:0">Related Articles</h2><p>Continue with practical Microsoft 365 administration guidance on M365Buddy.</p><div class="actions"><a class="btn primary" href="/articles/">Browse All Articles</a></div></section>
+<footer>M365Buddy · Microsoft 365 · SharePoint Online</footer></article></main>
+<aside class="side right"><b>Search in this article</b><div class="article-search-box"><div class="article-search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg><input id="articleSearch" type="search" placeholder="Search in this article" autocomplete="off"></div><button class="match-btn" id="prevMatch">↑</button><button class="match-btn" id="nextMatch">↓</button></div><div class="search-count" id="searchCount"></div><b>On This Page</b><div id="toc" class="toc"></div></aside></div>
+<script>
+(function(){const root=document.querySelector(".article"),input=document.getElementById("articleSearch"),count=document.getElementById("searchCount"),prev=document.getElementById("prevMatch"),next=document.getElementById("nextMatch"),toc=document.getElementById("toc");let matches=[],idx=-1;
+root.querySelectorAll("h2,h3").forEach((h,i)=>{if(!h.id)h.id="s"+i;const a=document.createElement("a");a.href="#"+h.id;a.textContent=h.textContent;a.className=h.tagName.toLowerCase();toc.appendChild(a);});
+const nodes=[...root.querySelectorAll("p,li,td,h2,h3,pre,.call,.card")];
+function scan(){root.querySelectorAll(".match-highlight,.current-match").forEach(x=>x.classList.remove("match-highlight","current-match"));matches=[];idx=-1;const q=input.value.trim().toLowerCase();if(!q){count.textContent="";return}nodes.forEach(n=>{if(n.textContent.toLowerCase().includes(q)){n.classList.add("match-highlight");matches.push(n)}});if(matches.length){idx=0;matches[0].classList.add("current-match");count.textContent="1 / "+matches.length;matches[0].scrollIntoView({behavior:"smooth",block:"center"})}else count.textContent="0 matches"}
+function move(d){if(!matches.length)return;matches[idx].classList.remove("current-match");idx=(idx+d+matches.length)%matches.length;matches[idx].classList.add("current-match");matches[idx].scrollIntoView({behavior:"smooth",block:"center"});count.textContent=(idx+1)+" / "+matches.length}
+input.addEventListener("input",scan);input.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();move(e.shiftKey?-1:1)}if(e.key==="Escape"){input.value="";scan()}});prev.onclick=()=>move(-1);next.onclick=()=>move(1);
+})();
+</script>
+
+</body></html>
