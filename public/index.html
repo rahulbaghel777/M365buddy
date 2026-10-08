@@ -3,330 +3,307 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>M365Buddy — Simplifying Microsoft 365 Problems</title>
+<meta name="description" content="M365Buddy — practical Microsoft 365 guides, PowerShell scripts and administrator-focused solutions.">
+<title>M365Buddy — Simplifying Microsoft 365 problems</title>
 <style>
 :root{
-  --bg:#f5f7fb;--panel:#fff;--panel-soft:#f8fafc;--border:#d9dee8;
-  --text:#172033;--muted:#647084;--accent:#2563eb;--accent-hover:#1d4ed8;
-  --shadow:0 8px 24px rgba(15,23,42,.07)
+ --nav1:#07346f;--nav2:#0873c9;--blue:#0878ee;--ink:#071a3d;
+ --text:#263b5c;--muted:#617492;--line:#d7e1ee;--white:#fff;
+ --shadow:0 3px 14px rgba(20,55,95,.08);--shadow-hover:0 10px 26px rgba(20,55,95,.13);
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--text);font-family:"Segoe UI",Arial,sans-serif;font-size:15px;line-height:1.65}
-a{color:var(--accent);text-decoration:none}
+body{margin:0;background:#fff;color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif;line-height:1.45}
+a{text-decoration:none;color:inherit}
 button,input{font:inherit}
+.header{height:90px;background:linear-gradient(105deg,var(--nav1),var(--nav2));color:#fff}
+.header-inner{max-width:1400px;height:100%;margin:auto;padding:0 28px;display:grid;grid-template-columns:285px 1fr 430px;align-items:center;gap:30px}
+.brand{color:#fff;line-height:1}
+.brand-title{font-size:35px;font-weight:800;letter-spacing:-1.5px}
+.brand-title span{color:#b8d7fa;font-weight:400}
+.brand-sub{margin-top:6px;font-size:15px;color:#d8e8fb}
+.nav{display:flex;justify-content:center;gap:8px}
+.nav a{display:flex;align-items:center;gap:10px;min-height:54px;padding:0 22px;border-radius:13px;color:#fff;font-size:17px;font-weight:650}
+.nav a:hover,.nav a.active{background:#087bf2}
+.nav svg{width:22px;height:22px}
+.search{position:relative}
+.search input{width:100%;height:54px;border:1px solid rgba(255,255,255,.45);border-radius:14px;outline:none;background:rgba(255,255,255,.06);color:#fff;padding:0 18px 0 58px;font-size:16px}
+.search input::placeholder{color:#e1efff}
+.search input:focus{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.14)}
+.search-icon{position:absolute;left:18px;top:50%;width:25px;height:25px;transform:translateY(-50%);pointer-events:none}
+.search-icon svg{width:100%;height:100%}
 
-/* Header */
-.header{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--border)}
-.header-inner{
-  max-width:1500px;margin:auto;padding:10px 22px;min-height:64px;
-  display:grid;grid-template-columns:auto minmax(320px,760px) auto;
-  align-items:center;gap:22px
-}
-.nav{display:flex;align-items:center;gap:4px}
-.nav a{padding:8px 13px;border-radius:7px;color:var(--text);font-weight:500;white-space:nowrap}
-.nav a:hover,.nav a.active{background:#eaf1ff;color:var(--accent)}
-.brand{display:flex;align-items:center;gap:10px;color:var(--text);font-size:20px;font-weight:700;white-space:nowrap;justify-self:end}
-.brand-mark{width:30px;height:30px;border-radius:8px;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:14px}
+.hero{background:linear-gradient(105deg,#f5faff,#eaf5ff);padding:70px 28px 74px;text-align:center;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;right:-100px;top:-160px;width:560px;height:430px;border-radius:50%;background:radial-gradient(circle,rgba(83,166,244,.13),transparent 68%)}
+.hero-inner{position:relative;z-index:1;max-width:900px;margin:auto}
+.eyebrow{color:#0878ee;text-transform:uppercase;letter-spacing:.12em;font-size:13px;font-weight:800;margin-bottom:15px}
+.hero h1{margin:0;color:#071a3d;font-size:52px;line-height:1.06;letter-spacing:-2px}
+.hero p{max-width:750px;margin:18px auto 28px;color:#405879;font-size:19px}
+.hero-search{max-width:700px;margin:auto;position:relative}
+.hero-search input{width:100%;height:58px;border:1px solid #c4d6e9;border-radius:13px;background:#fff;color:#203653;padding:0 20px 0 58px;outline:none;font-size:16px;box-shadow:var(--shadow)}
+.hero-search input:focus{border-color:#5da3ef;box-shadow:0 0 0 3px rgba(8,120,238,.1)}
 
-/* Search */
-.search-wrap{position:relative;min-width:0}
-.search-input{
-  width:100%;height:44px;padding:0 17px 0 43px;border:1px solid #d2d9e4;border-radius:10px;
-  outline:0;background:#fff;box-shadow:0 2px 7px rgba(15,23,42,.06);
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23647084' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-4-4'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:15px center
-}
-.search-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
-.search-results{
-  position:absolute;left:0;right:0;top:50px;background:#fff;border:1px solid var(--border);
-  border-radius:9px;box-shadow:var(--shadow);overflow:hidden;display:none;z-index:200
-}
+.search-results{max-width:700px;margin:9px auto 0;background:#fff;border:1px solid var(--line);border-radius:12px;text-align:left;box-shadow:0 10px 28px rgba(20,55,95,.12);overflow:hidden;display:none}
 .search-results.show{display:block}
-.result{display:block;padding:12px 15px;border-bottom:1px solid #edf0f5;color:var(--text)}
-.result:hover{background:var(--panel-soft)}
-.result-title{font-weight:650;color:var(--accent)}
-.result-meta{font-size:12px;color:var(--muted)}
-.result-desc{font-size:13px;color:var(--muted)}
+.result{display:block;padding:13px 16px;border-bottom:1px solid #edf2f7}
+.result:last-child{border-bottom:0}
+.result:hover{background:#f5faff}
+.result-title{font-weight:750;color:#071a3d}
+.result-meta{font-size:12px;color:#0878ee;margin-top:2px}
+.result-desc{font-size:13px;color:var(--muted);margin-top:2px}
 
-/* Main */
-.container{max-width:1200px;margin:auto;padding:42px 22px 65px}
-.hero{text-align:center;padding:28px 0 35px}
-.eyebrow{display:inline-flex;padding:5px 11px;border-radius:999px;background:#eaf1ff;color:var(--accent);font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
-.hero h1{font-size:clamp(38px,6vw,62px);line-height:1.08;letter-spacing:-.04em;margin:16px 0 12px}
-.hero h1 span{color:var(--accent)}
-.hero p{max-width:760px;margin:0 auto;color:var(--muted);font-size:18px;line-height:1.7}
-.hero-search{max-width:780px;margin:25px auto 0;position:relative}
-.hero-search .search-input{height:52px;font-size:16px;border-radius:11px;padding-left:47px}
-.hero-search .search-results{top:59px;text-align:left}
+.page{max-width:1300px;margin:auto;padding:54px 0}
+.section{margin-bottom:58px}
+.heading{display:flex;justify-content:space-between;align-items:end;margin-bottom:18px}
+.heading h2{margin:0;color:#071a3d;font-size:28px;letter-spacing:-.6px}
+.heading p{margin:5px 0 0;color:var(--muted);font-size:15px}
+.view{color:#0878ee;font-weight:750;font-size:15px}
 
-/* Sections */
-.section{margin-top:42px}
-.section-heading{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:15px}
-.section-heading h2{font-size:24px;margin:0;letter-spacing:-.015em}
-.section-heading p{margin:0;color:var(--muted);font-size:13px}
-.link{font-size:13px;font-weight:600;white-space:nowrap}
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.card{
-  display:block;background:#fff;border:1px solid var(--border);border-radius:10px;padding:21px;
-  box-shadow:0 1px 3px rgba(15,23,42,.05);transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease
-}
-.card:hover{transform:translateY(-2px);border-color:#bfd0f2;box-shadow:var(--shadow)}
-.card-icon{width:38px;height:38px;border-radius:9px;background:#eaf1ff;color:var(--accent);display:grid;place-items:center;font-weight:700;margin-bottom:14px}
-.card h3{font-size:18px;line-height:1.3;margin:0 0 7px;color:var(--text)}
-.card p{margin:0;color:var(--muted);font-size:14px}
-.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:13px}
-.tag{font-size:11px;color:#536176;background:#f1f4f8;border-radius:999px;padding:3px 8px}
+.solution-grid,.article-grid,.script-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.card{background:#fff;border:1px solid #dce5ef;border-radius:12px;padding:22px;box-shadow:var(--shadow);transition:.15s}
+.card:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);border-color:#bdd5ef}
+.solution-icon{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;background:#e9f4ff;color:#0878ee;font-weight:850}
+.card-top{display:flex;justify-content:space-between;align-items:center}
+.arrow{color:#0878ee;font-size:23px}
+.card h3{margin:16px 0 8px;color:#071a3d;font-size:19px;line-height:1.28}
+.card p{margin:0;color:#405879;font-size:15px}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:17px}
+.tag{padding:6px 10px;border-radius:9px;background:#eff6ff;border:1px solid #dce9f8;color:#284667;font-size:12px}
 
-.list{background:#fff;border:1px solid var(--border);border-radius:10px;overflow:hidden}
-.list-item{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:17px 19px;border-bottom:1px solid #edf0f5}
-.list-item:last-child{border-bottom:0}
-.list-item:hover{background:var(--panel-soft)}
-.list-main{min-width:0}
-.list-title{font-weight:650;color:var(--text)}
-.list-desc{font-size:13px;color:var(--muted);margin-top:2px}
-.list-meta{flex:0 0 auto;font-size:12px;color:var(--muted)}
-.pill{display:inline-block;background:#eef4ff;color:var(--accent);padding:4px 8px;border-radius:999px;font-size:11px;font-weight:600}
+.list{border:1px solid #dce5ef;border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
+.list-row{display:flex;align-items:center;justify-content:space-between;gap:25px;padding:20px 22px;background:#fff;border-bottom:1px solid #edf2f7}
+.list-row:last-child{border-bottom:0}
+.list-row:hover{background:#f8fbff}
+.list-row h3{margin:0;color:#071a3d;font-size:17px}
+.list-row p{margin:5px 0 0;color:var(--muted);font-size:14px}
+.badge{flex:0 0 auto;padding:6px 11px;border-radius:9px;background:#eff6ff;color:#0870ad;font-size:12px;font-weight:750}
 
-.cta{
-  margin-top:42px;background:#fff;border:1px solid var(--border);border-radius:11px;padding:27px 29px;
-  display:flex;align-items:center;justify-content:space-between;gap:25px
-}
-.cta h2{margin:0 0 5px;font-size:21px}.cta p{margin:0;color:var(--muted)}
-.btn{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:9px 15px;border-radius:7px;font-size:14px;font-weight:600;border:1px solid transparent;white-space:nowrap}
-.btn.primary{background:var(--accent);color:#fff}.btn.primary:hover{background:var(--accent-hover)}
-.btn.secondary{background:#fff;border-color:var(--border);color:var(--text)}
+.cta{padding:30px;border-radius:14px;background:linear-gradient(105deg,#edf7ff,#f7fbff);border:1px solid #d7e7f6;display:flex;align-items:center;justify-content:space-between;gap:25px}
+.cta h2{margin:0 0 5px;color:#071a3d;font-size:23px}
+.cta p{margin:0;color:#405879;font-size:14px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:45px;padding:0 18px;border-radius:9px;background:#0878ee;color:#fff;font-weight:750}
+.btn:hover{background:#0668d8}
 
-.footer{border-top:1px solid var(--border);padding:30px 22px;text-align:center;color:var(--muted);font-size:13px}
+.footer{min-height:91px;background:linear-gradient(105deg,#062f67,#0a3e7f);color:#fff;padding:17px max(28px,calc((100% - 1300px)/2))}
+.footer-inner{display:flex;align-items:center;justify-content:space-between;gap:25px}
+.footer-brand{font-size:21px;font-weight:800}.footer-brand span{font-weight:400;color:#b8d7fa}
+.footer-sub{font-size:13px;color:#cbdcf0;margin-top:2px}
+.footer-links{display:flex;gap:17px;color:#f1f7ff;font-size:15px}.footer-links .sep{opacity:.45}
+.footer-copy{font-size:14px;color:#d8e8f8}
 
-@media(max-width:950px){
-  .header-inner{grid-template-columns:auto minmax(220px,1fr) auto;gap:12px}
-  .cards{grid-template-columns:repeat(2,1fr)}
-}
-@media(max-width:700px){
-  .header-inner{grid-template-columns:1fr auto;min-height:auto;padding:10px 16px}
-  .nav{order:3;grid-column:1/-1;overflow:auto}
-  .brand{grid-column:2;grid-row:1}
-  .search-wrap{grid-column:1;grid-row:1}
-  .header .search-wrap{display:none}
-  .container{padding:28px 16px 50px}
-  .hero{padding-top:20px}
-  .hero h1{font-size:40px}
-  .hero p{font-size:16px}
-  .cards{grid-template-columns:1fr}
-  .section-heading{align-items:start;flex-direction:column;gap:5px}
-  .list-item{align-items:flex-start;flex-direction:column;gap:8px}
-  .cta{flex-direction:column;align-items:flex-start}
-}
+@media(max-width:1150px){.header-inner{grid-template-columns:245px 1fr 320px;gap:18px}.nav a{padding:0 14px}.page{padding-left:22px;padding-right:22px}}
+@media(max-width:900px){.header{height:auto}.header-inner{grid-template-columns:1fr auto;gap:12px;padding:14px 18px}.brand{grid-column:1/-1}.nav{grid-column:1;justify-content:flex-start}.search{grid-column:1/-1}.solution-grid,.article-grid,.script-grid{grid-template-columns:1fr}.hero h1{font-size:40px}.footer-inner{align-items:flex-start;flex-direction:column}}
+@media(max-width:600px){.hero{padding:52px 18px}.hero h1{font-size:34px}.hero p{font-size:16px}.heading{align-items:flex-start;flex-direction:column;gap:8px}.list-row{align-items:flex-start;flex-direction:column;gap:10px}}
+
+/* M365Buddy compact final scale */
+.header{height:76px!important}
+.header-inner{gap:24px!important}
+.brand-title{font-size:30px!important}
+.brand-sub{font-size:13px!important}
+.nav a{min-height:46px!important;padding:0 17px!important;font-size:15px!important}
+.search input{height:46px!important;font-size:14px!important;padding-left:51px!important}
+.search .search-icon{left:16px!important;width:22px!important;height:22px!important}
+
+.hero{padding:48px 24px 50px!important}
+.hero h1{font-size:42px!important}
+.hero p{font-size:16px!important;margin:14px auto 22px!important}
+.hero-search input{height:52px!important;font-size:15px!important}
+.page{padding-top:42px!important;padding-bottom:45px!important}
+.section{margin-bottom:44px!important}
+.heading h2{font-size:24px!important}
+.heading p{font-size:14px!important}
+.card{padding:18px!important}
+.card h3{font-size:17px!important}
+.card p{font-size:14px!important}
+.list-row{padding:16px 19px!important}
+.list-row h3{font-size:15px!important}
+.list-row p{font-size:13px!important}
+.badge{font-size:11px!important}
+.cta{padding:24px!important}
+.cta h2{font-size:20px!important}
+
+
+/* Extra compact final scale */
+.header{height:68px!important}
+.header-inner{grid-template-columns:245px 1fr 360px!important;gap:18px!important;padding:0 22px!important}
+.brand-title{font-size:26px!important}
+.brand-sub{font-size:11px!important;margin-top:4px!important}
+.nav{gap:3px!important}
+.nav a{min-height:40px!important;padding:0 13px!important;font-size:14px!important}
+.nav svg{width:19px!important;height:19px!important}
+.search input{height:40px!important;border-radius:11px!important;font-size:13px!important;padding-left:46px!important}
+.search .search-icon{left:14px!important;width:19px!important;height:19px!important}
+
+.hero{padding:38px 20px 40px!important}
+.hero h1{font-size:35px!important;letter-spacing:-1.3px!important}
+.hero p{font-size:14px!important;line-height:1.45!important;margin:10px auto 18px!important}
+.hero-search{max-width:620px!important}
+.hero-search input{height:46px!important;font-size:14px!important;padding-left:50px!important}
+.page{padding:32px 20px 38px!important}
+.section{margin-bottom:34px!important}
+.heading{margin-bottom:13px!important}
+.heading h2{font-size:21px!important}
+.heading p{font-size:12px!important}
+.solution-grid,.article-grid,.script-grid{gap:13px!important}
+.card{padding:15px!important;border-radius:10px!important}
+.solution-icon{width:38px!important;height:38px!important;border-radius:9px!important}
+.card h3{font-size:15px!important;margin:12px 0 6px!important}
+.card p{font-size:12.5px!important;line-height:1.45!important}
+.tags{margin-top:11px!important;gap:5px!important}
+.tag{font-size:10px!important;padding:4px 7px!important}
+.list-row{padding:13px 16px!important;gap:15px!important}
+.list-row h3{font-size:14px!important}
+.list-row p{font-size:12px!important;margin-top:3px!important}
+.badge{font-size:10px!important;padding:5px 8px!important}
+.cta{padding:19px 21px!important}
+.cta h2{font-size:17px!important}
+.cta p{font-size:12px!important}
+.btn{min-height:38px!important;padding:0 14px!important;font-size:12px!important}
+.footer{min-height:72px!important;padding:13px 20px!important}
+.footer-brand{font-size:17px!important}
+.footer-sub,.footer-copy,.footer-links{font-size:11px!important}
+
+
+/* Final tighter compact scale */
+.header{height:62px!important}
+.header-inner{grid-template-columns:225px 1fr 320px!important;gap:14px!important;padding:0 18px!important}
+.brand-title{font-size:23px!important}
+.brand-sub{font-size:10px!important;margin-top:2px!important}
+.nav{gap:1px!important}
+.nav a{min-height:36px!important;padding:0 11px!important;font-size:13px!important}
+.nav svg{width:17px!important;height:17px!important}
+.search input{height:36px!important;font-size:12px!important;padding-left:42px!important;border-radius:9px!important}
+.search .search-icon{left:12px!important;width:17px!important;height:17px!important}
+.hero{padding:32px 18px 34px!important}
+.hero h1{font-size:31px!important;letter-spacing:-1px!important}
+.hero p{font-size:13px!important;margin:8px auto 15px!important}
+.hero-search input{height:43px!important;font-size:13px!important}
+.page{padding:28px 18px 32px!important}
+.section{margin-bottom:28px!important}
+.heading{margin-bottom:10px!important}
+.heading h2{font-size:19px!important}
+.heading p{font-size:11px!important}
+.solution-grid,.article-grid,.script-grid{gap:10px!important}
+.card{padding:13px!important}
+.card h3{font-size:14px!important;margin:10px 0 5px!important}
+.card p{font-size:11.5px!important}
+.solution-icon{width:34px!important;height:34px!important}
+.tag{font-size:9px!important;padding:3px 6px!important}
+.list-row{padding:11px 14px!important}
+.list-row h3{font-size:13px!important}
+.list-row p{font-size:11px!important}
+.badge{font-size:9px!important;padding:4px 7px!important}
+.cta{padding:16px 18px!important}
+.cta h2{font-size:16px!important}
+.cta p{font-size:11px!important}
+.btn{min-height:34px!important;font-size:11px!important;padding:0 12px!important}
+.footer{min-height:62px!important;padding:10px 18px!important}
+.footer-brand{font-size:15px!important}
+.footer-sub,.footer-copy,.footer-links{font-size:10px!important}
+
 </style>
 </head>
 <body>
 
 <header class="header">
-  <div class="header-inner">
-    <nav class="nav">
-      <a href="#" class="active">Home</a>
-      <a href="#articles">Articles</a>
-      <a href="#scripts">Scripts</a>
-    </nav>
-
-    <div class="search-wrap">
-      <input id="headerSearch" class="search-input"
-        placeholder="Search M365Buddy — articles, scripts, everything..."
-        autocomplete="off">
-      <div id="headerResults" class="search-results"></div>
-    </div>
-
-    <a class="brand" href="#"><span class="brand-mark">M</span>M365Buddy</a>
-  </div>
+<div class="header-inner">
+<a class="brand" href="/">
+<div class="brand-title">M365<span>Buddy</span></div>
+<div class="brand-sub">Your Guide to Microsoft 365</div>
+</a>
+<nav class="nav">
+<a href="/" class="active"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 11.2 12 3l9 8.2v8.1a1.7 1.7 0 0 1-1.7 1.7H4.7A1.7 1.7 0 0 1 3 19.3v-8.1Zm6.4 9.8v-6.1h5.2V21H9.4Z"/></svg>Home</a>
+<a href="/articles/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3.5h9l3 3V20a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1Z"/><path d="M14 3.5V7h4M8 11h8M8 14.5h8M8 18h5"/></svg>Articles</a>
+<a href="/scripts/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="m8 7-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/></svg>Scripts</a>
+</nav>
+<div class="search">
+<span class="search-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg></span>
+<input id="headerSearch" type="search" placeholder="Search M365Buddy..." autocomplete="off">
+</div>
+</div>
 </header>
 
-<main class="container">
+<section class="hero">
+<div class="hero-inner">
+<div class="eyebrow">Microsoft 365 Solutions</div>
+<h1>Simplifying Microsoft 365 problems.</h1>
+<p>Practical guides, PowerShell scripts and administrator-focused solutions to help you solve Microsoft 365 problems faster.</p>
+<div class="hero-search">
+<span class="search-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#637b9a" stroke-width="2.2"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg></span>
+<input id="homeSearch" type="search" placeholder="What are you trying to solve?" autocomplete="off">
+</div>
+<div id="searchResults" class="search-results"></div>
+</div>
+</section>
 
-  <section class="hero">
-    <div class="eyebrow">Microsoft 365 Solutions</div>
-    <h1>Simplifying <span>Microsoft 365</span> problems.</h1>
-    <p>
-      Practical guides, PowerShell scripts and administrator-focused solutions
-      to help you solve Microsoft 365 problems faster.
-    </p>
+<main class="page">
 
-    <div class="hero-search search-wrap">
-      <input id="heroSearch" class="search-input"
-        placeholder="What are you trying to solve?"
-        autocomplete="off">
-      <div id="heroResults" class="search-results"></div>
-    </div>
-  </section>
+<section class="section">
+<div class="heading"><div><h2>Popular Solutions</h2><p>Start with the Microsoft 365 area you're working on.</p></div></div>
+<div class="solution-grid">
+<a class="card" href="/articles/?category=SharePoint"><div class="card-top"><div class="solution-icon">SP</div><span class="arrow">→</span></div><h3>SharePoint</h3><p>Site management, storage, permissions, lifecycle, versioning and administration.</p><div class="tags"><span class="tag">Administration</span><span class="tag">PowerShell</span></div></a>
+<a class="card" href="/articles/?category=OneDrive"><div class="card-top"><div class="solution-icon">OD</div><span class="arrow">→</span></div><h3>OneDrive</h3><p>Storage, sync, sharing, administration and practical troubleshooting.</p><div class="tags"><span class="tag">Admin</span><span class="tag">Troubleshooting</span></div></a>
+<a class="card" href="/articles/?category=Power%20Platform"><div class="card-top"><div class="solution-icon">PP</div><span class="arrow">→</span></div><h3>Power Platform</h3><p>Power Apps, Power Automate, Power BI and practical automation solutions.</p><div class="tags"><span class="tag">Automation</span><span class="tag">Governance</span></div></a>
+</div>
+</section>
 
-  <section class="section">
-    <div class="section-heading">
-      <div>
-        <h2>Popular Solutions</h2>
-        <p>Start with a Microsoft 365 area.</p>
-      </div>
-      <a class="link" href="#articles">View all articles →</a>
-    </div>
+<section class="section">
+<div class="heading"><div><h2>Latest Articles</h2><p>Practical Microsoft 365 administration guides.</p></div><a class="view" href="/articles/">View all articles →</a></div>
+<div class="list">
+<a class="list-row" href="/articles/sharepoint-online-site-inventory.html"><div><h3>Export All SharePoint Online Sites Using PnP PowerShell</h3><p>Generate a SharePoint Online site inventory and storage usage report.</p></div><span class="badge">SharePoint</span></a>
+<a class="list-row" href="/articles/entra-id-pnp-certificate-authentication.html"><div><h3>Register an Entra ID App for PnP PowerShell Certificate Authentication</h3><p>Configure application registration, certificate authentication and permissions.</p></div><span class="badge">Microsoft Entra</span></a>
+<a class="list-row" href="/articles/sharepoint-storage-management.html"><div><h3>SharePoint Storage Management</h3><p>Understand storage consumption, allocation and reporting.</p></div><span class="badge">SharePoint</span></a>
+</div>
+</section>
 
-    <div class="cards">
-      <a class="card" href="#sharepoint">
-        <div class="card-icon">SP</div>
-        <h3>SharePoint</h3>
-        <p>Site management, storage, permissions, lifecycle, versioning and administration.</p>
-        <div class="tags"><span class="tag">Administration</span><span class="tag">PowerShell</span></div>
-      </a>
+<section class="section">
+<div class="heading"><div><h2>Popular Scripts</h2><p>Ready-to-use PowerShell solutions for Microsoft 365 administration.</p></div><a class="view" href="/scripts/">View all scripts →</a></div>
+<div class="script-grid">
+<a class="card" href="/scripts/SharePoint/sharepoint-site-inventory-viewer.html"><div class="card-top"><span class="badge">PowerShell</span><span class="arrow">→</span></div><h3>SharePoint Site Inventory PowerShell Script</h3><p>Collect SharePoint site details, storage and ownership information.</p></a>
+<a class="card" href="/scripts/SharePoint/sharepoint-version-report.html"><div class="card-top"><span class="badge">PowerShell</span><span class="arrow">→</span></div><h3>SharePoint Version Report</h3><p>Generate version counts and version storage information.</p></a>
+<a class="card" href="/scripts/SharePoint/sharepoint-recycle-bin-report.html"><div class="card-top"><span class="badge">PowerShell</span><span class="arrow">→</span></div><h3>SharePoint Recycle Bin Report</h3><p>Report first-stage and second-stage recycle bin usage.</p></a>
+</div>
+</section>
 
-      <a class="card" href="#onedrive">
-        <div class="card-icon">OD</div>
-        <h3>OneDrive</h3>
-        <p>Storage, sync, sharing, administration and practical troubleshooting.</p>
-        <div class="tags"><span class="tag">Admin</span><span class="tag">Troubleshooting</span></div>
-      </a>
-
-      <a class="card" href="#powerplatform">
-        <div class="card-icon">PP</div>
-        <h3>Power Platform</h3>
-        <p>Power Apps, Power Automate, Power BI and practical automation solutions.</p>
-        <div class="tags"><span class="tag">Automation</span><span class="tag">Governance</span></div>
-      </a>
-    </div>
-  </section>
-
-  <section class="section" id="articles">
-    <div class="section-heading">
-      <div>
-        <h2>Latest Articles</h2>
-        <p>Practical documentation for Microsoft 365 administrators.</p>
-      </div>
-      <a class="link" href="#articles">View all →</a>
-    </div>
-
-    <div class="list">
-      <a class="list-item" href="#site-inventory">
-        <div class="list-main">
-          <div class="list-title">Export All SharePoint Online Sites Using PnP PowerShell</div>
-          <div class="list-desc">Generate a SharePoint Online site inventory and storage usage report.</div>
-        </div>
-        <span class="pill">SharePoint</span>
-      </a>
-
-      <a class="list-item" href="#entra">
-        <div class="list-main">
-          <div class="list-title">Register an Entra ID App for PnP PowerShell Certificate Authentication</div>
-          <div class="list-desc">Configure application registration, certificate authentication and permissions.</div>
-        </div>
-        <span class="pill">Entra ID</span>
-      </a>
-
-      <a class="list-item" href="#storage">
-        <div class="list-main">
-          <div class="list-title">SharePoint Storage Management</div>
-          <div class="list-desc">Understand storage consumption, allocation and reporting.</div>
-        </div>
-        <span class="pill">SharePoint</span>
-      </a>
-    </div>
-  </section>
-
-  <section class="section" id="scripts">
-    <div class="section-heading">
-      <div>
-        <h2>Popular Scripts</h2>
-        <p>Ready-to-use automation for common administration tasks.</p>
-      </div>
-      <a class="link" href="#scripts">View all →</a>
-    </div>
-
-    <div class="list">
-      <a class="list-item" href="#site-inventory-script">
-        <div class="list-main">
-          <div class="list-title">SharePoint Site Inventory PowerShell Script</div>
-          <div class="list-desc">Collect SharePoint site details, storage and ownership information.</div>
-        </div>
-        <span class="pill">PowerShell</span>
-      </a>
-
-      <a class="list-item" href="#version-report">
-        <div class="list-main">
-          <div class="list-title">SharePoint Version Report</div>
-          <div class="list-desc">Generate version counts and version storage information.</div>
-        </div>
-        <span class="pill">PowerShell</span>
-      </a>
-
-      <a class="list-item" href="#recycle-bin">
-        <div class="list-main">
-          <div class="list-title">SharePoint Recycle Bin Report</div>
-          <div class="list-desc">Report first-stage and second-stage recycle bin usage.</div>
-        </div>
-        <span class="pill">PowerShell</span>
-      </a>
-    </div>
-  </section>
-
-  <section class="cta">
-    <div>
-      <h2>Can't find what you're looking for?</h2>
-      <p>Search the M365Buddy knowledge base for an article, script or solution.</p>
-    </div>
-    <a class="btn primary" href="#top">Search M365Buddy</a>
-  </section>
+<section class="cta">
+<div><h2>Can't find what you're looking for?</h2><p>Search the M365Buddy knowledge base for an article, script or solution.</p></div>
+<a class="btn" href="#home-search" id="focusSearch">Search M365Buddy</a>
+</section>
 
 </main>
 
 <footer class="footer">
-  M365Buddy · Simplifying Microsoft 365 problems
+<div class="footer-inner">
+<div><div class="footer-brand">M365<span>Buddy</span></div><div class="footer-sub">Your Guide to Microsoft 365</div></div>
+<div class="footer-links"><a href="/">Home</a><span class="sep">|</span><a href="/articles/">Articles</a><span class="sep">|</span><a href="/scripts/">Scripts</a><span class="sep">|</span></div>
+<div class="footer-copy">© 2026 M365Buddy. All rights reserved.</div>
+</div>
 </footer>
 
 <script>
-const INDEX=[
- {title:"SharePoint Online Site Inventory",type:"Article",category:"SharePoint",url:"#site-inventory",description:"Export SharePoint Online sites, storage information and ownership details using PnP PowerShell.",keywords:["SharePoint","site inventory","storage","PnP PowerShell","PowerShell"]},
- {title:"Entra ID App for PnP PowerShell Certificate Authentication",type:"Article",category:"Microsoft Entra",url:"#entra",description:"Configure Entra ID application registration and certificate authentication.",keywords:["Entra ID","certificate","authentication","PnP PowerShell","permissions"]},
- {title:"SharePoint Storage Management",type:"Article",category:"SharePoint",url:"#storage",description:"Understand SharePoint storage consumption and reporting.",keywords:["SharePoint","storage","capacity","storage report"]},
- {title:"SharePoint Site Inventory PowerShell Script",type:"Script",category:"SharePoint",url:"#site-inventory-script",description:"Collect SharePoint site details, storage and ownership information.",keywords:["SharePoint","PowerShell","inventory","storage"]},
- {title:"SharePoint Version Report",type:"Script",category:"SharePoint",url:"#version-report",description:"Generate version counts and storage information.",keywords:["SharePoint","PowerShell","version","version history","storage"]},
- {title:"SharePoint Recycle Bin Report",type:"Script",category:"SharePoint",url:"#recycle-bin",description:"Report first-stage and second-stage recycle bin usage.",keywords:["SharePoint","PowerShell","Recycle Bin","storage"]}
+const ITEMS=[
+{title:"Export All SharePoint Online Sites Using PnP PowerShell",type:"Article",category:"SharePoint",url:"/articles/sharepoint-online-site-inventory.html",description:"Generate a SharePoint Online site inventory and storage usage report.",keywords:"SharePoint PowerShell PnP site inventory storage"},
+{title:"Register an Entra ID App for PnP PowerShell Certificate Authentication",type:"Article",category:"Microsoft Entra",url:"/articles/entra-id-pnp-certificate-authentication.html",description:"Configure application registration, certificate authentication and permissions.",keywords:"Entra ID Azure AD certificate authentication PnP PowerShell"},
+{title:"SharePoint Storage Management",type:"Article",category:"SharePoint",url:"/articles/sharepoint-storage-management.html",description:"Understand storage consumption, allocation and reporting.",keywords:"SharePoint storage capacity reporting"},
+{title:"SharePoint Site Inventory PowerShell Script",type:"Script",category:"SharePoint",url:"/scripts/SharePoint/sharepoint-site-inventory-viewer.html",description:"Collect SharePoint site details, storage and ownership information.",keywords:"PowerShell SharePoint script site inventory"},
+{title:"SharePoint Version Report",type:"Script",category:"SharePoint",url:"/scripts/SharePoint/sharepoint-version-report.html",description:"Generate version counts and version storage information.",keywords:"SharePoint versions PowerShell storage"}
 ];
 
-function setupSearch(input,box){
- input.addEventListener("input",()=>{
-  const q=input.value.trim().toLowerCase();
-  box.innerHTML="";
-  if(!q){box.classList.remove("show");return}
-  const words=q.split(/\s+/);
-  const found=INDEX.map(x=>{
-   let score=0;
-   words.forEach(w=>{
-    if(x.title.toLowerCase().includes(w))score+=10;
-    if(x.category.toLowerCase().includes(w))score+=6;
-    if(x.type.toLowerCase().includes(w))score+=4;
-    if(x.description.toLowerCase().includes(w))score+=3;
-    if(x.keywords.join(" ").toLowerCase().includes(w))score+=5;
-   });
-   return{x,score};
-  }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,8);
+const homeSearch=document.getElementById("homeSearch"),headerSearch=document.getElementById("headerSearch"),results=document.getElementById("searchResults");
 
-  if(!found.length){
-   box.innerHTML='<div class="result"><div class="result-title">No results found</div><div class="result-desc">Try a different Microsoft 365 topic or problem.</div></div>';
-  }else{
-   found.forEach(({x})=>{
-    const a=document.createElement("a");
-    a.className="result";a.href=x.url;
-    a.innerHTML='<div class="result-title">'+x.title+'</div><div class="result-meta">'+x.type+' · '+x.category+'</div><div class="result-desc">'+x.description+'</div>';
-    box.appendChild(a);
-   });
-  }
-  box.classList.add("show");
- });
+function esc(v){return String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function doSearch(q){
+ q=q.trim().toLowerCase();
+ if(!q){results.classList.remove("show");results.innerHTML="";return}
+ const found=ITEMS.filter(x=>(x.title+" "+x.category+" "+x.description+" "+x.keywords).toLowerCase().includes(q)).slice(0,8);
+ results.innerHTML=found.length?found.map(x=>`<a class="result" href="${x.url}"><div class="result-title">${esc(x.title)}</div><div class="result-meta">${esc(x.type)} · ${esc(x.category)}</div><div class="result-desc">${esc(x.description)}</div></a>`).join(""):'<div class="result"><div class="result-desc">No matching articles or scripts found.</div></div>';
+ results.classList.add("show");
 }
-setupSearch(document.getElementById("headerSearch"),document.getElementById("headerResults"));
-setupSearch(document.getElementById("heroSearch"),document.getElementById("heroResults"));
-document.addEventListener("click",e=>{
- document.querySelectorAll(".search-results").forEach(box=>{
-  const input=box.previousElementSibling;
-  if(!box.contains(e.target)&&e.target!==input)box.classList.remove("show");
- });
-});
+homeSearch.addEventListener("input",e=>doSearch(e.target.value));
+headerSearch.addEventListener("keydown",e=>{if(e.key==="Enter"){const q=e.target.value.trim().toLowerCase();const x=ITEMS.find(i=>(i.title+" "+i.category+" "+i.description+" "+i.keywords).toLowerCase().includes(q));if(x)location.href=x.url}});
+homeSearch.addEventListener("keydown",e=>{if(e.key==="Escape"){e.target.value="";doSearch("")}if(e.key==="Enter"){const first=results.querySelector(".result");if(first)first.click()}});
+document.getElementById("focusSearch").addEventListener("click",e=>{e.preventDefault();homeSearch.focus();homeSearch.scrollIntoView({behavior:"smooth",block:"center"})});
+document.addEventListener("click",e=>{if(!e.target.closest(".hero-search"))results.classList.remove("show")});
 </script>
 </body>
 </html>
