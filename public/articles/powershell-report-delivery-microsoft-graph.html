@@ -1,0 +1,203 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>M365Buddy — Email PowerShell Reports Using Microsoft Graph</title><style>
+.m365-header{height:62px;background:linear-gradient(105deg,#07346f,#0873c9);position:sticky;top:0;z-index:100;color:#fff}
+.m365-header-inner{height:100%;max-width:1400px;margin:auto;padding:0 18px;display:grid;grid-template-columns:225px minmax(260px,1fr) 150px;gap:14px;align-items:center}
+.m365-nav{display:flex;align-items:center;gap:2px}
+.m365-nav a{display:flex;align-items:center;min-height:36px;padding:0 11px;border-radius:8px;color:#fff!important;font-size:13px;font-weight:700;text-decoration:none}
+.m365-nav a:hover,.m365-nav a.active{background:rgba(255,255,255,.12)}
+.m365-search{position:relative;width:min(100%,480px);justify-self:center}
+.m365-search input{width:100%;height:36px;border:1px solid rgba(255,255,255,.42);border-radius:9px;background:rgba(255,255,255,.07);color:#fff;padding:0 12px 0 42px;outline:0;font-size:12px}
+.m365-search input::placeholder{color:#e3effb}
+.m365-search input:focus{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.12)}
+.m365-search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:17px;height:17px;color:#fff;pointer-events:none}
+.m365-search-icon svg{width:100%;height:100%}
+.m365-brand{justify-self:end;color:#fff!important;text-decoration:none;font-size:23px;font-weight:800;letter-spacing:-.4px;white-space:nowrap}
+.m365-brand span{color:#9bd3ff}
+.m365-results{display:none;position:absolute;left:0;right:0;top:42px;background:#fff;border:1px solid #d5dfeb;border-radius:9px;box-shadow:0 10px 28px rgba(15,23,42,.18);overflow:hidden;z-index:500}
+.m365-results.show{display:block}
+.m365-result{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 11px;border-bottom:1px solid #edf1f6;color:#172033!important;text-decoration:none!important;background:#fff}
+.m365-result:hover{background:#eff6ff}
+.m365-result-title{font-size:11.5px;font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.m365-result-desc{font-size:10px;color:#647084;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.m365-result-type{font-size:9.5px;color:#2563eb;background:#eff6ff;border:1px solid #bfdbfe;border-radius:999px;padding:2px 6px;white-space:nowrap}
+.m365-result-empty{padding:11px;color:#647084;font-size:11px}
+@media(max-width:900px){
+  .m365-header{height:auto;padding:7px 0}
+  .m365-header-inner{grid-template-columns:1fr auto;gap:6px 10px}
+  .m365-search{grid-column:1/-1;grid-row:2;width:100%}
+}
+
+:root{--ink:#071a3d;--text:#263b5c;--muted:#617492;--line:#d7e1ee;--soft:#f4f8fd;--blue:#0878ee;--code:#0b1830}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f7faff;color:var(--text);font:13px/1.6 "Segoe UI",Arial,sans-serif}a{color:var(--blue);text-decoration:none}
+.layout{max-width:1400px;margin:18px auto;display:grid;grid-template-columns:215px minmax(0,1fr) 225px;gap:18px;padding:0 18px}
+.side{position:sticky;top:80px;height:max-content;background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px;box-shadow:0 2px 10px rgba(20,55,95,.07)}.side b{display:block;color:#4d6380;font-size:10px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}.side a{display:block;padding:6px 8px;color:#617492;font-size:11.5px;border-radius:7px}.side a:hover{background:#f1f7ff;color:var(--blue)}.side a.active{background:#eaf4ff;color:var(--blue);font-weight:700}
+.hero,.article{background:#fff;border:1px solid var(--line);border-radius:11px}.hero{padding:22px;margin-bottom:13px}.ey{display:inline-block;background:#edf6ff;border:1px solid #c9e0fa;color:var(--blue);padding:3px 8px;border-radius:999px;font-size:9.5px;font-weight:800}.hero h1{font-size:28px;line-height:1.18;color:var(--ink);margin:10px 0 7px}.sub{color:var(--muted);font-size:13.5px}.article{padding:24px}.article h2{font-size:19px;color:var(--ink);margin:28px 0 8px;scroll-margin-top:75px}.article h3{font-size:14px;color:var(--ink);margin:18px 0 6px}.article p{margin:7px 0}.article li{margin:4px 0}.article pre{background:var(--code);color:#e2e8f0;padding:12px;border-radius:7px;overflow:auto;font:11px/1.55 Consolas,monospace}.article code{background:#edf2f7;padding:1px 4px;border-radius:4px;font:11px Consolas,monospace}.call{padding:11px 13px;border:1px solid #c8def7;background:#eef7ff;border-radius:8px;margin:13px 0}.call.ok{background:#f0fdf4;border-color:#bbf7d0}.call.warn{background:#fffbeb;border-color:#fde68a}.card{background:var(--soft);border:1px solid var(--line);border-radius:9px;padding:13px;margin:15px 0}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.btn{display:inline-flex;border:1px solid var(--line);background:#fff;border-radius:6px;padding:6px 10px;font-size:11px;font-weight:750;color:var(--text)}.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}.article-search-box{display:flex;gap:5px;margin-bottom:6px}.article-search-wrap{position:relative;flex:1}.article-search-wrap input{width:100%;height:34px;border:1px solid #cbd9e8;border-radius:7px;padding:0 8px 0 32px;font-size:11px;outline:0}.article-search-wrap svg{position:absolute;left:9px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:#68809d}.match-btn{width:31px;height:34px;border:1px solid #cbd9e8;background:#fff;border-radius:7px;cursor:pointer}.search-count{font-size:10px;color:#72859e;margin-bottom:10px}.toc a{display:block;padding:5px 7px;font-size:10.5px;color:#617492;border-radius:6px}.toc a:hover{background:#f1f7ff;color:var(--blue)}.toc a.h3{padding-left:15px;font-size:10px}.match-highlight{outline:2px solid #9ac2ea;outline-offset:1px;background:#fff8cc}.current-match{outline:2px solid #0878ee;outline-offset:1px;background:#fff2a8}footer{margin-top:22px;border-top:1px solid var(--line);padding-top:13px;color:var(--muted);font-size:10.5px}
+@media(max-width:1100px){.layout{grid-template-columns:minmax(0,1fr) 205px}.left{display:none}}@media(max-width:850px){.layout{grid-template-columns:1fr}.right{display:none}}
+</style></head><body>
+
+<header class="m365-header">
+  <div class="m365-header-inner">
+    <nav class="m365-nav" aria-label="Main navigation">
+      <a href="/" data-nav="home">Home</a>
+      <a href="/articles/" data-nav="articles">Articles</a>
+      <a href="/scripts/" data-nav="scripts">Scripts</a>
+    </nav>
+    <div class="m365-search">
+      <span class="m365-search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg></span>
+      <input type="search" data-m365-search placeholder="Search M365Buddy..." autocomplete="off" aria-label="Search M365Buddy">
+    </div>
+    <a class="m365-brand" href="/">M365<span>Buddy</span></a>
+  </div>
+</header>
+
+<div class="layout">
+<aside class="side left">
+    <b>All Articles</b>
+    <a href="/articles/sharepoint-online-site-inventory.html">SharePoint Online Site Inventory</a>
+    <a href="/articles/entra-id-pnp-certificate-authentication.html">Entra ID Certificate Authentication</a>
+    <a href="/articles/sharepoint-storage-management.html">SharePoint Storage Management</a>
+    <a href="/articles/sharepoint-site-lifecycle.html">SharePoint Site Lifecycle Management</a>
+    <a href="/articles/sharepoint-version-management.html">SharePoint Version Management</a>
+    <a class="active" href="#top">Email PowerShell Reports Using Microsoft Graph</a>
+    </aside>
+<main id="top">
+<section class="hero"><span class="ey">PowerShell · Microsoft Graph · Exchange Online</span><h1>Email PowerShell Reports Using Microsoft Graph</h1><p class="sub">Replace SMTP delivery with Microsoft Graph when the report must be emailed but an SMTP relay is not available.</p></section>
+<article class="article">
+<div class="call"><b>Where this fits:</b> This is the email-delivery option for the SharePoint Site Inventory script.</div>
+
+<h2 id="when">When should you use Microsoft Graph instead of SMTP?</h2>
+<p>Use this option when the Site Inventory script must continue to email the CSV but your organization does not provide an SMTP relay that the script is allowed to use.</p>
+
+<h2 id="replace">What replaces the SMTP section?</h2>
+<p>Do not put an Exchange Online hostname into <code>$SmtpServer</code>. Instead, replace the old <code>Send-MailMessage</code> delivery block with a Microsoft Graph mail-sending block that authenticates using an approved Entra ID application.</p>
+<div class="call ok"><b>Keep these parts unchanged:</b> site collection discovery, report building, <code>Export-Csv</code>, storage calculations and output path. The change is only the <b>email-delivery portion</b>.</div>
+
+<h2 id="where">What do I put where?</h2>
+<table style="width:100%;border-collapse:collapse;font-size:11.5px"><tr><th style="border:1px solid #d7e1ee;padding:7px">Old SMTP setting</th><th style="border:1px solid #d7e1ee;padding:7px">Graph-based replacement</th></tr>
+<tr><td style="border:1px solid #d7e1ee;padding:7px"><code>$SmtpServer</code></td><td style="border:1px solid #d7e1ee;padding:7px">Remove it. Graph sends through Exchange Online; you do not provide an SMTP server.</td></tr>
+<tr><td style="border:1px solid #d7e1ee;padding:7px"><code>$From</code></td><td style="border:1px solid #d7e1ee;padding:7px">Use the approved mailbox/user that is permitted to send the report.</td></tr>
+<tr><td style="border:1px solid #d7e1ee;padding:7px"><code>$To</code></td><td style="border:1px solid #d7e1ee;padding:7px">Keep the recipient addresses here or in the Graph request body.</td></tr>
+<tr><td style="border:1px solid #d7e1ee;padding:7px">SMTP authentication</td><td style="border:1px solid #d7e1ee;padding:7px">Replace with the approved Entra ID app/certificate authentication described in the Entra setup article.</td></tr></table>
+
+<h2 id="app">Entra ID application requirements</h2>
+<p>Use an Entra ID application that is approved for unattended reporting. Grant the Microsoft Graph mail permission required by your organization's design (commonly <code>Mail.Send</code> for application-based sending), then obtain admin consent.</p>
+<p>If you are using the same certificate-authenticated application pattern as the Site Inventory script, keep the certificate and private key secure and use the same tenant/client/certificate values where appropriate.</p>
+<div class="call"><b>Related setup:</b> <a href="/articles/entra-id-pnp-certificate-authentication.html"><strong>Register an Entra ID App for PnP PowerShell Certificate Authentication</strong></a></div>
+
+<h2 id="replace-code">Example delivery pattern</h2>
+<pre># Keep your existing report generation above this point.
+
+# 1. Create the CSV with Export-Csv
+# 2. Acquire an Entra ID access token for Microsoft Graph
+# 3. Build a /users/{sender}/sendMail request
+# 4. Attach the generated CSV as an email attachment
+# 5. Send the request to Microsoft Graph
+
+# Do not hard-code secrets or certificate passwords.</pre>
+<p>The exact Graph authentication and <code>sendMail</code> implementation should match your organization's approved authentication model. The important change is that the SMTP variables and <code>Send-MailMessage</code> call are no longer used.</p>
+
+<h2 id="run">Save the script and run it normally</h2>
+<p>After replacing the SMTP/email portion with the approved Graph implementation, save the <code>.ps1</code> file. Then follow the same execution process from the Site Inventory article:</p>
+<pre>Get-ExecutionPolicy -List
+
+# If allowed for your user:
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+
+cd "C:\Scripts\SharePoint"
+.\SharePoint_Site_Inventory.ps1</pre>
+<div class="call warn"><b>Preferred:</b> Open PowerShell 7 as Administrator during setup and troubleshooting. If execution policy is controlled by Group Policy or Intune, do not bypass it.</div>
+<div class="actions"><a class="btn primary" href="/articles/sharepoint-online-site-inventory.html#run">Open the full execution instructions →</a></div>
+
+<h2 id="test">Test before scheduling</h2>
+<ol><li>Run the script manually.</li><li>Confirm the CSV is created.</li><li>Confirm the email is delivered.</li><li>Check the sender mailbox and recipient mailbox.</li><li>Only then move the script into Task Scheduler, Azure Automation or another approved unattended process.</li></ol>
+
+<h2 id="security">Security</h2>
+<ul><li>Never put a PFX password, private key or client secret in public code.</li><li>Use the minimum approved Graph permissions.</li><li>Use a dedicated reporting mailbox where appropriate.</li><li>Do not expose access tokens in transcript files or logs.</li></ul>
+
+<section class="card"><h2 style="margin-top:0">Related Article</h2><p>Return to the SharePoint Site Inventory article to configure, run and troubleshoot the report.</p><div class="actions"><a class="btn primary" href="/articles/sharepoint-online-site-inventory.html">SharePoint Online Site Inventory</a></div></section>
+<footer>M365Buddy · Microsoft 365 · PowerShell · PowerShell · Microsoft Graph · Exchange Online</footer>
+</article>
+</main>
+<aside class="side right">
+<b>Search in this article</b>
+<div class="article-search-box"><div class="article-search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg><input id="articleSearch" type="search" placeholder="Search in this article" autocomplete="off"></div><button class="match-btn" id="prevMatch" title="Previous match">↑</button><button class="match-btn" id="nextMatch" title="Next match">↓</button></div>
+<div class="search-count" id="searchCount"></div><b>On This Page</b><div id="toc" class="toc"></div>
+</aside>
+</div>
+<script>
+(function(){
+ const root=document.querySelector(".article"), input=document.getElementById("articleSearch"), count=document.getElementById("searchCount"), prev=document.getElementById("prevMatch"), next=document.getElementById("nextMatch"), toc=document.getElementById("toc");
+ const heads=[...root.querySelectorAll("h2,h3")];
+ heads.forEach((h,i)=>{if(!h.id)h.id="section-"+i;const a=document.createElement("a");a.href="#"+h.id;a.textContent=h.textContent;a.className=h.tagName.toLowerCase();toc.appendChild(a);});
+ const nodes=[...root.querySelectorAll("p,li,td,h2,h3,pre,.call,.card")].filter(x=>!x.closest(".actions")&&!x.querySelector(".match-highlight"));
+ let matches=[],idx=-1;
+ function clear(){root.querySelectorAll(".match-highlight,.current-match").forEach(x=>x.classList.remove("match-highlight","current-match"));}
+ function scan(){
+   clear();matches=[];idx=-1;const q=input.value.trim().toLowerCase();
+   if(!q){count.textContent="";return;}
+   nodes.forEach(n=>{if(n.textContent.toLowerCase().includes(q)){n.classList.add("match-highlight");matches.push(n);}});
+   if(matches.length){idx=0;matches[0].classList.add("current-match");matches[0].scrollIntoView({behavior:"smooth",block:"center"});count.textContent="1 / "+matches.length;}else count.textContent="0 matches";
+ }
+ function go(dir){if(!matches.length)return;matches[idx]?.classList.remove("current-match");idx=(idx+dir+matches.length)%matches.length;matches[idx].classList.add("current-match");matches[idx].scrollIntoView({behavior:"smooth",block:"center"});count.textContent=(idx+1)+" / "+matches.length;}
+ input.addEventListener("input",scan);input.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();go(e.shiftKey?-1:1);}if(e.key==="Escape"){input.value="";scan();}});next.addEventListener("click",()=>go(1));prev.addEventListener("click",()=>go(-1));
+})();
+</script>
+<script>
+(function(){
+"use strict";
+const M365_INDEX = [{"title": "Export All SharePoint Online Sites Using PnP PowerShell", "type": "Article", "category": "SharePoint", "url": "/articles/sharepoint-online-site-inventory.html", "description": "Generate a SharePoint Online site inventory and storage usage report using PnP PowerShell.", "keywords": ["sharepoint", "site inventory", "storage", "pnp powershell", "powershell", "csv"]}, {"title": "Register an Entra ID App for PnP PowerShell Certificate Authentication", "type": "Article", "category": "Microsoft Entra", "url": "/articles/entra-id-pnp-certificate-authentication.html", "description": "Configure an Entra ID application, certificate, permissions and authentication for PnP PowerShell.", "keywords": ["entra id", "certificate", "app registration", "pnp powershell", "admin consent"]}, {"title": "SharePoint Storage Management", "type": "Article", "category": "SharePoint", "url": "/articles/sharepoint-storage-management.html", "description": "Understand SharePoint Online storage consumption and practical storage governance.", "keywords": ["sharepoint", "storage", "quota", "capacity", "usage", "report"]}, {"title": "SharePoint Site Lifecycle Management", "type": "Article", "category": "SharePoint", "url": "/articles/sharepoint-site-lifecycle.html", "description": "Manage inactive SharePoint sites with lifecycle and ownership processes.", "keywords": ["sharepoint", "lifecycle", "inactive sites", "attestation", "governance"]}, {"title": "SharePoint Version Management", "type": "Article", "category": "SharePoint", "url": "/articles/sharepoint-version-management.html", "description": "Understand SharePoint version history, version limits and storage governance.", "keywords": ["sharepoint", "versions", "version history", "version limit", "storage"]}, {"title": "Email PowerShell Reports Using Microsoft Graph", "type": "Article", "category": "Microsoft 365", "url": "/articles/powershell-report-delivery-microsoft-graph.html", "description": "Replace SMTP delivery with Microsoft Graph for PowerShell reports.", "keywords": ["smtp", "email", "graph", "sendmail", "powershell", "exchange online"]}, {"title": "Email PowerShell Reports Using Power Automate", "type": "Article", "category": "Power Automate", "url": "/articles/powershell-report-delivery-power-automate.html", "description": "Use Power Automate and Microsoft 365 Outlook to email PowerShell CSV reports.", "keywords": ["smtp", "email", "power automate", "outlook", "powershell", "csv"]}, {"title": "SharePoint Site Inventory PowerShell Script", "type": "Script", "category": "SharePoint", "url": "/scripts/SharePoint/sharepoint-site-inventory-viewer.html", "description": "View the published SharePoint Online site inventory PowerShell script.", "keywords": ["sharepoint", "powershell", "site inventory", "script"]}, {"title": "SharePoint Version Report", "type": "Script", "category": "SharePoint", "url": "/scripts/SharePoint/sharepoint-version-report.html", "description": "SharePoint Online version usage reporting script.", "keywords": ["sharepoint", "version report", "powershell"]}, {"title": "SharePoint Recycle Bin Report", "type": "Script", "category": "SharePoint", "url": "/scripts/SharePoint/sharepoint-recycle-bin-report.html", "description": "SharePoint Online recycle bin reporting script.", "keywords": ["sharepoint", "recycle bin", "powershell"]}, {"title": "SharePoint Storage Report", "type": "Script", "category": "SharePoint", "url": "/scripts/", "description": "SharePoint Online storage reporting scripts.", "keywords": ["sharepoint", "storage report", "powershell"]}];
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));}
+function scoreItem(item,q){
+  const Q=q.toLowerCase();
+  const title=item.title.toLowerCase(), text=(item.title+" "+item.type+" "+item.category+" "+item.description+" "+item.keywords.join(" ")).toLowerCase();
+  if(!text.includes(Q)) return 0;
+  let s=1;
+  if(title===Q)s+=100;
+  if(title.includes(Q))s+=60;
+  if(item.category.toLowerCase().includes(Q))s+=30;
+  if(item.type.toLowerCase().includes(Q))s+=20;
+  if(item.description.toLowerCase().includes(Q))s+=15;
+  s+=item.keywords.filter(k=>k.toLowerCase().includes(Q)).length*10;
+  return s;
+}
+function searchItems(q,type){
+  q=(q||"").trim();
+  if(!q)return [];
+  return M365_INDEX.map(x=>({...x,score:scoreItem(x,q)})).filter(x=>x.score>0 && (!type||type==="All"||x.type===type)).sort((a,b)=>b.score-a.score);
+}
+function wireGlobalSearch(){
+  document.querySelectorAll("[data-m365-search]").forEach(input=>{
+    const wrap=input.closest(".m365-search")||input.parentElement;
+    let box=wrap.querySelector(".m365-results");
+    if(!box){box=document.createElement("div");box.className="m365-results";wrap.appendChild(box);}
+    function render(){
+      const q=input.value.trim(), items=searchItems(q).slice(0,7);
+      if(!q){box.classList.remove("show");box.innerHTML="";return;}
+      box.classList.add("show");
+      if(!items.length){box.innerHTML='<div class="m365-result-empty">No matching articles or scripts.</div>';return;}
+      box.innerHTML=items.map(x=>'<a class="m365-result" href="'+x.url+'"><div style="min-width:0"><div class="m365-result-title">'+esc(x.title)+'</div><div class="m365-result-desc">'+esc(x.description)+'</div></div><span class="m365-result-type">'+esc(x.type)+'</span></a>').join("");
+    }
+    input.addEventListener("input",render);
+    input.addEventListener("focus",render);
+    input.addEventListener("keydown",function(e){
+      if(e.key==="Enter"){e.preventDefault();const q=input.value.trim();if(q)location.href="/search.html?q="+encodeURIComponent(q);}
+      if(e.key==="Escape"){input.value="";box.classList.remove("show");}
+    });
+  });
+  document.addEventListener("click",function(e){
+    document.querySelectorAll(".m365-results").forEach(box=>{if(!box.parentElement.contains(e.target))box.classList.remove("show");});
+  });
+}
+function markNav(){
+  const p=location.pathname;
+  document.querySelectorAll(".m365-nav a[data-nav]").forEach(a=>{
+    const n=a.dataset.nav;
+    if((n==="home" && (p==="/"||p.endsWith("/index.html"))) ||
+       (n==="articles" && p.startsWith("/articles")) ||
+       (n==="scripts" && p.startsWith("/scripts"))) a.classList.add("active");
+  });
+}
+document.addEventListener("DOMContentLoaded",function(){wireGlobalSearch();markNav();});
+window.M365BuddySearch={index:M365_INDEX,search:searchItems};
+})();
+</script>
+</body></html>
