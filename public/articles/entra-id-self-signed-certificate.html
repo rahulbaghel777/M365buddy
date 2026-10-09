@@ -1,9 +1,6 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Register an Entra ID App for PnP PowerShell Certificate Authentication | M365Buddy</title>
-<meta name="description" content="Step-by-step guide to register a Microsoft Entra application, create and upload a certificate, configure permissions, and test PnP PowerShell certificate authentication.">
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Create a Self-Signed Certificate for Microsoft Entra App Authentication | M365Buddy</title>
+<meta name="description" content="Create and export a self-signed certificate with PowerShell for Microsoft Entra application authentication, upload the public certificate, and protect the private key.">
 <style>
 
 :root{--nav1:#07346f;--nav2:#0873c9;--blue:#0878ee;--ink:#071a3d;--text:#263b5c;--muted:#617492;--line:#d7e1ee;--soft:#f4f8fd;--code:#0b1830;--shadow:0 2px 10px rgba(20,55,95,.07)}
@@ -107,131 +104,69 @@ header{height:62px;background:linear-gradient(105deg,var(--nav1),var(--nav2));po
 footer{margin-top:30px;padding-top:16px;border-top:1px solid #e5edf6;color:#718096;font-size:11px}
 @media(max-width:1000px){.article-layout{grid-template-columns:190px minmax(0,1fr)}.right-sidebar{display:none}}
 @media(max-width:720px){.article-layout{display:block;padding:0 10px}.left-sidebar{display:none}.article-main{padding:16px}.article-main h1{font-size:25px}}
-</style>
-</head>
-<body>
-<header class="m365-header">
+
+.article-layout{max-width:1400px;margin:18px auto;padding:0 18px;display:grid;grid-template-columns:220px minmax(0,1fr) 220px;gap:18px;align-items:start}.article-main,.side-card{background:#fff;border:1px solid #d7e1ee;border-radius:11px}.article-main{padding:24px;min-width:0;color:#263b5c;font-size:13px;line-height:1.7}.article-main h1{font-size:29px;color:#071a3d}.article-main h2{font-size:20px;color:#071a3d;margin:28px 0 9px;border-bottom:1px solid #e5edf6;padding-bottom:7px}.article-main h3{font-size:15px;color:#102a50;margin:18px 0 7px}.article-main pre{background:#0b1830;color:#e2e8f0;padding:14px;border-radius:9px;overflow:auto;font:12px/1.55 Consolas,monospace}.article-main code{font-family:Consolas,monospace;background:#eff5fb;padding:2px 4px;border-radius:4px}.article-main pre code{background:transparent}.side-card{padding:14px;position:sticky;top:78px;font-size:11px}.side-card a{display:block;padding:5px 0;color:#47617f;text-decoration:none}.side-card b{display:block;margin-bottom:8px}.search-mini{width:100%;height:33px;border:1px solid #cbd9e8;border-radius:7px;padding:0 9px;margin-bottom:8px}.callout{padding:13px 15px;border:1px solid #bfdbfe;border-left:4px solid #0878ee;background:#eff6ff;border-radius:8px;margin:15px 0}.warning{background:#fff7ed;border-color:#fed7aa;border-left-color:#ea580c}.pill{display:inline-block;border:1px solid #c9e0fa;background:#edf6ff;color:#0878ee;border-radius:6px;padding:3px 7px;font-size:10px;margin:0 4px 4px 0}@media(max-width:1000px){.article-layout{grid-template-columns:190px minmax(0,1fr)}.right-sidebar{display:none}}@media(max-width:720px){.article-layout{display:block;padding:0 10px}.left-sidebar{display:none}.article-main{padding:16px}.article-main h1{font-size:25px}}
+</style></head><body><header class="m365-header">
   <div class="m365-header-inner"><nav class="m365-nav" aria-label="Main navigation"><a href="/" data-nav="home">Home</a><a href="/articles/" data-nav="articles">Articles</a><a href="/scripts/" data-nav="scripts">Scripts</a></nav>
   <div class="m365-search"><span class="m365-search-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg></span><input type="search" data-m365-search placeholder="Search M365Buddy..." autocomplete="off"></div>
   <a class="m365-brand" href="/">M365<span>Buddy</span></a></div>
 </header>
 <div class="article-layout">
-<aside class="left-sidebar side-card">
-<b>All Articles</b>
-<input class="search-mini" id="articleListSearch" type="search" placeholder="Search articles">
-<div id="articleList">
-<a href="/articles/sharepoint-online-site-inventory.html">SharePoint Online Site Inventory</a>
-<a href="/articles/entra-id-pnp-certificate-authentication.html">Entra ID Certificate Authentication</a>
-<a href="/articles/entra-id-self-signed-certificate.html">Create a Self-Signed Certificate</a>
-<a href="/articles/sharepoint-storage-management.html">SharePoint Storage Management</a>
-<a href="/articles/sharepoint-site-lifecycle.html">Site Lifecycle Management</a>
-<a href="/articles/sharepoint-version-management.html">Version Management</a>
-</div>
-</aside>
+<aside class="left-sidebar side-card"><b>All Articles</b><input id="listSearch" class="search-mini" placeholder="Search articles"><div id="list"><a href="/articles/sharepoint-online-site-inventory.html">SharePoint Online Site Inventory</a><a href="/articles/entra-id-pnp-certificate-authentication.html">Entra ID Certificate Authentication</a><a href="/articles/entra-id-self-signed-certificate.html">Create a Self-Signed Certificate</a><a href="/articles/sharepoint-storage-management.html">SharePoint Storage Management</a></div></aside>
 <main class="article-main" id="articleContent">
-<div><span class="pill">Microsoft Entra ID</span><span class="pill">PnP PowerShell</span><span class="pill">Certificates</span><span class="pill">Automation</span></div>
-<h1>Register an Entra ID App for PnP PowerShell Certificate Authentication</h1>
-<p><strong>Use this guide to set up app-only authentication for SharePoint Online PowerShell automation.</strong> You will register an application, create or obtain a certificate, upload its public key to the app registration, grant the required API permissions, and test the connection.</p>
-<div class="callout"><strong>Before you begin:</strong> You need permission to register applications in your tenant and an administrator who can approve the required application permissions. Use least privilege. The exact permissions depend on the commands your script runs.</div>
+<div><span class="pill">Microsoft Entra ID</span><span class="pill">PowerShell</span><span class="pill">Certificates</span></div>
+<h1>Create a Self-Signed Certificate for Microsoft Entra App Authentication</h1>
+<p>This guide creates a certificate for a development or controlled test setup, exports the public certificate for upload to a Microsoft Entra app registration, and exports a PFX containing the private key for the machine that runs PnP PowerShell.</p>
+<div class="callout warning"><strong>Production guidance:</strong> Microsoft recommends a certificate issued by a trusted certificate authority for production. A self-signed certificate is best kept for development/testing unless your security team explicitly approves it. Protect the PFX and its password as credentials.</div>
+<h2 id="requirements">1. What you need</h2><ul><li>Windows PowerShell with permission to create a certificate in your user certificate store.</li><li>An Entra app registration that will use the certificate.</li><li>A secure folder to store the PFX file.</li><li>Permission to upload the public certificate to the app registration.</li></ul>
+<h2 id="create">2. Create the certificate</h2>
+<p>Open PowerShell as the account that will use the certificate. Create a certificate with a signature key and an exportable private key:</p>
+<pre><code>$cert = New-SelfSignedCertificate `
+  -Subject "CN=M365Buddy-SharePoint-Automation" `
+  -CertStoreLocation "Cert:\CurrentUser\My" `
+  -KeyExportPolicy Exportable `
+  -KeySpec Signature `
+  -KeyLength 2048 `
+  -KeyAlgorithm RSA `
+  -HashAlgorithm SHA256 `
+  -NotAfter (Get-Date).AddYears(1)
 
-<h2 id="why">1. Why use certificate authentication?</h2>
-<p>PnP PowerShell can authenticate as an Entra application rather than relying on a user signing in interactively. This is useful for scheduled reports and unattended administration. The application ID identifies the app; the certificate proves possession of its private key.</p>
-<ul><li><strong>Tenant ID:</strong> identifies your Microsoft Entra tenant.</li><li><strong>Client ID:</strong> identifies the app registration.</li><li><strong>Public certificate (.cer):</strong> uploaded to the app registration.</li><li><strong>Private certificate (.pfx):</strong> kept securely on the machine that runs the script.</li></ul>
-<div class="callout warning"><strong>Security:</strong> Never upload a PFX file, private key, or certificate password to GitHub. A public repository must never contain private credentials.</div>
+$cert | Select-Object Subject, Thumbprint, NotBefore, NotAfter</code></pre>
+<p>Keep the thumbprint and expiration date for your certificate inventory. Do not create a long-lived certificate without a rotation plan.</p>
+<h2 id="export-public">3. Export the public certificate (.cer)</h2>
+<p>The public certificate is uploaded to Microsoft Entra. It does not contain the private key.</p>
+<pre><code>$CerPath = "$env:USERPROFILE\Documents\M365Buddy-SharePoint-Automation.cer"
 
-<h2 id="register">2. Register the application in Microsoft Entra ID</h2>
-<ol>
-<li>Open the <a href="https://entra.microsoft.com/" target="_blank" rel="noopener">Microsoft Entra admin center</a>.</li>
-<li>Navigate to <strong>Identity → Applications → App registrations</strong> and select <strong>New registration</strong>.</li>
-<li>Enter a clear name, for example <code>M365Buddy-SharePoint-Automation</code>.</li>
-<li>For an app used only in your organization, select <strong>Accounts in this organizational directory only (Single tenant)</strong>.</li>
-<li>Leave Redirect URI blank for this unattended app-only PowerShell scenario unless your specific solution requires one.</li>
-<li>Select <strong>Register</strong>.</li>
-<li>On the Overview page, copy the <strong>Application (client) ID</strong> and <strong>Directory (tenant) ID</strong>. Store these values in your secure configuration.</li>
-</ol>
+Export-Certificate -Cert $cert -FilePath $CerPath
 
+Write-Host "Public certificate: $CerPath"</code></pre>
+<h2 id="export-pfx">4. Export the private certificate (.pfx)</h2>
+<p>The PFX includes the private key and must be protected. Use a strong password and store the file in a restricted folder accessible only to the intended automation identity.</p>
+<pre><code>$PfxPath = "$env:USERPROFILE\Documents\M365Buddy-SharePoint-Automation.pfx"
+$PfxPassword = Read-Host "Enter a strong PFX password" -AsSecureString
 
-<h2 id="certificate">3. Create or obtain a certificate</h2>
-<p>For production automation, prefer a certificate issued by a trusted certificate authority and manage its lifecycle securely. A self-signed certificate can be useful for a controlled lab or test environment, subject to your organization's policy.</p>
-<p>To create a certificate for testing, follow our companion guide:</p>
-<div class="callout"><strong>Related M365Buddy guide:</strong><br><a href="/articles/entra-id-self-signed-certificate.html"><strong>Create a Self-Signed Certificate for Microsoft Entra App Authentication</strong></a><br>This explains how to create a certificate with PowerShell, export the public <code>.cer</code> and private-key <code>.pfx</code> files, and protect the private key.</div>
-<p>If you already have a certificate, make sure the private key is available to the account that will run PowerShell and that the certificate has not expired.</p>
+Export-PfxCertificate `
+  -Cert $cert `
+  -FilePath $PfxPath `
+  -Password $PfxPassword
 
-<h2 id="upload">4. Upload the public certificate to the app</h2>
-<ol>
-<li>Open your app registration in the Entra admin center.</li>
-<li>Select <strong>Certificates &amp; secrets → Certificates</strong>.</li>
-<li>Select <strong>Upload certificate</strong>.</li>
-<li>Choose the public <code>.cer</code> file, add a description, and select <strong>Add</strong>.</li>
-<li>Confirm that the certificate appears in the list and note its expiration date.</li>
-</ol>
-<p>Upload the public certificate only. Keep the private-key PFX on the execution machine or in an approved secret/certificate store.</p>
-
-<h2 id="permissions">5. Configure the required API permissions</h2>
-<p>Permissions are determined by what the script actually does. A read-only inventory needs different access from a script that changes site settings or manages permissions.</p>
-<ol>
-<li>Open <strong>API permissions</strong> in the app registration.</li>
-<li>Select <strong>Add a permission</strong>.</li>
-<li>Choose the API used by your script, such as <strong>SharePoint</strong> or <strong>Microsoft Graph</strong>, and select the required <strong>Application permissions</strong> for unattended app-only access.</li>
-<li>Select only the permissions needed for the script's operations.</li>
-<li>Have an authorized administrator select <strong>Grant admin consent</strong> if required by the permission type and tenant policy.</li>
-<li>Confirm the permissions show as granted.</li>
-</ol>
-<div class="callout warning"><strong>Important:</strong> Do not copy a broad permission list from another script without checking the commands used. Some PnP/SharePoint operations require SharePoint-specific application permissions or an explicit site grant. API permissions alone do not guarantee that every operation is authorized.</div>
-
-<h2 id="test">6. Test the PnP PowerShell connection</h2>
-<p>Install or update PnP PowerShell in PowerShell 7, then test the connection using your own tenant, client ID and certificate path.</p>
-<pre><code>Install-Module PnP.PowerShell -Scope CurrentUser
-
-$Tenant   = "contoso.onmicrosoft.com"
-$ClientId = "YOUR-APPLICATION-CLIENT-ID"
-$AdminUrl = "https://contoso-admin.sharepoint.com"
-$PfxPath  = "C:\Certificates\M365Buddy-SharePoint-Automation.pfx"
-
-Connect-PnPOnline `
-    -Url $AdminUrl `
-    -Tenant $Tenant `
-    -ClientId $ClientId `
-    -CertificatePath $PfxPath
-
-Get-PnPTenantSite -Limit 5</code></pre>
-<p>Use the tenant domain or tenant ID accepted by your installed PnP PowerShell version. If the PFX is password-protected, use the supported certificate-password parameter for your module version, and retrieve the password securely rather than hard-coding it in a script.</p>
-<p>If connection succeeds but a command returns <code>Access denied</code>, check the API permissions, admin consent, site-specific grants where applicable, and whether the command supports app-only authentication.</p>
-
-<h2 id="troubleshooting">7. Troubleshooting</h2>
-<h3>Certificate or PFX cannot be read</h3>
-<ul><li>Check that the path exists and the file is a valid PFX.</li><li>Confirm the PFX password is correct if one is required.</li><li>Ensure the Windows account running the script can access the file and private key.</li><li>Check certificate validity dates and that the corresponding public certificate is uploaded to the correct app registration.</li></ul>
-<h3>Authentication works but commands fail</h3>
-<ul><li>Confirm the app is registered in the intended tenant.</li><li>Confirm the client ID and tenant are paired correctly.</li><li>Review the exact API permissions and admin consent.</li><li>Check whether the cmdlet requires SharePoint administrator privileges or site-specific authorization.</li></ul>
-<h3>Scheduled task fails but interactive run works</h3>
-<ul><li>Run the task under the intended service account.</li><li>Use absolute file paths.</li><li>Make sure that account can read the PFX and output directory.</li><li>Do not rely on certificates installed only in another user's certificate store.</li></ul>
-
-<h2 id="next">8. Use the app with the SharePoint Site Inventory script</h2>
-<p>Once authentication has been tested, use the same tenant ID, client ID and certificate path in your approved inventory script. Review its requested permissions before running it against the tenant.</p>
-<div class="callout"><strong>Next step:</strong> <a href="/articles/sharepoint-online-site-inventory.html"><strong>Export All SharePoint Online Sites Using PnP PowerShell</strong></a><br>Follow the inventory article to configure the script, run it, and review the CSV report.</div>
-
-<h2 id="notes">Implementation notes</h2>
-<p>Use the steps in this M365Buddy guide as a practical starting point. Validate permissions and authentication behavior in a test environment before applying the configuration to production.</p>
-<footer>M365Buddy · Microsoft 365 administration · Review permissions and certificate lifecycle regularly.</footer>
-</main>
-<aside class="right-sidebar side-card">
-<b>Search in this article</b>
-<input id="articleSearch" class="search-mini" type="search" placeholder="Search in this article">
-<div style="display:flex;gap:5px;margin-bottom:8px"><button id="prevMatch" class="btn">↑</button><button id="nextMatch" class="btn">↓</button><span id="searchCount" style="font-size:10px;align-self:center"></span></div>
-<b>On This Page</b><div id="toc"></div>
-</aside>
+Write-Host "Private-key PFX: $PfxPath"</code></pre>
+<div class="callout warning"><strong>Never commit the .pfx file or its password to GitHub.</strong> If you accidentally expose a private key, remove the credential from use, replace it, and follow your organization's incident process.</div>
+<h2 id="upload">5. Upload the .cer to Microsoft Entra</h2><ol><li>Open <a href="https://entra.microsoft.com/" target="_blank" rel="noopener">Microsoft Entra admin center</a>.</li><li>Go to <strong>App registrations</strong> and select your automation app.</li><li>Select <strong>Certificates &amp; secrets → Certificates</strong>.</li><li>Select <strong>Upload certificate</strong>, choose the <code>.cer</code> file, provide a description and add it.</li><li>Confirm the certificate thumbprint and expiry date are shown.</li></ol>
+<h2 id="connect">6. Use the PFX with PnP PowerShell</h2>
+<p>Use the tenant and client ID from your app registration. The PFX path must be accessible to the process running PowerShell.</p>
+<pre><code>Connect-PnPOnline `
+  -Url "https://contoso-admin.sharepoint.com" `
+  -Tenant "contoso.onmicrosoft.com" `
+  -ClientId "YOUR-APPLICATION-CLIENT-ID" `
+  -CertificatePath "$env:USERPROFILE\Documents\M365Buddy-SharePoint-Automation.pfx"</code></pre>
+<p>Replace the example tenant, client ID and URL with your organization's values. If the PFX is password-protected, use the certificate-password option supported by your installed PnP PowerShell version and retrieve the password securely. Never hard-code it in the script.</p>
+<h2 id="verify">7. Verify and maintain the certificate</h2><ul><li>Confirm the app registration has the correct public certificate.</li><li>Confirm the private key is present and readable by the intended execution account.</li><li>Test authentication before running the full report.</li><li>Monitor expiry and replace the certificate before it expires. Upload the new public certificate and test it before removing the old one.</li><li>Remove unused certificates from the app and securely delete obsolete private-key copies according to policy.</li></ul>
+<h2 id="next">Next steps</h2><div class="callout"><strong>Continue setup:</strong> <a href="/articles/entra-id-pnp-certificate-authentication.html"><strong>Register an Entra ID App for PnP PowerShell Certificate Authentication</strong></a> explains app registration, permissions, admin consent and testing.<br><br><strong>Use the configuration:</strong> <a href="/articles/sharepoint-online-site-inventory.html"><strong>Export All SharePoint Online Sites Using PnP PowerShell</strong></a>.</div>
+<h2 id="notes">Final checks</h2><p>Use self-signed certificates only where permitted by your organization. For production, follow your organization’s certificate issuance, storage, renewal and rotation requirements.</p>
+<footer>M365Buddy · Microsoft 365 administration</footer></main>
+<aside class="right-sidebar side-card"><b>Search in this article</b><input id="articleSearch" class="search-mini" placeholder="Search in this article"><div style="display:flex;gap:5px"><button id="prevMatch">↑</button><button id="nextMatch">↓</button><span id="searchCount"></span></div><b style="margin-top:12px">On This Page</b><div id="toc"></div></aside>
 </div>
 <script>
-(function(){
- const content=document.getElementById('articleContent'),toc=document.getElementById('toc');
- content.querySelectorAll('h2,h3').forEach((h,i)=>{if(!h.id)h.id='section-'+i;const a=document.createElement('a');a.href='#'+h.id;a.textContent=h.textContent;a.style.paddingLeft=h.tagName==='H3'?'12px':'0';toc.appendChild(a);});
- const search=document.getElementById('articleSearch'),count=document.getElementById('searchCount'),prev=document.getElementById('prevMatch'),next=document.getElementById('nextMatch');let hits=[],current=-1;
- function clear(){content.querySelectorAll('.m365-hit,.m365-current').forEach(n=>n.classList.remove('m365-hit','m365-current'));}
- function scan(){clear();hits=[];current=-1;const q=search.value.trim().toLowerCase();if(!q){count.textContent='';return;}content.querySelectorAll('p,li,h2,h3,pre,.callout').forEach(n=>{if(n.textContent.toLowerCase().includes(q)){n.classList.add('m365-hit');hits.push(n)}});if(hits.length){current=0;hits[0].classList.add('m365-current');count.textContent='1 / '+hits.length;}else count.textContent='0 matches';}
- function move(d){if(!hits.length)return;hits[current].classList.remove('m365-current');current=(current+d+hits.length)%hits.length;hits[current].classList.add('m365-current');hits[current].scrollIntoView({behavior:'smooth',block:'center'});count.textContent=(current+1)+' / '+hits.length;}
- search.addEventListener('input',scan);search.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();move(e.shiftKey?-1:1)}if(e.key==='Escape'){search.value='';scan()}});prev.addEventListener('click',()=>move(-1));next.addEventListener('click',()=>move(1));
- const filter=document.getElementById('articleListSearch');filter.addEventListener('input',()=>{document.querySelectorAll('#articleList a').forEach(a=>a.style.display=a.textContent.toLowerCase().includes(filter.value.toLowerCase())?'block':'none')});
-})();
-</script>
-<style>.m365-hit{background:#fff7cc;border-radius:3px}.m365-current{outline:2px solid #0878ee;outline-offset:2px}</style>
-</body></html>
+(function(){const c=document.getElementById('articleContent'),t=document.getElementById('toc');c.querySelectorAll('h2,h3').forEach((h,i)=>{if(!h.id)h.id='section-'+i;let a=document.createElement('a');a.href='#'+h.id;a.textContent=h.textContent;t.appendChild(a)});const s=document.getElementById('articleSearch'),n=document.getElementById('searchCount');let hits=[],cur=-1;function scan(){c.querySelectorAll('.m365-hit,.m365-current').forEach(x=>x.classList.remove('m365-hit','m365-current'));hits=[];cur=-1;let q=s.value.trim().toLowerCase();if(!q){n.textContent='';return}c.querySelectorAll('p,li,h2,h3,pre,.callout').forEach(x=>{if(x.textContent.toLowerCase().includes(q)){x.classList.add('m365-hit');hits.push(x)}});if(hits.length){cur=0;hits[0].classList.add('m365-current');n.textContent='1 / '+hits.length}else n.textContent='0 matches'}function move(d){if(!hits.length)return;hits[cur].classList.remove('m365-current');cur=(cur+d+hits.length)%hits.length;hits[cur].classList.add('m365-current');hits[cur].scrollIntoView({behavior:'smooth',block:'center'});n.textContent=(cur+1)+' / '+hits.length}s.addEventListener('input',scan);s.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();move(e.shiftKey?-1:1)}});document.getElementById('prevMatch').onclick=()=>move(-1);document.getElementById('nextMatch').onclick=()=>move(1);document.getElementById('listSearch').addEventListener('input',e=>document.querySelectorAll('#list a').forEach(a=>a.style.display=a.textContent.toLowerCase().includes(e.target.value.toLowerCase())?'block':'none'));})();
+</script><style>.m365-hit{background:#fff7cc}.m365-current{outline:2px solid #0878ee}</style></body></html>
