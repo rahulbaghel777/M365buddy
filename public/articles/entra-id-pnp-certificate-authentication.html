@@ -227,9 +227,25 @@ Get-PnPTenantSite -Limit 5</code></pre>
 <ul><li>Check that the path exists and the file is a valid PFX.</li><li>Confirm the PFX password is correct if one is required.</li><li>Ensure the Windows account running the script can access the file and private key.</li><li>Check certificate validity dates and that the corresponding public certificate is uploaded to the correct app registration.</li></ul>
 <h3>Authentication works but commands fail</h3>
 <ul><li>Confirm the app is registered in the intended tenant.</li><li>Confirm the client ID and tenant are paired correctly.</li><li>Review the exact API permissions and admin consent.</li><li>Check whether the cmdlet requires SharePoint administrator privileges or site-specific authorization.</li></ul>
-<h2 id="next">8. Use the app with the SharePoint Site Inventory script</h2>
-<p>Once authentication has been tested, use the same tenant ID, client ID and certificate path in your approved inventory script. Review its requested permissions before running it against the tenant.</p>
-<div class="callout"><strong>Next step:</strong> <a href="/articles/sharepoint-online-site-inventory.html"><strong>Export All SharePoint Online Sites Using PnP PowerShell</strong></a><br>Follow the inventory article to configure the script, run it, and review the CSV report.</div>
+<h2 id="next">8. Use Your App Credentials for SharePoint Online Automation</h2>
+<p>Once certificate authentication is configured and tested, you can reuse the same Entra ID app registration and certificate to connect to SharePoint Online from compatible PowerShell scripts.</p>
+<p>Depending on the permissions granted to the application and the authorization required by each operation, this setup can support tasks such as:</p>
+<ul>
+<li><strong>Site inventory and reporting:</strong> Export site URLs, owners, storage usage and other site details. Start with <a href="/articles/sharepoint-online-site-inventory.html">SharePoint Online Site Inventory</a>.</li>
+<li><strong>Version management:</strong> Report document version counts and review version limits. See <a href="/articles/sharepoint-version-management.html">SharePoint Version Management</a>.</li>
+<li><strong>Storage reporting and governance:</strong> Understand capacity and identify storage-management opportunities. See <a href="/articles/sharepoint-storage-management.html">SharePoint Storage Management</a>.</li>
+<li><strong>Site lifecycle management:</strong> Support site inventory, ownership reviews and governance reporting. See <a href="/articles/sharepoint-site-lifecycle.html">Site Lifecycle Management</a>.</li>
+<li><strong>Other approved administrative tasks:</strong> Reuse the authentication pattern in compatible PnP PowerShell scripts, provided the application has the permissions required for each operation.</li>
+</ul>
+<h3>Example: Connect to SharePoint Online</h3>
+<pre><code>Connect-PnPOnline `
+    -Url "https://yourtenant-admin.sharepoint.com" `
+    -ClientId "YOUR-CLIENT-ID" `
+    -Tenant "yourtenant.onmicrosoft.com" `
+    -CertificatePath "C:\Certificates\YourCertificate.pfx" `
+    -CertificatePassword (Read-Host "Enter certificate password" -AsSecureString)</code></pre>
+<p>Replace the example values with your tenant, application and certificate details. Use the appropriate SharePoint URL for the task you intend to perform.</p>
+<div class="callout warning"><strong>Important:</strong> Authentication alone does not grant access to every administrative operation. The application must have the required API permissions and admin consent, and an operation may also require SharePoint administrator privileges or site-level authorization. Keep the private certificate and its password secure; never publish them in source code or upload them to a public repository.</div>
 
 <footer>M365Buddy · Microsoft 365 administration · Review permissions and certificate lifecycle regularly.</footer>
 </main>
