@@ -106,13 +106,39 @@ footer{margin-top:30px;padding-top:16px;border-top:1px solid #e5edf6;color:#7180
 @media(max-width:720px){.article-layout{display:block;padding:0 10px}.left-sidebar{display:none}.article-main{padding:16px}.article-main h1{font-size:25px}}
 
 .article-layout{max-width:1400px;margin:18px auto;padding:0 18px;display:grid;grid-template-columns:220px minmax(0,1fr) 220px;gap:18px;align-items:start}.article-main,.side-card{background:#fff;border:1px solid #d7e1ee;border-radius:11px}.article-main{padding:24px;min-width:0;color:#263b5c;font-size:13px;line-height:1.7}.article-main h1{font-size:29px;color:#071a3d}.article-main h2{font-size:20px;color:#071a3d;margin:28px 0 9px;border-bottom:1px solid #e5edf6;padding-bottom:7px}.article-main h3{font-size:15px;color:#102a50;margin:18px 0 7px}.article-main pre{background:#0b1830;color:#e2e8f0;padding:14px;border-radius:9px;overflow:auto;font:12px/1.55 Consolas,monospace}.article-main code{font-family:Consolas,monospace;background:#eff5fb;padding:2px 4px;border-radius:4px}.article-main pre code{background:transparent}.side-card{padding:14px;position:sticky;top:78px;font-size:11px}.side-card a{display:block;padding:5px 0;color:#47617f;text-decoration:none}.side-card b{display:block;margin-bottom:8px}.search-mini{width:100%;height:33px;border:1px solid #cbd9e8;border-radius:7px;padding:0 9px;margin-bottom:8px}.callout{padding:13px 15px;border:1px solid #bfdbfe;border-left:4px solid #0878ee;background:#eff6ff;border-radius:8px;margin:15px 0}.warning{background:#fff7ed;border-color:#fed7aa;border-left-color:#ea580c}.pill{display:inline-block;border:1px solid #c9e0fa;background:#edf6ff;color:#0878ee;border-radius:6px;padding:3px 7px;font-size:10px;margin:0 4px 4px 0}@media(max-width:1000px){.article-layout{grid-template-columns:190px minmax(0,1fr)}.right-sidebar{display:none}}@media(max-width:720px){.article-layout{display:block;padding:0 10px}.left-sidebar{display:none}.article-main{padding:16px}.article-main h1{font-size:25px}}
+
+/* Targeted usability fixes for this article */
+:root{scroll-padding-top:82px}
+.article-main h2,.article-main h3{scroll-margin-top:84px}
+.search-field{position:relative;display:flex;align-items:center;min-width:0}
+.search-field .search-glass{position:absolute;left:10px;width:17px;height:17px;color:#587393;pointer-events:none}
+.search-field input{padding-left:34px!important;margin:0!important;min-width:0}
+.left-sidebar .search-field{margin:10px 0 8px}
+.right-sidebar .search-row{display:grid;grid-template-columns:minmax(0,1fr) 32px 32px;gap:6px;align-items:center;margin:10px 0 14px}
+.right-sidebar .search-row button{height:32px;width:32px;padding:0;border:1px solid #cbd9e8;background:#fff;border-radius:7px;color:#365577;font-size:15px;cursor:pointer}
+.right-sidebar .search-row button:hover{background:#eff6ff}
+#searchCount{grid-column:1/-1;min-height:14px;color:#617492;font-size:10px}
+.global-search{position:relative}
+.global-results{max-height:330px;overflow:auto}
+.article-main pre{position:relative;padding-top:43px!important}
+.code-tools{position:absolute;top:7px;right:8px;display:flex;align-items:center;gap:7px;z-index:1}
+.code-language{font:10px/1.2 Inter,"Segoe UI",Arial,sans-serif;color:#c4d4e8}
+.copy-code{border:1px solid #50627c;background:#172944;color:#fff;border-radius:5px;padding:4px 8px;font:10px/1.2 Inter,"Segoe UI",Arial,sans-serif;cursor:pointer}
+.copy-code:hover{background:#24446b}
+.article-main pre code{white-space:pre}
+.output-example{margin:-7px 0 15px;padding:10px 12px;background:#f7fafc;border:1px solid #dbe5ef;border-radius:7px;color:#354a65;font:11px/1.55 Consolas,monospace;white-space:pre-wrap}
+.output-example strong{display:block;font:700 11px/1.4 Inter,"Segoe UI",Arial,sans-serif;color:#28415f;margin-bottom:5px}
+mark.m365-match{background:#ffec99;color:#172033;border-radius:2px;padding:0}
+mark.m365-match.current-match{outline:2px solid #0878ee;outline-offset:1px;background:#ffe078}
+@media(max-width:1000px){.right-sidebar{display:block;position:static;grid-column:1/-1;grid-row:2}.article-layout{grid-template-columns:190px minmax(0,1fr)}.right-sidebar #toc{columns:2}}
+@media(max-width:720px){.article-layout{display:flex;flex-direction:column}.article-main{order:1;width:100%}.right-sidebar{order:2;width:100%}.left-sidebar{display:block;order:0;width:100%;position:static}.right-sidebar #toc{columns:1}.right-sidebar .search-row{grid-template-columns:minmax(0,1fr) 32px 32px}}
 </style></head><body><header class="m365-header">
   <div class="m365-header-inner"><nav class="m365-nav" aria-label="Main navigation"><a href="/" data-nav="home">Home</a><a href="/articles/" data-nav="articles">Articles</a><a href="/scripts/" data-nav="scripts">Scripts</a></nav>
   <div class="m365-search"><span class="m365-search-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg></span><input type="search" data-m365-search placeholder="Search M365Buddy..." autocomplete="off"></div>
   <a class="m365-brand" href="/">M365<span>Buddy</span></a></div>
 </header>
 <div class="article-layout">
-<aside class="left-sidebar side-card"><b>All Articles</b><input id="listSearch" class="search-mini" placeholder="Search articles"><div id="list"><a href="/articles/sharepoint-online-site-inventory.html">SharePoint Online Site Inventory</a><a href="/articles/entra-id-pnp-certificate-authentication.html">Entra ID Certificate Authentication</a><a href="/articles/entra-id-self-signed-certificate.html">Create a Self-Signed Certificate</a><a href="/articles/sharepoint-storage-management.html">SharePoint Storage Management</a></div></aside>
+<aside class="left-sidebar side-card"><b>All Articles</b><div class="search-field"><svg class="search-glass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg><input id="listSearch" class="search-mini" placeholder="Search articles" aria-label="Search articles"></div><div id="list"><a href="/articles/sharepoint-online-site-inventory.html">SharePoint Online Site Inventory</a><a href="/articles/entra-id-pnp-certificate-authentication.html">Entra ID Certificate Authentication</a><a href="/articles/entra-id-self-signed-certificate.html">Create a Self-Signed Certificate</a><a href="/articles/sharepoint-storage-management.html">SharePoint Storage Management</a></div></aside>
 <main class="article-main" id="articleContent">
 <div><span class="pill">Microsoft Entra ID</span><span class="pill">PowerShell</span><span class="pill">Certificates</span></div>
 <h1>Create a Self-Signed Certificate for Microsoft Entra App Authentication</h1>
@@ -120,7 +146,7 @@ footer{margin-top:30px;padding-top:16px;border-top:1px solid #e5edf6;color:#7180
 <div class="callout warning"><strong>Production guidance:</strong> Microsoft recommends a certificate issued by a trusted certificate authority for production. A self-signed certificate is best kept for development/testing unless your security team explicitly approves it. Protect the PFX and its password as credentials.</div>
 <h2 id="requirements">1. What you need</h2><ul><li>Windows PowerShell with permission to create a certificate in your user certificate store.</li><li>An Entra app registration that will use the certificate.</li><li>A secure folder to store the PFX file.</li><li>Permission to upload the public certificate to the app registration.</li></ul>
 <h2 id="create">2. Create the certificate</h2>
-<p>Open PowerShell as the account that will use the certificate. Create a certificate with a signature key and an exportable private key:</p>
+<p>Open PowerShell and run the command below. It creates the certificate in the current Windows user's certificate store. The signature key and exportable private key settings are included in the command because the certificate will be used for app authentication and exported to a PFX file.</p>
 <pre><code>$cert = New-SelfSignedCertificate `
   -Subject "CN=M365Buddy-SharePoint-Automation" `
   -CertStoreLocation "Cert:\CurrentUser\My" `
@@ -132,16 +158,22 @@ footer{margin-top:30px;padding-top:16px;border-top:1px solid #e5edf6;color:#7180
   -NotAfter (Get-Date).AddYears(1)
 
 $cert | Select-Object Subject, Thumbprint, NotBefore, NotAfter</code></pre>
+<div class="output-example"><strong>Example output (values will differ on your computer)</strong>Subject                           Thumbprint                               NotBefore             NotAfter
+-------                           ----------                               ---------             --------
+CN=M365Buddy-SharePoint-Automation  A1B2C3D4...                             10/13/2026            10/13/2027</div>
 <p>Keep the thumbprint and expiration date for your certificate inventory. Do not create a long-lived certificate without a rotation plan.</p>
 <h2 id="export-public">3. Export the public certificate (.cer)</h2>
-<p>The public certificate is uploaded to Microsoft Entra. It does not contain the private key.</p>
+<p>The public certificate is uploaded to your Microsoft Entra app registration. It does not contain the private key. The example saves it in your Documents folder; change <code>$CerPath</code> to any folder you prefer, as long as that folder already exists and you have permission to write to it.</p>
 <pre><code>$CerPath = "$env:USERPROFILE\Documents\M365Buddy-SharePoint-Automation.cer"
 
 Export-Certificate -Cert $cert -FilePath $CerPath
 
 Write-Host "Public certificate: $CerPath"</code></pre>
+<div class="output-example"><strong>Expected result</strong>Path                                  
+----                                  
+C:\Users\&lt;your-user&gt;\Documents\M365Buddy-SharePoint-Automation.cer</div>
 <h2 id="export-pfx">4. Export the private certificate (.pfx)</h2>
-<p>The PFX includes the private key and must be protected. Use a strong password and store the file in a restricted folder accessible only to the intended automation identity.</p>
+<p>The PFX includes the private key and must be protected. Use a strong password and store the file in a restricted folder accessible only to the intended automation identity. You can change <code>$PfxPath</code> to a different folder or filename. Make sure the destination folder already exists and that the account running PowerShell can access it.</p>
 <pre><code>$PfxPath = "$env:USERPROFILE\Documents\M365Buddy-SharePoint-Automation.pfx"
 $PfxPassword = Read-Host "Enter a strong PFX password" -AsSecureString
 
@@ -151,22 +183,140 @@ Export-PfxCertificate `
   -Password $PfxPassword
 
 Write-Host "Private-key PFX: $PfxPath"</code></pre>
+<div class="output-example"><strong>Expected result</strong>Path                                  
+----                                  
+C:\Users\&lt;your-user&gt;\Documents\M365Buddy-SharePoint-Automation.pfx</div>
 <div class="callout warning"><strong>Never commit the .pfx file or its password to GitHub.</strong> If you accidentally expose a private key, remove the credential from use, replace it, and follow your organization's incident process.</div>
 <h2 id="upload">5. Upload the .cer to Microsoft Entra</h2><ol><li>Open <a href="https://entra.microsoft.com/" target="_blank" rel="noopener">Microsoft Entra admin center</a>.</li><li>Go to <strong>App registrations</strong> and select your automation app.</li><li>Select <strong>Certificates &amp; secrets → Certificates</strong>.</li><li>Select <strong>Upload certificate</strong>, choose the <code>.cer</code> file, provide a description and add it.</li><li>Confirm the certificate thumbprint and expiry date are shown.</li></ol>
 <h2 id="connect">6. Use the PFX with PnP PowerShell</h2>
-<p>Use the tenant and client ID from your app registration. The PFX path must be accessible to the process running PowerShell.</p>
+<p>Use the tenant and client ID from your app registration. Update <code>-CertificatePath</code> to match the location where you saved the PFX file. If you change the path during export, use that same path here.</p>
 <pre><code>Connect-PnPOnline `
   -Url "https://contoso-admin.sharepoint.com" `
   -Tenant "contoso.onmicrosoft.com" `
   -ClientId "YOUR-APPLICATION-CLIENT-ID" `
   -CertificatePath "$env:USERPROFILE\Documents\M365Buddy-SharePoint-Automation.pfx"</code></pre>
+<div class="output-example"><strong>Successful connection</strong>Connect-PnPOnline normally returns no success message. Verify the connection with a harmless command such as Get-PnPWeb and confirm that the expected site title and URL are returned.</div>
+<pre><code>Get-PnPWeb | Select-Object Title, Url</code></pre>
+<div class="output-example"><strong>Example output (your site details will differ)</strong>Title                    Url
+-----                    ---
+Communication Site       https://contoso.sharepoint.com/sites/CommunicationSite</div>
 <p>Replace the example tenant, client ID and URL with your organization's values. If the PFX is password-protected, use the certificate-password option supported by your installed PnP PowerShell version and retrieve the password securely. Never hard-code it in the script.</p>
 <h2 id="verify">7. Verify and maintain the certificate</h2><ul><li>Confirm the app registration has the correct public certificate.</li><li>Confirm the private key is present and readable by the intended execution account.</li><li>Test authentication before running the full report.</li><li>Monitor expiry and replace the certificate before it expires. Upload the new public certificate and test it before removing the old one.</li><li>Remove unused certificates from the app and securely delete obsolete private-key copies according to policy.</li></ul>
 <h2 id="next">Next steps</h2><div class="callout"><strong>Continue setup:</strong> <a href="/articles/entra-id-pnp-certificate-authentication.html"><strong>Register an Entra ID App for PnP PowerShell Certificate Authentication</strong></a> explains app registration, permissions, admin consent and testing.<br><br><strong>Use the configuration:</strong> <a href="/articles/sharepoint-online-site-inventory.html"><strong>Export All SharePoint Online Sites Using PnP PowerShell</strong></a>.</div>
-<h2 id="notes">Final checks</h2><p>Use self-signed certificates only where permitted by your organization. For production, follow your organization’s certificate issuance, storage, renewal and rotation requirements.</p>
 <footer>M365Buddy · Microsoft 365 administration</footer></main>
-<aside class="right-sidebar side-card"><b>Search in this article</b><input id="articleSearch" class="search-mini" placeholder="Search in this article"><div style="display:flex;gap:5px"><button id="prevMatch">↑</button><button id="nextMatch">↓</button><span id="searchCount"></span></div><b style="margin-top:12px">On This Page</b><div id="toc"></div></aside>
+<aside class="right-sidebar side-card"><b>Search in this article</b><div class="search-row"><div class="search-field"><svg class="search-glass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg><input id="articleSearch" class="search-mini" placeholder="Search in this article" aria-label="Search in this article"></div><button id="prevMatch" type="button" aria-label="Previous match" title="Previous match">↑</button><button id="nextMatch" type="button" aria-label="Next match" title="Next match">↓</button><span id="searchCount" aria-live="polite"></span></div><b style="margin-top:12px">On This Page</b><div id="toc"></div></aside>
 </div>
 <script>
-(function(){const c=document.getElementById('articleContent'),t=document.getElementById('toc');c.querySelectorAll('h2,h3').forEach((h,i)=>{if(!h.id)h.id='section-'+i;let a=document.createElement('a');a.href='#'+h.id;a.textContent=h.textContent;t.appendChild(a)});const s=document.getElementById('articleSearch'),n=document.getElementById('searchCount');let hits=[],cur=-1;function scan(){c.querySelectorAll('.m365-hit,.m365-current').forEach(x=>x.classList.remove('m365-hit','m365-current'));hits=[];cur=-1;let q=s.value.trim().toLowerCase();if(!q){n.textContent='';return}c.querySelectorAll('p,li,h2,h3,pre,.callout').forEach(x=>{if(x.textContent.toLowerCase().includes(q)){x.classList.add('m365-hit');hits.push(x)}});if(hits.length){cur=0;hits[0].classList.add('m365-current');n.textContent='1 / '+hits.length}else n.textContent='0 matches'}function move(d){if(!hits.length)return;hits[cur].classList.remove('m365-current');cur=(cur+d+hits.length)%hits.length;hits[cur].classList.add('m365-current');hits[cur].scrollIntoView({behavior:'smooth',block:'center'});n.textContent=(cur+1)+' / '+hits.length}s.addEventListener('input',scan);s.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();move(e.shiftKey?-1:1)}});document.getElementById('prevMatch').onclick=()=>move(-1);document.getElementById('nextMatch').onclick=()=>move(1);document.getElementById('listSearch').addEventListener('input',e=>document.querySelectorAll('#list a').forEach(a=>a.style.display=a.textContent.toLowerCase().includes(e.target.value.toLowerCase())?'block':'none'));})();
-</script><style>.m365-hit{background:#fff7cc}.m365-current{outline:2px solid #0878ee}</style></body></html>
+(function(){
+  const content=document.getElementById('articleContent');
+  const toc=document.getElementById('toc');
+  const articleSearch=document.getElementById('articleSearch');
+  const count=document.getElementById('searchCount');
+  const prev=document.getElementById('prevMatch');
+  const next=document.getElementById('nextMatch');
+  let matches=[],current=-1;
+  const icon='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg>';
+
+  // Build TOC from headings and keep targets visible below the sticky header.
+  content.querySelectorAll('h2,h3').forEach((heading,i)=>{
+    if(!heading.id) heading.id='section-'+i;
+    heading.style.scrollMarginTop='84px';
+    const link=document.createElement('a');
+    link.href='#'+heading.id;
+    link.textContent=heading.textContent.trim();
+    if(heading.tagName==='H3') link.style.paddingLeft='12px';
+    link.addEventListener('click',()=>{setTimeout(()=>heading.scrollIntoView({behavior:'smooth',block:'start'}),0)});
+    toc.appendChild(link);
+  });
+
+  // Add functional copy controls to every PowerShell block.
+  content.querySelectorAll('pre').forEach(pre=>{
+    const tools=document.createElement('div'); tools.className='code-tools';
+    const lang=document.createElement('span'); lang.className='code-language'; lang.textContent='PowerShell';
+    const button=document.createElement('button'); button.className='copy-code'; button.type='button'; button.textContent='Copy';
+    button.addEventListener('click',async()=>{
+      const code=pre.querySelector('code'); const text=code?code.innerText:pre.innerText;
+      try{await navigator.clipboard.writeText(text);button.textContent='Copied!';}
+      catch(e){const area=document.createElement('textarea');area.value=text;area.style.position='fixed';area.style.opacity='0';document.body.appendChild(area);area.select();const ok=document.execCommand('copy');area.remove();button.textContent=ok?'Copied!':'Select code to copy';}
+      setTimeout(()=>button.textContent='Copy',1600);
+    });
+    tools.append(lang,button);pre.appendChild(tools);
+  });
+
+  function clearMatches(){
+    content.querySelectorAll('mark.m365-match').forEach(mark=>mark.replaceWith(document.createTextNode(mark.textContent)));
+    content.normalize(); matches=[]; current=-1;
+  }
+  function scan(){
+    clearMatches();
+    const q=articleSearch.value.trim();
+    if(!q){count.textContent='';return;}
+    const escaped=q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+    const regex=new RegExp(escaped,'gi');
+    const walker=document.createTreeWalker(content,NodeFilter.SHOW_TEXT,{acceptNode(node){
+      if(!node.nodeValue.trim())return NodeFilter.FILTER_REJECT;
+      const parent=node.parentElement;
+      if(!parent||parent.closest('script,style,button,mark,.code-tools'))return NodeFilter.FILTER_REJECT;
+      regex.lastIndex=0;
+      return regex.test(node.nodeValue)?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT;
+    }});
+    // Reset regex state between TreeWalker tests.
+    const nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);
+    nodes.forEach(node=>{
+      const text=node.nodeValue; const fragment=document.createDocumentFragment(); let last=0; regex.lastIndex=0; let m;
+      while((m=regex.exec(text))!==null){
+        fragment.appendChild(document.createTextNode(text.slice(last,m.index)));
+        const mark=document.createElement('mark');mark.className='m365-match';mark.textContent=m[0];fragment.appendChild(mark);matches.push(mark);last=m.index+m[0].length;
+        if(!m[0].length)regex.lastIndex++;
+      }
+      fragment.appendChild(document.createTextNode(text.slice(last)));node.replaceWith(fragment);
+    });
+    if(matches.length){current=0;matches[0].classList.add('current-match');count.textContent='1 / '+matches.length;}
+    else count.textContent='0 matches';
+  }
+  function move(delta){
+    if(!matches.length)return;
+    if(current>=0&&matches[current])matches[current].classList.remove('current-match');
+    current=(current+delta+matches.length)%matches.length;
+    matches[current].classList.add('current-match');
+    matches[current].scrollIntoView({behavior:'smooth',block:'center'});
+    count.textContent=(current+1)+' / '+matches.length;
+  }
+  articleSearch.addEventListener('input',scan);
+  articleSearch.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();move(e.shiftKey?-1:1)}if(e.key==='Escape'){articleSearch.value='';scan()}});
+  prev.addEventListener('click',()=>move(-1)); next.addEventListener('click',()=>move(1));
+  document.getElementById('listSearch').addEventListener('input',e=>{
+    const q=e.target.value.toLowerCase();document.querySelectorAll('#list a').forEach(a=>a.style.display=a.textContent.toLowerCase().includes(q)?'block':'none');
+  });
+
+  // Global search suggestions. Use known M365Buddy destinations and keep navigation local.
+  const catalog=[
+    {title:'Home',url:'/',type:'Page',keywords:'home main'},
+    {title:'Articles',url:'/articles/',type:'Page',keywords:'articles guides'},
+    {title:'Scripts',url:'/scripts/',type:'Scripts',keywords:'powershell automation'},
+    {title:'SharePoint Online Site Inventory',url:'/articles/sharepoint-online-site-inventory.html',type:'Article',keywords:'sharepoint site inventory report storage pnp'},
+    {title:'Entra ID Certificate Authentication',url:'/articles/entra-id-pnp-certificate-authentication.html',type:'Article',keywords:'entra app registration authentication certificate pnp'},
+    {title:'Create a Self-Signed Certificate',url:'/articles/entra-id-self-signed-certificate.html',type:'Article',keywords:'self signed certificate cer pfx private key'},
+    {title:'SharePoint Storage Management',url:'/articles/sharepoint-storage-management.html',type:'Article',keywords:'sharepoint storage capacity'},
+    {title:'Site Lifecycle Management',url:'/articles/sharepoint-site-lifecycle.html',type:'Article',keywords:'site lifecycle inactive governance'},
+    {title:'Version Management',url:'/articles/sharepoint-version-management.html',type:'Article',keywords:'versions versioning storage'}
+  ];
+  const globalInput=document.querySelector('[data-m365-search]');
+  const globalWrap=globalInput&&globalInput.closest('.m365-search');
+  if(globalInput&&globalWrap){
+    let results=globalWrap.querySelector('.global-results');
+    if(!results){results=document.createElement('div');results.className='global-results';globalWrap.appendChild(results);}
+    function renderGlobal(){
+      const q=globalInput.value.trim().toLowerCase();results.innerHTML='';
+      if(!q){results.classList.remove('show');return;}
+      const found=catalog.filter(x=>(x.title+' '+x.keywords+' '+x.type).toLowerCase().includes(q)).slice(0,7);
+      if(!found.length){const empty=document.createElement('div');empty.className='global-empty';empty.textContent='No matching M365Buddy pages found.';results.appendChild(empty);}
+      found.forEach(item=>{const a=document.createElement('a');a.className='global-result';a.href=item.url;const title=document.createElement('span');title.className='global-result-title';title.textContent=item.title;const type=document.createElement('span');type.className='global-result-type';type.textContent=item.type;a.append(title,type);results.appendChild(a);});
+      results.classList.add('show');
+    }
+    globalInput.addEventListener('input',renderGlobal);
+    globalInput.addEventListener('keydown',e=>{if(e.key==='Escape'){results.classList.remove('show');return;}if(e.key==='Enter'){const first=results.querySelector('a');if(first){e.preventDefault();location.href=first.href;}}if(e.key==='ArrowDown'){const first=results.querySelector('a');if(first){e.preventDefault();first.focus();}}});
+    document.addEventListener('click',e=>{if(!globalWrap.contains(e.target))results.classList.remove('show');});
+  }
+})();
+</script><style>.global-results.show{display:block}.global-results{display:none}.global-empty{padding:11px;color:#647084;font-size:12px}.m365-match{background:#ffec99}.current-match{outline:2px solid #0878ee}</style></body></html>
