@@ -2232,12 +2232,14 @@ function loadActiveEditor() {
     updateEditorStyle();
     updateReplaceControls();
 
-    editor.focus();
-
-    editor.setSelectionRange(
-        0,
-        0
-    );
+    /* Always start a newly opened script at its first line.
+       Focusing without preventScroll was scrolling the whole page
+       down to the editor, making the script appear to open at the bottom. */
+    editor.scrollTop = 0;
+    editor.scrollLeft = 0;
+    lineNumbers.scrollTop = 0;
+    editor.setSelectionRange(0, 0);
+    editor.focus({ preventScroll: true });
 }
 
 
@@ -4506,6 +4508,12 @@ if (requestedScript) {
                 }
 
                 openScript(id, { unhide: true });
+                editor.scrollTop = 0;
+                editor.scrollLeft = 0;
+                lineNumbers.scrollTop = 0;
+                editor.setSelectionRange(0, 0);
+                editor.focus({ preventScroll: true });
+                window.scrollTo({ top: 0, behavior: "auto" });
                 statusText.textContent = "Loaded published source: " + filename;
                 saveState();
             } catch (error) {
