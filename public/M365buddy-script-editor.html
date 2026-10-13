@@ -4468,14 +4468,56 @@ const requestedScript =
 
 if (requestedScript) {
 
-    const requested =
-        getScript(requestedScript);
+    const requested = getScript(requestedScript);
 
     if (requested) {
-        openScript(
-            requestedScript,
-            { unhide: true }
-        );
+        openScript(requestedScript, { unhide: true });
+    } else if (/^\/scripts\/.+\.ps1(?:\?.*)?$/i.test(requestedScript)) {
+        /* Load the actual published .ps1 requested by the link.
+           Never silently substitute the built-in sample script. */
+        (async function loadPublishedScript() {
+            const cleanPath = requestedScript.split("?")[0];
+            try {
+                statusText.textContent = "Loading published script…";
+                const response = await fetch(cleanPath, { cache: "no-store" });
+                if (!response.ok) throw new Error("HTTP " + response.status);
+                const content = await response.text();
+                if (!content.trim() || /<html[\s>]/i.test(content.slice(0, 500))) {
+                    throw new Error("The URL did not return PowerShell source.");
+                }
+
+                const filename = cleanPath.split("/").pop() || "Published Script.ps1";
+                const id = "published-source:" + cleanPath;
+                let script = getScript(id);
+                if (!script) {
+                    script = {
+                        id,
+                        name: filename.replace(/\.ps1$/i, ""),
+                        description: "Loaded from the published M365Buddy script",
+                        content,
+                        original: false,
+                        readOnly: false,
+                        sidebarHidden: false
+                    };
+                    state.scripts.push(script);
+                } else {
+                    script.content = content;
+                    script.sidebarHidden = false;
+                }
+
+                openScript(id, { unhide: true });
+                statusText.textContent = "Loaded published source: " + filename;
+                saveState();
+            } catch (error) {
+                console.error("Unable to load requested published script:", error);
+                renderScriptList();
+                renderTabs();
+                editor.value = "";
+                editor.readOnly = true;
+                statusText.textContent = "Could not load the requested script. Check that the .ps1 file exists and is publicly accessible, then try again.";
+                showToast("Could not load the actual .ps1 file. No sample was opened.");
+            }
+        })();
     } else {
         renderScriptList();
         renderTabs();
