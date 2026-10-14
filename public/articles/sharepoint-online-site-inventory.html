@@ -194,15 +194,31 @@ Get-ExecutionPolicy -List</pre>
 <p><small>On smaller screens, scroll the table horizontally to see all nine columns.</small></p>
 <h2 id="storage">Storage and over-utilization</h2><p>For each site, the script converts <code>StorageUsageCurrent</code> from MB to GB using <code>StorageUsageCurrent / 1024</code>. It sums those site values, reads the tenant's <code>StorageQuota</code>, and calculates over-utilization as used storage minus allocated storage. The percentage is over-utilized storage divided by allocated storage, multiplied by 100. Negative over-utilization is displayed as zero.</p><div class="call warn"><b>Interpretation:</b> These figures are calculated from the values returned by the script. They should not be described as an exact reconciliation with every storage figure shown in the Microsoft 365 admin center without separately validating the tenant's storage definitions and returned values.</div>
 <h2 id="email">Email report behavior</h2><p>The standard version creates the CSV first, builds an HTML email summary, attaches the CSV and sends it through <code>Send-MailMessage</code>. The temporary CSV is deleted only after the send command completes successfully. If email delivery fails, the CSV is retained for recovery. The current filename includes the date (not the time), so rerunning the script on the same day uses the same CSV path and can overwrite an earlier run's file.</p><p>The email's <b>Report Date</b> and <b>Report Generated</b> labels currently both display the date only; they do not show a time.</p>
-<h2 id="csvonly">Do not want email? Make it CSV-only</h2><div class="call ok"><b>Solution: use the same script in CSV-only mode.</b><br/>The CSV export happens before the email section. Keep the inventory and <code>Export-Csv</code> logic, remove the email configuration and email-sending block using the steps below, and the CSV will remain in <code>$OutputDirectory</code>.<p style="margin:10px 0 0;"><a href="#csvonly-steps"><strong>Go to the step-by-step changes ↓</strong></a> · <a href="#nosmtp"><strong>Need email without SMTP? See alternatives →</strong></a></p></div>
-<h3 id="csvonly-steps">1. Remove the email configuration</h3><p>At the top of the script, remove or comment out:</p><pre>$From = "SharePointReport@contoso.com"
+<h2 id="csvonly">Do not want email? Make it CSV-only</h2>
+<div class="call ok">
+  <b>Keep the same inventory script—just remove email delivery.</b>
+  <p>The script exports the CSV before the email section. Follow the steps below to keep the report on your computer without sending email. Your inventory logic and CSV columns do not need to change.</p>
+  <p style="margin:10px 0 0;"><a href="#csvonly-steps"><strong>Go to the step-by-step changes ↓</strong></a> &nbsp;·&nbsp; <a href="#nosmtp"><strong>Need email without SMTP? See alternatives →</strong></a></p>
+</div>
+<div id="csvonly-steps" style="scroll-margin-top:85px;margin-top:18px;">
+  <h3 style="font-size:17px;margin-bottom:6px;">Make these four changes</h3>
+  <p>Work on a copy of the script first. Keep the existing site inventory, calculations, validation and <code>Export-Csv</code> sections unchanged.</p>
+  <div style="border:1px solid #d7e1ee;border-radius:10px;padding:15px;margin:14px 0;background:#fff;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;"><span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:#e8f2ff;color:#0759b5;font-weight:800;flex-shrink:0;">1</span><strong style="color:#071a3d;">Remove the email configuration</strong></div>
+    <p>Near the top of the script, remove or comment out these email settings:</p>
+    <pre>$From = "SharePointReport@contoso.com"
 
 $To = @(
     "admin@contoso.com"
 )
 
 $SmtpServer = "smtp.contoso.com"</pre>
-<h3>2. Remove the complete email block</h3><p>Find the section beginning with <code># EMAIL</code>. Remove everything from that heading through the following <code>try { ... } catch { ... }</code> block containing <code>Send-MailMessage</code>.</p><pre>Send-MailMessage `
+  </div>
+  <div style="border:1px solid #d7e1ee;border-radius:10px;padding:15px;margin:14px 0;background:#fff;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;"><span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:#e8f2ff;color:#0759b5;font-weight:800;flex-shrink:0;">2</span><strong style="color:#071a3d;">Remove the email-sending section</strong></div>
+    <p>Find the section marked <code># EMAIL</code>. Remove the email subject/body creation and the complete <code>try { ... } catch { ... }</code> block used to send the email and delete the temporary CSV.</p>
+    <p>The sending command looks like this:</p>
+    <pre>Send-MailMessage `
     -From $From `
     -To $To `
     -Subject $Subject `
@@ -211,16 +227,25 @@ $SmtpServer = "smtp.contoso.com"</pre>
     -Attachments $OutputCsv `
     -SmtpServer $SmtpServer `
     -ErrorAction Stop</pre>
-<p><b>Do not remove the CSV export section.</b> Leave the earlier <code>Export-Csv</code> block intact. After this change the script generates the CSV and leaves it in <code>$OutputDirectory</code>; it does not contact SMTP and does not delete the CSV.</p>
-<h3>CSV-only workflow</h3><pre>Run script
-  ↓
-Connect to SharePoint Online
-  ↓
-Collect site inventory
-  ↓
-Export-Csv
-  ↓
-CSV remains in $OutputDirectory</pre>
+  </div>
+  <div style="border:1px solid #d7e1ee;border-radius:10px;padding:15px;margin:14px 0;background:#fff;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;"><span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:#e8f2ff;color:#0759b5;font-weight:800;flex-shrink:0;">3</span><strong style="color:#071a3d;">Keep the CSV export intact</strong></div>
+    <p>Do <b>not</b> remove the earlier <code>Export-Csv</code> block or the configuration for <code>$OutputDirectory</code>. These are what create and save the report.</p>
+  </div>
+  <div style="border:1px solid #d7e1ee;border-radius:10px;padding:15px;margin:14px 0;background:#fff;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;"><span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:#e8f2ff;color:#0759b5;font-weight:800;flex-shrink:0;">4</span><strong style="color:#071a3d;">Run the script and check the output folder</strong></div>
+    <p>Run your modified copy in PowerShell 7. When it completes, open the folder specified by <code>$OutputDirectory</code> and confirm that the CSV was created.</p>
+  </div>
+  <div class="call ok" style="margin-top:16px;">
+    <b>Expected result</b>
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-top:10px;font-weight:650;color:#17452a;">
+      <span style="background:#fff;border:1px solid #bbf7d0;border-radius:6px;padding:7px 9px;">Run script</span><span aria-hidden="true">→</span>
+      <span style="background:#fff;border:1px solid #bbf7d0;border-radius:6px;padding:7px 9px;">Collect sites</span><span aria-hidden="true">→</span>
+      <span style="background:#fff;border:1px solid #bbf7d0;border-radius:6px;padding:7px 9px;">Export CSV</span><span aria-hidden="true">→</span>
+      <span style="background:#fff;border:1px solid #bbf7d0;border-radius:6px;padding:7px 9px;">CSV stays in output folder</span>
+    </div>
+  </div>
+</div>
 <h2 id="nosmtp">What if you do not have an SMTP server?</h2>
 <p>You have two practical choices depending on whether email is actually required:</p>
 <div class="card">
