@@ -62,13 +62,18 @@
 <main id="top">
 <section class="hero"><span class="ey">PowerShell · Microsoft Graph · Exchange Online</span><h1>Email PowerShell Reports Using Microsoft Graph</h1><p class="sub">Replace SMTP delivery with Microsoft Graph when the report must be emailed but an SMTP relay is not available.</p></section>
 <article class="article">
-<div class="call"><b>Where this fits:</b> This is the email-delivery option for the SharePoint Site Inventory script.</div>
+<div class="call ok"><b>First-time user? Start here.</b> Do not edit your existing Site Inventory script yet. First, create a small separate PowerShell file that sends a test CSV using Microsoft Graph. Once that works, you can decide whether to add the same email section to your report script. This is safer and makes troubleshooting much easier.</div>
+<div class="card"><h3 style="margin-top:0">What you will do</h3><p>Use a separate PowerShell script to send an existing CSV file as an email attachment through Microsoft Graph. This lets you test email delivery without changing your report-generation script.</p><p><a class="btn primary" href="/scripts/SharePoint/Test-GraphCsvEmail-Fixed.ps1" download>Download the PowerShell script</a></p></div>
 
 <h2 id="when">When should you use Microsoft Graph instead of SMTP?</h2>
-<p>Use this option when the Site Inventory script must continue to email the CSV but your organization does not provide an SMTP relay that the script is allowed to use.</p>
+<p>Use Microsoft Graph when a PowerShell report must be emailed with a CSV attachment and your organization does not provide an approved SMTP relay. This article covers email delivery only; the report-generation script remains separate.</p>
 
+<h2 id="beginner-path">Beginner path: test email delivery in a separate script first</h2>
+<p>Think of your existing report script as two jobs: <b>Job 1 creates the CSV</b>; <b>Job 2 emails that CSV</b>. Microsoft Graph changes Job 2 only. To avoid breaking Job 1, test Job 2 in a new file first.</p>
+<ol><li>Run your existing report and note the exact full path of the CSV it creates.</li><li>Download <a href="/scripts/SharePoint/Test-GraphCsvEmail-Fixed.ps1"><strong>Test-GraphCsvEmail-Fixed.ps1</strong></a>.</li><li>Update the configuration values near the top of the downloaded script.</li><li>Run the email script and confirm the email and attachment arrive before editing your main report script.</li></ol>
+<div class="call warn"><b>Important:</b> The sample requires an Entra app configured for certificate authentication and Microsoft Graph <code>Mail.Send</code> Application permission with admin consent. The sender mailbox must be allowed by your organization’s Exchange app-access restrictions. This standalone sample stores the PFX password in a plaintext configuration variable to match the tested setup. Keep the file private and never commit it to a public repository. For production automation, prefer an approved secret store or a secure password prompt.</div>
 <h2 id="replace">What replaces the SMTP section?</h2>
-<p>Do not put an Exchange Online hostname into <code>$SmtpServer</code>. Instead, replace the old <code>Send-MailMessage</code> delivery block with a Microsoft Graph mail-sending block that authenticates using an approved Entra ID application.</p>
+<p>Do not put an Exchange Online hostname into <code>$SmtpServer</code>. Microsoft Graph uses an HTTPS API, not SMTP. In the Site Inventory script, find the email section after the CSV export and storage summary—usually headed <code># EMAIL</code> or <code># SEND EMAIL</code>. Replace only the SMTP delivery logic there with a Graph implementation. Do not change site collection discovery, report calculations, or the approved CSV columns.</p>
 <div class="call ok"><b>Keep these parts unchanged:</b> site collection discovery, report building, <code>Export-Csv</code>, storage calculations and output path. The change is only the <b>email-delivery portion</b>.</div>
 
 <h2 id="where">What do I put where?</h2>
@@ -78,43 +83,99 @@
 <tr><td style="border:1px solid #d7e1ee;padding:7px"><code>$To</code></td><td style="border:1px solid #d7e1ee;padding:7px">Keep the recipient addresses here or in the Graph request body.</td></tr>
 <tr><td style="border:1px solid #d7e1ee;padding:7px">SMTP authentication</td><td style="border:1px solid #d7e1ee;padding:7px">Replace with the approved Entra ID app/certificate authentication described in the Entra setup article.</td></tr></table>
 
-<h2 id="app">Entra ID application requirements</h2>
-<p>Use an Entra ID application that is approved for unattended reporting. Grant the Microsoft Graph mail permission required by your organization's design (commonly <code>Mail.Send</code> for application-based sending), then obtain admin consent.</p>
-<p>If you are using the same certificate-authenticated application pattern as the Site Inventory script, keep the certificate and private key secure and use the same tenant/client/certificate values where appropriate.</p>
-<div class="call"><b>Related setup:</b> <a href="/articles/entra-id-pnp-certificate-authentication.html"><strong>Register an Entra ID App for PnP PowerShell Certificate Authentication</strong></a></div>
+<h2 id="app">Exact Microsoft Graph permission required</h2>
+<p>For the unattended certificate/app-only pattern described here, the Microsoft Graph permission required by the <code>POST /users/{sender}/sendMail</code> endpoint is:</p>
+<table style="width:100%;border-collapse:collapse;font-size:11.5px"><tr><th style="border:1px solid #d7e1ee;padding:7px">Setting</th><th style="border:1px solid #d7e1ee;padding:7px">Value</th></tr>
+<tr><td style="border:1px solid #d7e1ee;padding:7px">API</td><td style="border:1px solid #d7e1ee;padding:7px">Microsoft Graph</td></tr>
+<tr><td style="border:1px solid #d7e1ee;padding:7px">Permission</td><td style="border:1px solid #d7e1ee;padding:7px"><code>Mail.Send</code></td></tr>
+<tr><td style="border:1px solid #d7e1ee;padding:7px">Permission type</td><td style="border:1px solid #d7e1ee;padding:7px"><b>Application</b> for unattended app-only/certificate authentication</td></tr>
+<tr><td style="border:1px solid #d7e1ee;padding:7px">Admin consent</td><td style="border:1px solid #d7e1ee;padding:7px"><b>Required</b> for Application <code>Mail.Send</code></td></tr>
+<tr><td style="border:1px solid #d7e1ee;padding:7px">Endpoint</td><td style="border:1px solid #d7e1ee;padding:7px"><code>POST https://graph.microsoft.com/v1.0/users/{sender-UPN-or-id}/sendMail</code></td></tr></table>
+<div class="call warn"><b>Important scope note:</b> Application <code>Mail.Send</code> can allow sending as users across the organization unless mailbox access is restricted. Ask your Exchange administrator to apply an approved mailbox-scoping control, such as Exchange Online Application RBAC, so the app can send only from the dedicated reporting mailbox. Grant no <code>Mail.Read</code> or <code>Mail.ReadWrite</code> permission unless another documented feature actually needs it.</div>
+<p>If you use a signed-in-user/delegated flow instead of certificate app-only authentication, the permission type and sign-in requirements differ. Do not mix delegated and application permissions; this article's unattended example assumes Application <code>Mail.Send</code>.</p>
+<p>The app also needs an authentication method supported by your implementation, such as a certificate registered on the Entra app. The certificate authenticates the app; it does not replace the Graph API permission. The mailbox in the <code>/users/{sender}/sendMail</code> URL must exist in Exchange Online and be permitted by the app's effective access configuration.</p>
+<div class="call"><b>Related setup:</b> <a href="/articles/entra-id-pnp-certificate-authentication.html"><strong>Register an Entra ID App for PnP PowerShell Certificate Authentication</strong></a>. Follow the certificate steps, but add the Graph <code>Mail.Send</code> Application permission specifically for this mail-sending scenario.</div>
 
-<h2 id="replace-code">Example delivery pattern</h2>
-<pre># Keep your existing report generation above this point.
+<h2 id="replace-code">Download and use the PowerShell email script</h2>
+<p>This standalone script sends an existing CSV file; it does not create the SharePoint report. Download it, open it in Notepad or VS Code, and replace the example values. The configuration excerpt below shows which settings you need to update.</p>
+<div class="call"><b>Use the downloadable script as the source of truth.</b> The full script includes configuration validation, certificate checks, CSV size checks, Graph connection, attachment creation and error handling. To keep this article easy to follow, the complete code is provided as a separate <code>.ps1</code> download.</div>
+<h3>Configuration section in the script</h3>
+<p>Open the downloaded file and update the example values near the top. These settings tell the script which Entra app to use, which mailbox should send the email, who should receive it, and where the CSV is saved.</p>
+<pre>$TenantId              = 'YOUR-TENANT-ID'
+$ClientId              = 'YOUR-APP-CLIENT-ID'
+$PfxPath               = 'C:\Path\To\YourCertificate.pfx'
+$SenderMailbox         = 'reports@contoso.com'
+$Recipient             = 'you@contoso.com'
+$CsvPath               = 'C:\Reports\SharePointSiteInventory.csv'
+$EmailSubject          = 'SharePoint Site Inventory Report'
+$EmailBody             = 'Please find the SharePoint CSV report attached.'</pre>
+<p>Replace every example value with your real environment details. Set <code>$PfxPath</code> to the full path of your PFX file. The script uses the <code>$PfxPasswordPlainText</code> value in its configuration section; it does not prompt for the password. Keep this file private because the password is stored as plaintext. For production use, replace this with your organization's approved secret-storage method. You do not need to know the thumbprint—the script loads the certificate directly from the PFX. The matching public certificate must already be uploaded under your Entra app's Certificates section.</p>
+<p><a class="btn primary" href="/scripts/SharePoint/Test-GraphCsvEmail-Fixed.ps1" download>Download Test-GraphCsvEmail-Fixed.ps1</a></p>
+<p><a href="https://github.com/rahulbaghel777/M365buddy/blob/main/public/scripts/SharePoint/Test-GraphCsvEmail-Fixed.ps1" target="_blank" rel="noopener noreferrer">View the script source on GitHub</a></p>
 
-# 1. Create the CSV with Export-Csv
-# 2. Acquire an Entra ID access token for Microsoft Graph
-# 3. Build a /users/{sender}/sendMail request
-# 4. Attach the generated CSV as an email attachment
-# 5. Send the request to Microsoft Graph
-
-# Do not hard-code secrets or certificate passwords.</pre>
-<p>The exact Graph authentication and <code>sendMail</code> implementation should match your organization's approved authentication model. The important change is that the SMTP variables and <code>Send-MailMessage</code> call are no longer used.</p>
+<div class="call warn"><b>CSV attachment limit:</b> This script is intended for CSV files up to 3 MB. Larger reports need a Microsoft Graph upload-session implementation.</div>
+<p><b>Part B — only after the test works.</b> Open your existing Site Inventory <code>.ps1</code> file in VS Code or Notepad. Find <code>Send-MailMessage</code> (or the existing email-send section). Keep the report generation and <code>Export-Csv</code> lines. Replace only the old email-send block with the working Graph send section, and update <code>$CsvPath</code> to the variable/path your report already uses. Do not paste the whole test script over your existing report script.</p>
+<p>If you are not comfortable merging the tested email block, keep two scripts: one creates the CSV, and a second sends it. That is a valid first version, although you will need to run or schedule them in the correct order.</p>
 
 <h2 id="run">Save the script and run it normally</h2>
-<p>After replacing the SMTP/email portion with the approved Graph implementation, save the <code>.ps1</code> file. Then follow the same execution process from the Site Inventory article:</p>
-<pre>Get-ExecutionPolicy -List
-
-# If allowed for your user:
-Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
-
-cd "C:\Scripts\SharePoint"
-.\SharePoint_Site_Inventory.ps1</pre>
-<div class="call warn"><b>Preferred:</b> Open PowerShell 7 as Administrator during setup and troubleshooting. If execution policy is controlled by Group Policy or Intune, do not bypass it.</div>
+<p>For your first test, run <code>Test-GraphCsvEmail-Fixed.ps1</code> after the report CSV already exists. Once email delivery is confirmed, you can run or schedule the report-generation script and email script in the correct order:</p>
+<pre># Open PowerShell in the folder where you saved the email script
+.\Test-GraphCsvEmail-Fixed.ps1</pre>
+<div class="call warn"><b>Elevation:</b> Administrator rights are not inherently required to run the script or call Microsoft Graph. Elevate only when a specific setup task requires it. If execution policy is controlled by Group Policy or Intune, do not bypass it.</div>
 <div class="actions"><a class="btn primary" href="/articles/sharepoint-online-site-inventory.html#run">Open the full execution instructions →</a></div>
 
+<h2 id="execution-policy-error">Error: The script is not digitally signed</h2>
+<p>You may see an error similar to this when running the downloaded file:</p>
+<pre>File C:\Users\yourname\Downloads\Test-GraphCsvEmail-Fixed.ps1 cannot be loaded.
+The file is not digitally signed. You cannot run this script on the current system.</pre>
+<p>This is a PowerShell execution-policy issue. It does not necessarily mean the script itself is broken. Follow the steps below in the same PowerShell session you use to run the script.</p>
+<h3>Step 1 — Check the current policy</h3>
+<pre>Get-ExecutionPolicy -List</pre>
+<p>Check <code>MachinePolicy</code>, <code>UserPolicy</code>, <code>Process</code>, <code>CurrentUser</code> and <code>LocalMachine</code>. If <code>MachinePolicy</code> or <code>UserPolicy</code> is set, your organization may be enforcing the policy through Group Policy. Do not try to override an organization-managed policy; contact your IT/security administrator.</p>
+<h3>Step 2 — If the file was downloaded, unblock that file</h3>
+<p>If your organization allows unsigned local scripts and the effective policy is <code>RemoteSigned</code>, Windows may still mark a downloaded file as coming from the internet. Unblock only the script you have reviewed and trust:</p>
+<pre>Unblock-File -LiteralPath "$env:USERPROFILE\Downloads\Test-GraphCsvEmail-Fixed.ps1"</pre>
+<p>Then try running it again from its folder:</p>
+<pre>Set-Location "$env:USERPROFILE\Downloads"
+.\Test-GraphCsvEmail-Fixed.ps1</pre>
+<h3>Step 3 — If your effective policy is restricted, and you are allowed to change it</h3>
+<p>For a personally managed computer or a user account where your organization permits this setting, you can set <code>RemoteSigned</code> for your user account rather than changing the policy for every user on the computer:</p>
+<pre>Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned</pre>
+<p>Read the confirmation prompt and proceed only if you are authorized to make this change. Then unblock the reviewed downloaded file as shown above and run it again. You generally do not need to run PowerShell as Administrator for a <code>CurrentUser</code> setting.</p>
+<div class="call warn"><b>If the policy is <code>AllSigned</code> or managed by your organization:</b> do not lower or bypass the policy. Use a script signed by your organization's trusted code-signing certificate, or ask your administrator for the approved method. Avoid setting <code>Unrestricted</code> or using a broad execution-policy bypass as a routine fix.</div>
+
+<h2 id="parser-error">ParserError: Missing closing '}' near <code>try {</code></h2>
+<p>If PowerShell reports a parser error such as <code>Missing closing '}' in statement block or type definition</code> at the line containing <code>try {</code>, the cause may be earlier in the file. Check the configuration section first—especially <code>$PfxPasswordPlainText</code> if you added the password directly to the script.</p>
+<p>Apostrophes inside a single-quoted PowerShell string must be doubled. For example, this is invalid:</p>
+<pre>$PfxPasswordPlainText = 'abc'def123'</pre>
+<p>Use two single quotes to represent one apostrophe inside the value:</p>
+<pre>$PfxPasswordPlainText = 'abc''def123'</pre>
+<p>Do not share your actual PFX password in screenshots or support requests. If the password does not contain an apostrophe, inspect earlier lines for an unmatched quote, parenthesis, bracket, or brace. Make sure the complete script was copied and saved, then try running it again in a new PowerShell session.</p>
+
+<h2 id="troubleshooting">Other common errors and fixes</h2>
+<h3>CSV file not found</h3>
+<p>Run the report-generation script first, then verify that <code>$CsvPath</code> at the top of the email script matches the full path and file name of the CSV that was created.</p>
+<pre>Test-Path -LiteralPath 'C:\Reports\SharePointSiteInventory.csv'</pre>
+<h3>PFX file not found or password/certificate error</h3>
+<p>Check that <code>$PfxPath</code> points to the actual PFX file, that the password is correct, and that the PFX contains the private key. The matching public certificate must be uploaded to the Entra app registration. Do not share the PFX or password in logs or screenshots.</p>
+<h3>Microsoft.Graph.Authentication module missing</h3>
+<p>If permitted by your organization's PowerShell Gallery policy, install the required module for your user and retry:</p>
+<pre>Install-Module Microsoft.Graph.Authentication -Scope CurrentUser</pre>
+<h3>Graph returns 401 or 403 / Access denied</h3>
+<p>Check the tenant ID and client ID, certificate match, Microsoft Graph <code>Mail.Send</code> Application permission, admin consent, and whether the application is allowed to send from the configured sender mailbox. Ask the Entra/Exchange administrator to verify the app's effective mailbox scope.</p>
+<h3>Graph request succeeds but no email arrives</h3>
+<p>A <code>202 Accepted</code> response means Graph accepted the send request; it does not guarantee final delivery. Check the recipient address, junk/quarantine, Exchange message trace, and any mail-flow restrictions.</p>
+<div class="call"><b>When asking for help:</b> Share the exact error text and the output of <code>Get-ExecutionPolicy -List</code>, but remove tenant identifiers, email addresses, tokens, certificate details and passwords first.</div>
+
+<div class="call"><b>Attachment limit:</b> This sample is for CSV files up to 3 MB. Larger reports need a Microsoft Graph upload-session implementation.</div>
 <h2 id="test">Test before scheduling</h2>
-<ol><li>Run the script manually.</li><li>Confirm the CSV is created.</li><li>Confirm the email is delivered.</li><li>Check the sender mailbox and recipient mailbox.</li><li>Only then move the script into Task Scheduler, Azure Automation or another approved unattended process.</li></ol>
+<ol><li>Run the script manually in the same PowerShell version and identity that will be used for scheduled runs.</li><li>Confirm the CSV is created at the expected path and contains the expected columns.</li><li>Confirm Graph returns a successful response (typically <code>202 Accepted</code> for <code>sendMail</code>).</li><li>Confirm delivery in the recipient mailbox; a successful API response means the request was accepted, not that final delivery is guaranteed.</li><li>Only then move the script into Task Scheduler, Azure Automation or another approved unattended process.</li></ol>
 
 <h2 id="security">Security</h2>
-<ul><li>Never put a PFX password, private key or client secret in public code.</li><li>Use the minimum approved Graph permissions.</li><li>Use a dedicated reporting mailbox where appropriate.</li><li>Do not expose access tokens in transcript files or logs.</li></ul>
+<ul><li>Never commit a PFX password, private key, client secret or access token to a public repository. This sample stores the PFX password in plaintext locally; protect the file and use an approved secret store for production automation.</li><li>Use Application <code>Mail.Send</code> only for app-only mail sending; admin consent is required.</li><li>Restrict the app to the required reporting mailbox using your organization's supported Exchange application-access controls.</li><li>Use a dedicated reporting mailbox where appropriate.</li><li>Do not expose access tokens, email content or recipient details in transcript files or logs.</li></ul>
 
 <section class="card"><h2 style="margin-top:0">Related Article</h2><p>Return to the SharePoint Site Inventory article to configure, run and troubleshoot the report.</p><div class="actions"><a class="btn primary" href="/articles/sharepoint-online-site-inventory.html">SharePoint Online Site Inventory</a></div></section>
-<footer>M365Buddy · Microsoft 365 · PowerShell · PowerShell · Microsoft Graph · Exchange Online</footer>
+<footer>M365Buddy · Microsoft 365 · PowerShell · Microsoft Graph · Exchange Online</footer>
 </article>
 </main>
 <aside class="side right">
