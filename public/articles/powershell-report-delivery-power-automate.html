@@ -30,7 +30,24 @@
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f7faff;color:var(--text);font:13px/1.6 "Segoe UI",Arial,sans-serif}a{color:var(--blue);text-decoration:none}
 .layout{max-width:1400px;margin:18px auto;display:grid;grid-template-columns:215px minmax(0,1fr) 225px;gap:18px;padding:0 18px}
 .side{position:sticky;top:80px;height:max-content;background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px;box-shadow:0 2px 10px rgba(20,55,95,.07)}.side b{display:block;color:#4d6380;font-size:10px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}.side a{display:block;padding:6px 8px;color:#617492;font-size:11.5px;border-radius:7px}.side a:hover{background:#f1f7ff;color:var(--blue)}.side a.active{background:#eaf4ff;color:var(--blue);font-weight:700}
-.hero,.article{background:#fff;border:1px solid var(--line);border-radius:11px}.hero{padding:22px;margin-bottom:13px}.ey{display:inline-block;background:#edf6ff;border:1px solid #c9e0fa;color:var(--blue);padding:3px 8px;border-radius:999px;font-size:9.5px;font-weight:800}.hero h1{font-size:28px;line-height:1.18;color:var(--ink);margin:10px 0 7px}.sub{color:var(--muted);font-size:13.5px}.article{padding:24px}.article h2{font-size:19px;color:var(--ink);margin:28px 0 8px;scroll-margin-top:75px}.article h3{font-size:14px;color:var(--ink);margin:18px 0 6px}.article p{margin:7px 0}.article li{margin:4px 0}.article pre{background:var(--code);color:#e2e8f0;padding:12px;border-radius:7px;overflow:auto;font:11px/1.55 Consolas,monospace}.article code{background:#edf2f7;padding:1px 4px;border-radius:4px;font:11px Consolas,monospace}.call{padding:11px 13px;border:1px solid #c8def7;background:#eef7ff;border-radius:8px;margin:13px 0}.call.ok{background:#f0fdf4;border-color:#bbf7d0}.call.warn{background:#fffbeb;border-color:#fde68a}.card{background:var(--soft);border:1px solid var(--line);border-radius:9px;padding:13px;margin:15px 0}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.btn{display:inline-flex;border:1px solid var(--line);background:#fff;border-radius:6px;padding:6px 10px;font-size:11px;font-weight:750;color:var(--text)}.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}.article-search-box{display:flex;gap:5px;margin-bottom:6px}.article-search-wrap{position:relative;flex:1}.article-search-wrap input{width:100%;height:34px;border:1px solid #cbd9e8;border-radius:7px;padding:0 8px 0 32px;font-size:11px;outline:0}.article-search-wrap svg{position:absolute;left:9px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:#68809d}.match-btn{width:31px;height:34px;border:1px solid #cbd9e8;background:#fff;border-radius:7px;cursor:pointer}.search-count{font-size:10px;color:#72859e;margin-bottom:10px}.toc a{display:block;padding:5px 7px;font-size:10.5px;color:#617492;border-radius:6px}.toc a:hover{background:#f1f7ff;color:var(--blue)}.toc a.h3{padding-left:15px;font-size:10px}.match-highlight{outline:2px solid #9ac2ea;outline-offset:1px;background:#fff8cc}.current-match{outline:2px solid #0878ee;outline-offset:1px;background:#fff2a8}footer{margin-top:22px;border-top:1px solid var(--line);padding-top:13px;color:var(--muted);font-size:10.5px}
+.hero,.article{background:#fff;border:1px solid var(--line);border-radius:11px}.hero{padding:22px;margin-bottom:13px}.ey{display:inline-block;background:#edf6ff;border:1px solid #c9e0fa;color:var(--blue);padding:3px 8px;border-radius:999px;font-size:9.5px;font-weight:800}.hero h1{font-size:28px;line-height:1.18;color:var(--ink);margin:10px 0 7px}.sub{color:var(--muted);font-size:13.5px}.article{padding:24px}.article h2{font-size:19px;color:var(--ink);margin:28px 0 8px;scroll-margin-top:75px}.article h3{font-size:14px;color:var(--ink);margin:18px 0 6px}.article p{margin:7px 0}.article li{margin:4px 0}.article pre{background:var(--code);color:#e2e8f0;padding:12px;border-radius:7px;overflow:auto;font:11px/1.55 Consolas,monospace}.article code{background:#edf2f7;padding:1px 4px;border-radius:4px;font:11px Consolas,monospace}.call{padding:11px 13px;border:1px solid #c8def7;background:#eef7ff;border-radius:8px;margin:13px 0}.call.ok{background:#f0fdf4;border-color:#bbf7d0}.call.warn{background:#fffbeb;border-color:#fde68a}.card{background:var(--soft);border:1px solid var(--line);border-radius:9px;padding:13px;margin:15px 0}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.btn{display:inline-flex;border:1px solid var(--line);background:#fff;border-radius:6px;padding:6px 10px;font-size:11px;font-weight:750;color:var(--text)}.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.article .table-wrap{width:100%;overflow-x:auto;margin:14px 0 22px;border:1px solid var(--line);border-radius:9px;background:#fff;box-shadow:0 2px 8px rgba(20,55,95,.04)}
+.article table{width:100%;border-collapse:separate;border-spacing:0;margin:0;font-size:12.5px;line-height:1.55}
+.article table th,.article table td{padding:11px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+.article table thead th{background:#eaf4ff;color:var(--ink);font-weight:800;font-size:12px;letter-spacing:.01em;border-bottom:1px solid #c9dff7}
+.article table tbody tr:nth-child(even){background:#f8fbff}
+.article table tbody tr:last-child td{border-bottom:0}
+.article table td:first-child{font-weight:650;color:#183761}
+.article table code{white-space:normal;overflow-wrap:anywhere}
+.flow-steps{counter-reset:flow-step;margin-top:14px}
+.flow-steps h3{counter-increment:flow-step;display:flex;align-items:center;gap:11px;margin:26px 0 10px;padding:12px 14px;background:linear-gradient(100deg,#f0f7ff,#fbfdff);border:1px solid #d9e8f8;border-radius:10px;color:var(--ink);font-size:16px;line-height:1.35}
+.flow-steps h3::before{content:counter(flow-step);display:inline-grid;place-items:center;flex:0 0 31px;width:31px;height:31px;background:var(--blue);color:#fff;border-radius:50%;font-size:13px;font-weight:800;box-shadow:0 2px 5px rgba(8,120,238,.22)}
+.flow-steps h3:first-child{margin-top:12px}
+.flow-steps ul,.flow-steps ol{padding-left:23px}
+.flow-summary{display:flex;gap:11px;align-items:flex-start;padding:13px 15px;margin:13px 0 18px;background:#f0f7ff;border:1px solid #d5e7fb;border-radius:9px}
+.flow-summary b{display:block;color:var(--ink);margin-bottom:2px}
+.flow-summary p{margin:0}
+@media(max-width:650px){.article table{min-width:560px}.flow-steps h3{font-size:14px;padding:10px 11px}.flow-steps h3::before{flex-basis:28px;width:28px;height:28px}}.article-search-box{display:flex;gap:5px;margin-bottom:6px}.article-search-wrap{position:relative;flex:1}.article-search-wrap input{width:100%;height:34px;border:1px solid #cbd9e8;border-radius:7px;padding:0 8px 0 32px;font-size:11px;outline:0}.article-search-wrap svg{position:absolute;left:9px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:#68809d}.match-btn{width:31px;height:34px;border:1px solid #cbd9e8;background:#fff;border-radius:7px;cursor:pointer}.search-count{font-size:10px;color:#72859e;margin-bottom:10px}.toc a{display:block;padding:5px 7px;font-size:10.5px;color:#617492;border-radius:6px}.toc a:hover{background:#f1f7ff;color:var(--blue)}.toc a.h3{padding-left:15px;font-size:10px}.match-highlight{outline:2px solid #9ac2ea;outline-offset:1px;background:#fff8cc}.current-match{outline:2px solid #0878ee;outline-offset:1px;background:#fff2a8}footer{margin-top:22px;border-top:1px solid var(--line);padding-top:13px;color:var(--muted);font-size:10.5px}
 @media(max-width:1100px){.layout{grid-template-columns:minmax(0,1fr) 205px}.left{display:none}}@media(max-width:850px){.layout{grid-template-columns:1fr}.right{display:none}}
 </style></head><body>
 
@@ -90,13 +107,14 @@ SharePoint — Get file content using path (Full Path from trigger)
   v
 Microsoft 365 Outlook — Send an email (V2)</pre>
 
-<h2 id="download">Download the production script</h2>
+<h2 id="download">Download the PowerShell script</h2>
 <div class="card">
 <p><b>SharePoint Site Inventory — direct SharePoint upload for Power Automate</b></p>
-<p>This is the production-oriented version of the SharePoint inventory script. It creates the CSV in memory, validates it, uploads it directly to SharePoint, and leaves email delivery to Power Automate.</p>
+<p>This tenant-neutral PowerShell script creates the CSV in memory, validates it, uploads it directly to SharePoint, and leaves email delivery to Power Automate. Update the configuration values for your tenant before running it.</p>
 <div class="actions">
-<a class="btn primary" href="/scripts/SharePoint/SharePoint_Site_Inventory_PowerAutomate.ps1" download="SharePoint_Site_Inventory_PowerAutomate.ps1">Download generic PowerShell script template</a>
-<a class="btn" href="https://github.com/rahulbaghel777/M365buddy/blob/main/public/scripts/SharePoint/SharePoint_Site_Inventory_PowerAutomate.ps1">View source on GitHub</a>
+<a class="btn primary" href="/scripts/SharePoint/SharePoint_Site_Inventory_PowerAutomate.ps1" download="SharePoint_Site_Inventory_PowerAutomate.ps1" title="Download the PowerShell script to your computer">Download script (.ps1)</a>
+<a class="btn" href="https://github.dev/rahulbaghel777/M365buddy/blob/main/public/scripts/SharePoint/SharePoint_Site_Inventory_PowerAutomate.ps1" target="_blank" rel="noopener noreferrer" title="Open the script in GitHub's browser-based editor">Open in editor</a>
+<a class="btn" href="https://github.com/rahulbaghel777/M365buddy/blob/main/public/scripts/SharePoint/SharePoint_Site_Inventory_PowerAutomate.ps1" target="_blank" rel="noopener noreferrer">View source on GitHub</a>
 </div>
 </div>
 
@@ -104,12 +122,12 @@ Microsoft 365 Outlook — Send an email (V2)</pre>
 <ul>
 <li>PowerShell 7 and a compatible version of <code>PnP.PowerShell</code>.</li>
 <li>An Entra application registered for certificate-based app-only authentication and the necessary permissions for the inventory operations.</li>
-<li>The certificate's public key registered with the Entra application, and the matching private-key certificate installed in the Windows certificate store.</li>
+<li>A password-protected PFX file containing the private key; its matching public certificate must be registered with the Entra application.</li>
 <li>Write permission for the application on the destination SharePoint report site/library, as well as the permissions required to read the tenant/site details in your inventory.</li>
 <li>An approved Power Automate SharePoint connection and Microsoft 365 Outlook connection.</li>
 <li>A DLP policy that allows SharePoint and Office 365 Outlook to be used together in the same flow.</li>
 </ul>
-<div class="call warn"><b>Security note:</b> This is a tenant-neutral template. Replace the example tenant domain, Entra app ID, SharePoint URLs, and PFX path with your own settings before running it. The script prompts securely for the PFX password and does not hard-code it. Do not commit a real password, private PFX file, or exported report data to a public repository.</div>
+<div class="call warn"><b>Before running:</b> Replace the example tenant domain, Entra app ID, SharePoint URLs, and PFX path with your own settings. The script securely prompts for the PFX password at runtime. Do not hard-code the password or commit a private PFX file or exported report data to a public repository.</div>
 
 <h2 id="certificate">PFX certificate setup</h2>
 <p>The script authenticates directly from your password-protected PFX file. You do not need to import the certificate into the Windows certificate store or look up a thumbprint.</p>
@@ -119,8 +137,8 @@ Microsoft 365 Outlook — Send an email (V2)</pre>
 <p>Run the script interactively because it asks for the password at runtime. For unattended scheduled runs, do not hard-code the password in the script; use an approved secret store or another unattended authentication design.</p>
 
 <h2 id="configure-script">Configure the script</h2>
-<p>Open the downloaded script in your editor and update the configuration section near the top. Keep the PFX password out of the script; you will enter it securely when prompted.</p>
-<table>
+<p>Choose <b>Download script (.ps1)</b> to save a local copy, or select <b>Open in editor</b> above to review the file in GitHub’s browser-based editor. In your editor, update the <code>CONFIGURATION</code> block near the top of the script. Keep the PFX password out of the file; it will be requested securely when you run the script.</p>
+<div class="table-wrap"><table>
 <thead><tr><th>Setting</th><th>What to enter</th></tr></thead>
 <tbody>
 <tr><td><code>$Tenant</code></td><td>Your tenant domain, such as <code>contoso.onmicrosoft.com</code>.</td></tr>
@@ -131,11 +149,11 @@ Microsoft 365 Outlook — Send an email (V2)</pre>
 <tr><td><code>$ReportSiteUrl</code></td><td>The site containing the document library/folder monitored by Power Automate.</td></tr>
 <tr><td><code>$ReportFolder</code></td><td>The site-relative path inside the document library where the CSV will be created.</td></tr>
 </tbody>
-</table>
-<p>Example destination configuration (replace with your actual site and folder):</p>
+</table></div>
+<p><b>Example destination settings</b> — replace these sample values with your own report site and folder:</p>
 <pre>$ReportSiteUrl = "https://contoso.sharepoint.com/sites/SharePointReports"
 $ReportFolder  = "Shared Documents/Reports/SharePointSiteInventory/Incoming"</pre>
-<p>The SharePoint destination folder must already exist. Use the exact same site, library, and folder in the Power Automate trigger. The script creates a unique filename such as <code>SharePointSiteInventory_20261021_003000.csv</code>; the timestamp differs on each run.</p>
+<div class="call"><b>Important:</b> Create the destination folder in SharePoint before the first run. Configure the Power Automate trigger to watch the same site, library, and folder. Each run creates a unique name such as <code>SharePointSiteInventory_20261021_003000.csv</code>.</div>
 
 <h2 id="how-script-works">How the script avoids a local CSV</h2>
 <ol>
@@ -148,41 +166,46 @@ $ReportFolder  = "Shared Documents/Reports/SharePointSiteInventory/Incoming"</pr
 <p>No local CSV file is created. The source PowerShell script still runs on the computer or automation host where PowerShell and PnP.PowerShell are installed.</p>
 
 <h2 id="create-flow">Build the Power Automate flow</h2>
-<h3>1. Create an automated cloud flow</h3>
+<p>Once the script uploads a CSV to SharePoint, this cloud flow detects the new file, reads its contents, and emails the CSV as an attachment.</p>
+<div class="flow-summary"><div aria-hidden="true">↪</div><div><b>Flow at a glance</b><p>SharePoint file created → filename condition → Get file content using path → Send an email (V2).</p></div></div>
+<div class="flow-steps">
+<h3>Create an automated cloud flow</h3>
 <p>In Power Automate, select <b>Create → Automated cloud flow</b>. Give it a name such as <b>SharePoint Site Inventory Email</b>. Select the SharePoint trigger <b>When a file is created (properties only)</b>.</p>
 
-<h3>2. Configure the trigger</h3>
+<h3>Configure the SharePoint trigger</h3>
 <ul>
 <li><b>Site Address:</b> the exact site configured in <code>$ReportSiteUrl</code>.</li>
 <li><b>Library Name:</b> select the document library that contains <code>$ReportFolder</code>.</li>
 <li><b>Folder:</b> use the folder picker to select the configured <code>Incoming</code> folder.</li>
 </ul>
 
-<h3>3. Filter the trigger to the report files</h3>
+<h3>Filter the trigger to report files</h3>
 <p>Add a <b>Condition</b> after the trigger:</p>
-<table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>
+<div class="table-wrap"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>
 <tr><td>Left value</td><td><code>File name with extension</code> from the trigger</td></tr>
 <tr><td>Operator</td><td><code>starts with</code></td></tr>
 <tr><td>Right value</td><td><code>SharePointSiteInventory_</code></td></tr>
-</tbody></table>
+</tbody></table></div>
 <p>Put the content and email actions inside the <b>If yes</b> branch. Leave <b>If no</b> empty for the initial setup.</p>
 
-<h3>4. Get the content using path (important)</h3>
+<h3>Get the file content using path</h3>
 <p>Add <b>SharePoint → Get file content using path</b>. In the working test, using the wrong file identifier caused a 404 “File not found”. The path-based action avoids that particular identifier mismatch.</p>
 <ul>
 <li><b>Site Address:</b> the same site as the trigger.</li>
 <li><b>File Path:</b> select <b>Full Path</b> from the trigger's dynamic content. Do not type the URL-encoded identifier manually or select only the file name.</li>
 </ul>
 
-<h3>5. Send the attachment</h3>
+<h3>Send the email attachment</h3>
 <p>Add <b>Microsoft 365 Outlook → Send an email (V2)</b> and configure:</p>
-<table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>
+<div class="table-wrap"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>
 <tr><td>To</td><td>The approved recipient or distribution group.</td></tr>
 <tr><td>Subject</td><td><code>SharePoint Site Inventory Report</code></td></tr>
 <tr><td>Body</td><td>State that the CSV site inventory report is attached.</td></tr>
 <tr><td>Attachment Name</td><td><b>File name with extension</b> from the trigger.</td></tr>
 <tr><td>Attachment Content</td><td><b>File Content</b> from <b>Get file content using path</b>.</td></tr>
-</tbody></table>
+</tbody></table></div>
+
+</div>
 
 <h2 id="dlp">Fix DLP connector policy errors</h2>
 <p>If Flow checker reports that <code>shared_sharepointonline</code> cannot be combined with <code>shared_office365</code> because of <code>DemoPolicy</code>, the issue is the environment's Data Loss Prevention policy, not the script or CSV.</p>
