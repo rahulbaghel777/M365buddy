@@ -205,7 +205,7 @@ Communication Site       https://contoso.sharepoint.com/sites/CommunicationSite<
 <p>Replace the example tenant, client ID and URL with your organization's values. If the PFX is password-protected, use the certificate-password option supported by your installed PnP PowerShell version and retrieve the password securely. Never hard-code it in the script.</p>
 <h2 id="verify">7. Verify and maintain the certificate</h2><ul><li>Confirm the app registration has the correct public certificate.</li><li>Confirm the private key is present and readable by the intended execution account.</li><li>Test authentication before running the full report.</li><li>Monitor expiry and replace the certificate before it expires. Upload the new public certificate and test it before removing the old one.</li><li>Remove unused certificates from the app and securely delete obsolete private-key copies according to policy.</li></ul>
 <h2 id="next">Next steps</h2><div class="callout"><strong>Continue setup:</strong> <a href="/articles/entra-id-pnp-certificate-authentication.html"><strong>Register an Entra ID App for PnP PowerShell Certificate Authentication</strong></a> explains app registration, permissions, admin consent and testing.<br><br><strong>Use the configuration:</strong> <a href="/articles/sharepoint-online-site-inventory.html"><strong>Export All SharePoint Online Sites Using PnP PowerShell</strong></a>.</div>
-<footer>M365Buddy · Microsoft 365 administration</footer><section class="m365-comments" data-giscus-comments aria-labelledby="community-comments-title">
+<section class="m365-comments" data-giscus-comments aria-labelledby="community-comments-title">
   <div class="m365-comments-head">
     <p class="m365-comments-kicker">M365Buddy Community</p>
     <h2 id="community-comments-title">Discuss this article</h2>
@@ -218,6 +218,8 @@ Communication Site       https://contoso.sharepoint.com/sites/CommunicationSite<
     <a href="https://github.com/rahulbaghel777/M365buddy/issues" target="_blank" rel="noopener noreferrer">Report an issue on GitHub →</a>
   </div>
 </section>
+
+<footer>M365Buddy · Microsoft 365 administration</footer>
 </main>
 <aside class="right-sidebar side-card"><b>Search in this article</b><div class="search-row"><div class="search-field"><svg class="search-glass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg><input id="articleSearch" class="search-mini" placeholder="Search in this article" aria-label="Search in this article"></div><button id="prevMatch" type="button" aria-label="Previous match" title="Previous match">↑</button><button id="nextMatch" type="button" aria-label="Next match" title="Next match">↓</button><span id="searchCount" aria-live="polite"></span></div><b style="margin-top:12px">On This Page</b><div id="toc"></div></aside>
 </div>
