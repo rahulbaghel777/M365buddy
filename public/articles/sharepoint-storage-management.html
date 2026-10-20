@@ -76,7 +76,8 @@ header{height:62px;background:linear-gradient(105deg,var(--nav1),var(--nav2));po
   .m365-header-inner{grid-template-columns:1fr auto;gap:6px 10px}
   .m365-search{grid-column:1/-1;grid-row:2;width:100%}
 }
-</style></head><body>
+</style>  <link rel="stylesheet" href="/assets/community.css">
+</head><body>
 <header class="m365-header">
   <div class="m365-header-inner"><nav class="m365-nav" aria-label="Main navigation"><a href="/" data-nav="home">Home</a><a href="/articles/" data-nav="articles">Articles</a><a href="/scripts/" data-nav="scripts">Scripts</a>
       <a href="/community/" data-nav="community">Community</a></nav>
@@ -96,7 +97,20 @@ header{height:62px;background:linear-gradient(105deg,var(--nav1),var(--nav2));po
 <section class="hero"><span class="ey">SharePoint Online</span><h1>SharePoint Storage Management</h1><p class="sub">Understand storage consumption, reporting and practical SharePoint storage governance.</p></section>
 <article class="article"><h2>Understand SharePoint storage</h2><p>SharePoint Online storage is consumed across document libraries, site assets, pages, recycle bins and version history. A site inventory helps identify where storage is being consumed.</p><h2>What should you report?</h2><ul><li>Site URL and title</li><li>Current storage usage</li><li>Allocated storage</li><li>Over-utilization</li><li>Site type and ownership</li></ul><h2>Use PowerShell for repeatable reporting</h2><p>For larger tenants, PnP PowerShell is useful for collecting consistent storage data across sites and exporting it to CSV.</p><h2>Practical governance</h2><p>Review high-consumption sites, version history, recycle bins and inactive sites before increasing tenant storage.</p>
 <section class="card"><h2 style="margin-top:0">Related Articles</h2><p>Continue with practical Microsoft 365 administration guidance on M365Buddy.</p><div class="actions"><a class="btn primary" href="/articles/">Browse All Articles</a></div></section>
-<footer>M365Buddy · Microsoft 365 · SharePoint Online</footer></article></main>
+<footer>M365Buddy · Microsoft 365 · SharePoint Online</footer><section class="m365-comments" data-giscus-comments aria-labelledby="community-comments-title">
+  <div class="m365-comments-head">
+    <p class="m365-comments-kicker">M365Buddy Community</p>
+    <h2 id="community-comments-title">Discuss this article</h2>
+    <p class="m365-comments-intro">Have a question, correction, or a helpful tip? Join the discussion. Posting and replying uses your GitHub account; please keep tenant details and credentials out of public comments.</p>
+  </div>
+  <div class="m365-comments-panel" data-giscus-pending>
+    <strong>GitHub comments are being connected</strong>
+    <p>The embedded discussion will appear here after GitHub Discussions is enabled for M365Buddy and the comments category is configured.</p>
+    <a href="/community/">Visit the M365Buddy Community →</a>
+    <a href="https://github.com/rahulbaghel777/M365buddy/issues" target="_blank" rel="noopener noreferrer">Report an issue on GitHub →</a>
+  </div>
+</section>
+</article></main>
 <aside class="side right"><b>Search in this article</b><div class="article-search-box"><div class="article-search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg><input id="articleSearch" type="search" placeholder="Search in this article" autocomplete="off"></div><button class="match-btn" id="prevMatch">↑</button><button class="match-btn" id="nextMatch">↓</button></div><div class="search-count" id="searchCount"></div><b>On This Page</b><div id="toc" class="toc"></div></aside></div>
 <script>
 (function(){const root=document.querySelector(".article"),input=document.getElementById("articleSearch"),count=document.getElementById("searchCount"),prev=document.getElementById("prevMatch"),next=document.getElementById("nextMatch"),toc=document.getElementById("toc");let matches=[],idx=-1;
@@ -108,4 +122,5 @@ input.addEventListener("input",scan);input.addEventListener("keydown",e=>{if(e.k
 })();
 </script>
 
+<script src="/assets/community-comments.js" defer></script>
 </body></html>
