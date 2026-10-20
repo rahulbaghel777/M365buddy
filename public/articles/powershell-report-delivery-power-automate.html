@@ -49,7 +49,8 @@
 .flow-summary p{margin:0}
 @media(max-width:650px){.article table{min-width:560px}.flow-steps h3{font-size:14px;padding:10px 11px}.flow-steps h3::before{flex-basis:28px;width:28px;height:28px}}.article-search-box{display:flex;gap:5px;margin-bottom:6px}.article-search-wrap{position:relative;flex:1}.article-search-wrap input{width:100%;height:34px;border:1px solid #cbd9e8;border-radius:7px;padding:0 8px 0 32px;font-size:11px;outline:0}.article-search-wrap svg{position:absolute;left:9px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:#68809d}.match-btn{width:31px;height:34px;border:1px solid #cbd9e8;background:#fff;border-radius:7px;cursor:pointer}.search-count{font-size:10px;color:#72859e;margin-bottom:10px}.toc a{display:block;padding:5px 7px;font-size:10.5px;color:#617492;border-radius:6px}.toc a:hover{background:#f1f7ff;color:var(--blue)}.toc a.h3{padding-left:15px;font-size:10px}.match-highlight{outline:2px solid #9ac2ea;outline-offset:1px;background:#fff8cc}.current-match{outline:2px solid #0878ee;outline-offset:1px;background:#fff2a8}footer{margin-top:22px;border-top:1px solid var(--line);padding-top:13px;color:var(--muted);font-size:10.5px}
 @media(max-width:1100px){.layout{grid-template-columns:minmax(0,1fr) 205px}.left{display:none}}@media(max-width:850px){.layout{grid-template-columns:1fr}.right{display:none}}
-</style></head><body>
+</style>  <link rel="stylesheet" href="/assets/community.css">
+</head><body>
 
 <header class="m365-header">
   <div class="m365-header-inner">
@@ -261,6 +262,19 @@ $ReportFolder  = "Shared Documents/Reports/SharePointSiteInventory/Incoming"</pr
 
 <section class="card"><h2 style="margin-top:0">Related article</h2><p>Read the inventory report article for the fields collected, the report calculations, and the base inventory workflow.</p><div class="actions"><a class="btn primary" href="/articles/sharepoint-online-site-inventory.html">SharePoint Online Site Inventory</a><a class="btn" href="/articles/powershell-report-delivery-microsoft-graph">Graph email alternative</a></div></section>
 <footer>M365Buddy · SharePoint Online · PnP PowerShell · Power Automate</footer>
+<section class="m365-comments" data-giscus-comments aria-labelledby="community-comments-title">
+  <div class="m365-comments-head">
+    <p class="m365-comments-kicker">M365Buddy Community</p>
+    <h2 id="community-comments-title">Discuss this article</h2>
+    <p class="m365-comments-intro">Have a question, correction, or a helpful tip? Join the discussion. Posting and replying uses your GitHub account; please keep tenant details and credentials out of public comments.</p>
+  </div>
+  <div class="m365-comments-panel" data-giscus-pending>
+    <strong>GitHub comments are being connected</strong>
+    <p>The embedded discussion will appear here after GitHub Discussions is enabled for M365Buddy and the comments category is configured.</p>
+    <a href="/community/">Visit the M365Buddy Community →</a>
+    <a href="https://github.com/rahulbaghel777/M365buddy/issues" target="_blank" rel="noopener noreferrer">Report an issue on GitHub →</a>
+  </div>
+</section>
 </article>
 </main>
 <aside class="side right">
@@ -346,4 +360,5 @@ document.addEventListener("DOMContentLoaded",function(){wireGlobalSearch();markN
 window.M365BuddySearch={index:M365_INDEX,search:searchItems};
 })();
 </script>
+<script src="/assets/community-comments.js" defer></script>
 </body></html>
