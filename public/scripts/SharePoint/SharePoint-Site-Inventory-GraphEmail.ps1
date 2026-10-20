@@ -51,7 +51,7 @@
 # CONFIGURATION
 # =====================================================
 
-$Tenant = "5062x8.onmicrosoft.com"
+$Tenant = "domain.onmicrosoft.com"
 
 $ClientId = "84ede95e-a45a-427c-862c-9afef6132839"
 
@@ -80,7 +80,7 @@ $PfxPassword = ConvertTo-SecureString -String $PfxPasswordPlainText -AsPlainText
 # -----------------------------------------------------
 
 $AdminCenterUrl =
-    "https://5062x8-admin.sharepoint.com"
+    "https://domain-admin.sharepoint.com"
 
 
 # -----------------------------------------------------
@@ -88,7 +88,7 @@ $AdminCenterUrl =
 # -----------------------------------------------------
 
 $SharePointRootUrl =
-    "https://5062x8.sharepoint.com"
+    "https://domain.sharepoint.com"
 
 
 # -----------------------------------------------------
