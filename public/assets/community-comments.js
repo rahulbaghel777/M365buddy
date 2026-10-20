@@ -53,6 +53,10 @@
     script.setAttribute("data-input-position", config.inputPosition);
     script.setAttribute("data-theme", config.theme);
     script.setAttribute("data-lang", config.lang);
+    script.onerror = function () {
+      if (fallback) fallback.hidden = false;
+      container.dataset.giscusLoaded = "false";
+    };
     container.appendChild(script);
     if (fallback) fallback.hidden = true;
   });
