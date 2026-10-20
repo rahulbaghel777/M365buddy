@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>M365Buddy — Email PowerShell Reports Using Power Automate</title><style>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SharePoint Inventory Report Email with Power Automate | M365Buddy</title><meta name="description" content="Use PowerShell 7 and PnP.PowerShell to create a SharePoint site inventory CSV in memory, upload it to SharePoint, and email it with Power Automate using secure PFX certificate authentication."><style>
 .m365-header{height:62px;background:linear-gradient(105deg,#07346f,#0873c9);position:sticky;top:0;z-index:100;color:#fff}
 .m365-header-inner{height:100%;max-width:1400px;margin:auto;padding:0 18px;display:grid;grid-template-columns:225px minmax(260px,1fr) 150px;gap:14px;align-items:center}
 .m365-nav{display:flex;align-items:center;gap:2px}
@@ -77,7 +77,7 @@
     <a class="active" href="#top">Email PowerShell Reports Using Power Automate</a>
     </aside>
 <main id="top">
-<section class="hero"><span class="ey">PowerShell · Power Automate · Microsoft 365</span><h1>Email PowerShell Reports Using Power Automate</h1><p class="sub">Use a Power Automate flow to email a PowerShell-generated CSV without putting SMTP configuration in the script.</p></section>
+<section class="hero"><span class="ey">PowerShell · Power Automate · Microsoft 365</span><h1>Email SharePoint Inventory Reports with Power Automate</h1><p class="sub">Generate a SharePoint site inventory CSV with PowerShell 7, upload it directly to SharePoint, and email it through Power Automate—without creating a local CSV or storing the PFX password in the script.</p></section>
 <article class="article">
 <div class="call ok"><b>Production architecture:</b> the script collects the SharePoint inventory, builds and validates the CSV in memory, uploads that text directly to SharePoint, and lets Power Automate email the uploaded file. No local CSV copy is created. The script securely prompts for the PFX password at the start of each interactive run.</div>
 
@@ -120,7 +120,7 @@ Microsoft 365 Outlook — Send an email (V2)</pre>
 
 <h2 id="prerequisites">Prerequisites</h2>
 <ul>
-<li>PowerShell 7 and a compatible version of <code>PnP.PowerShell</code>.</li>
+<li><b>PowerShell 7</b> and a compatible version of <code>PnP.PowerShell</code>. This script uses PowerShell 7 parallel-processing syntax and is not intended for Windows PowerShell 5.1 / PowerShell ISE.</li>
 <li>An Entra application registered for certificate-based app-only authentication and the necessary permissions for the inventory operations.</li>
 <li>A password-protected PFX file containing the private key; its matching public certificate must be registered with the Entra application.</li>
 <li>Write permission for the application on the destination SharePoint report site/library, as well as the permissions required to read the tenant/site details in your inventory.</li>
@@ -133,27 +133,29 @@ Microsoft 365 Outlook — Send an email (V2)</pre>
 <p>The script authenticates directly from your password-protected PFX file. You do not need to import the certificate into the Windows certificate store or look up a thumbprint.</p>
 <p>In the script configuration, set <code>$PfxPath</code> to the full path of your certificate file. When you run the script, it prompts once for the PFX password using a secure input; the password is not stored in the script.</p>
 <pre>$PfxPath = "C:\Certificates\SharePointAutomationCert.pfx"</pre>
-<p>The PFX file must contain the private key, and its public certificate must be registered with the Entra app identified by <code>$ClientId</code>. The app must have the required SharePoint permissions and admin consent.</p>
-<p>Run the script interactively because it asks for the password at runtime. For unattended scheduled runs, do not hard-code the password in the script; use an approved secret store or another unattended authentication design.</p>
+<p>The PFX file must contain the private key. Register the matching <b>public certificate</b> (typically the <code>.cer</code> file) with the Entra app identified by <code>$ClientId</code>; keep the private-key PFX file protected on the computer that runs the script. The app must have the required permissions and admin consent for tenant-wide inventory, site reads, and uploading to the destination site.</p>
+<p>You do not need to import the PFX into the Windows certificate store for this authentication method. The account running PowerShell must be able to read the PFX file.</p>
+<p>Run the script interactively because it asks for the password at the start of each run. For unattended scheduled runs, this prompt cannot be answered automatically; do not hard-code the password. Use an approved secret store or an authentication design intended for unattended execution.</p>
+<p>For app registration and certificate authentication steps, see the <a href="/articles/entra-id-pnp-certificate-authentication.html">Entra ID Certificate Authentication guide</a>.</p>
 
 <h2 id="configure-script">Configure the script</h2>
 <p>Choose <b>Download script (.ps1)</b> to save a local copy, or select <b>Open in editor</b> above to review the file in GitHub’s browser-based editor. In your editor, update the <code>CONFIGURATION</code> block near the top of the script. Keep the PFX password out of the file; it will be requested securely when you run the script.</p>
 <div class="table-wrap"><table>
-<thead><tr><th>Setting</th><th>What to enter</th></tr></thead>
+<thead><tr><th>Setting</th><th>Example value</th><th>Purpose</th></tr></thead>
 <tbody>
-<tr><td><code>$Tenant</code></td><td>Your tenant domain, such as <code>contoso.onmicrosoft.com</code>.</td></tr>
-<tr><td><code>$ClientId</code></td><td>The client ID of your Entra application.</td></tr>
-<tr><td><code>$PfxPath</code></td><td>The full path to your password-protected <code>.pfx</code> certificate file.</td></tr>
-<tr><td><code>$AdminCenterUrl</code></td><td>Your SharePoint admin-center URL.</td></tr>
-<tr><td><code>$SharePointRootUrl</code></td><td>Your tenant SharePoint root URL.</td></tr>
-<tr><td><code>$ReportSiteUrl</code></td><td>The site containing the document library/folder monitored by Power Automate.</td></tr>
-<tr><td><code>$ReportFolder</code></td><td>The site-relative path inside the document library where the CSV will be created.</td></tr>
+<tr><td><code>$Tenant</code></td><td><code>contoso.onmicrosoft.com</code></td><td>Your Entra tenant domain, not the SharePoint site URL.</td></tr>
+<tr><td><code>$ClientId</code></td><td><code>00000000-0000-0000-0000-000000000000</code></td><td>The application (client) ID of the Entra app registered for certificate authentication.</td></tr>
+<tr><td><code>$PfxPath</code></td><td><code>C:\Certificates\SharePointAutomationCert.pfx</code></td><td>Full local path to the password-protected PFX file. The running account must be able to read it.</td></tr>
+<tr><td><code>$AdminCenterUrl</code></td><td><code>https://contoso-admin.sharepoint.com</code></td><td>SharePoint admin-center URL used for tenant-wide site discovery.</td></tr>
+<tr><td><code>$SharePointRootUrl</code></td><td><code>https://contoso.sharepoint.com</code></td><td>Root URL used when checking site details.</td></tr>
+<tr><td><code>$ReportSiteUrl</code></td><td><code>https://contoso.sharepoint.com/sites/SharePointReports</code></td><td>The destination site containing the report document library.</td></tr>
+<tr><td><code>$ReportFolder</code></td><td><code>Shared Documents/Reports/SharePointSiteInventory/Incoming</code></td><td>The site-relative library/folder path passed to <code>Add-PnPFile</code>; include the library's URL segment.</td></tr>
 </tbody>
 </table></div>
-<p><b>Example destination settings</b> — replace these sample values with your own report site and folder:</p>
+<p><b>Example destination settings</b> — replace the sample site and folder with your own:</p>
 <pre>$ReportSiteUrl = "https://contoso.sharepoint.com/sites/SharePointReports"
 $ReportFolder  = "Shared Documents/Reports/SharePointSiteInventory/Incoming"</pre>
-<div class="call"><b>Important:</b> Create the destination folder in SharePoint before the first run. Configure the Power Automate trigger to watch the same site, library, and folder. Each run creates a unique name such as <code>SharePointSiteInventory_20261021_003000.csv</code>.</div>
+<div class="call"><b>Important:</b> Create this folder in SharePoint before the first run. The trigger in Power Automate selects the document library separately; its <b>Folder</b> field should point to the subfolder under that library (for this example, <code>Reports/SharePointSiteInventory/Incoming</code>), not the full <code>$ReportFolder</code> value including <code>Shared Documents/</code>. Each run creates a unique file such as <code>SharePointSiteInventory_20261021_003000.csv</code>.</div>
 
 <h2 id="how-script-works">How the script avoids a local CSV</h2>
 <ol>
@@ -176,7 +178,7 @@ $ReportFolder  = "Shared Documents/Reports/SharePointSiteInventory/Incoming"</pr
 <ul>
 <li><b>Site Address:</b> the exact site configured in <code>$ReportSiteUrl</code>.</li>
 <li><b>Library Name:</b> select the document library that contains <code>$ReportFolder</code>.</li>
-<li><b>Folder:</b> use the folder picker to select the configured <code>Incoming</code> folder.</li>
+<li><b>Folder:</b> use the folder picker to choose the subfolder under the selected library. For the example path in the configuration table, choose <code>Reports/SharePointSiteInventory/Incoming</code>. The library is selected separately, so do not paste the full <code>Shared Documents/...</code> value into this field.</li>
 </ul>
 
 <h3>Filter the trigger to report files</h3>
@@ -189,7 +191,7 @@ $ReportFolder  = "Shared Documents/Reports/SharePointSiteInventory/Incoming"</pr
 <p>Put the content and email actions inside the <b>If yes</b> branch. Leave <b>If no</b> empty for the initial setup.</p>
 
 <h3>Get the file content using path</h3>
-<p>Add <b>SharePoint → Get file content using path</b>. In the working test, using the wrong file identifier caused a 404 “File not found”. The path-based action avoids that particular identifier mismatch.</p>
+<p>Add <b>SharePoint → Get file content using path</b>. Use the trigger’s <b>Full Path</b> dynamic value for this action. This avoids manually copying an identifier or accidentally passing the wrong field, both of which can cause a 404 “File not found”.</p>
 <ul>
 <li><b>Site Address:</b> the same site as the trigger.</li>
 <li><b>File Path:</b> select <b>Full Path</b> from the trigger's dynamic content. Do not type the URL-encoded identifier manually or select only the file name.</li>
@@ -208,14 +210,14 @@ $ReportFolder  = "Shared Documents/Reports/SharePointSiteInventory/Incoming"</pr
 </div>
 
 <h2 id="dlp">Fix DLP connector policy errors</h2>
-<p>If Flow checker reports that <code>shared_sharepointonline</code> cannot be combined with <code>shared_office365</code> because of <code>DemoPolicy</code>, the issue is the environment's Data Loss Prevention policy, not the script or CSV.</p>
+<p>If Flow checker says the SharePoint and Microsoft 365 Outlook connectors cannot be used together, review the environment’s Data Loss Prevention (DLP) policies. The issue is with connector governance, not the CSV or PFX authentication. An error may name a policy such as <code>DemoPolicy</code>, but more than one applicable policy can affect the same environment.</p>
 <ol>
-<li>Open the Power Platform admin center and edit the applicable data policy if you have the required role.</li>
-<li>Review the data group for the SharePoint and Office 365 Outlook connectors.</li>
-<li>Ask the policy owner to put both connectors in the same approved group, commonly Business for internal report-delivery scenarios, consistent with company governance.</li>
-<li>Save the approved change, allow time for propagation, reopen the flow and run Flow checker again.</li>
+<li>Open the Power Platform admin center and inspect the data policies that apply to the environment.</li>
+<li>Check whether the SharePoint connector (<code>shared_sharepointonline</code>) and Microsoft 365 Outlook connector (<code>shared_office365</code>) are allowed and placed in compatible data groups under all applicable policies.</li>
+<li>If they are in different groups or one is blocked, ask the policy owner to make an approved governance change. Do not assume a particular group is always correct; follow your organization’s classification policy.</li>
+<li>Save the approved change, allow time for policy propagation, reopen the flow, and run Flow checker again.</li>
 </ol>
-<p>Do not delete or disable the policy merely to make this flow pass. If you cannot edit the policy, ask your Power Platform administrator to perform the change.</p>
+<p>Do not delete or disable the policy merely to make this flow pass. For details, see Microsoft’s <a href="https://learn.microsoft.com/en-us/power-platform/admin/wp-data-loss-prevention" target="_blank" rel="noopener noreferrer">Data policies documentation</a> and <a href="https://learn.microsoft.com/en-us/power-platform/admin/dlp-connector-classification" target="_blank" rel="noopener noreferrer">connector classification guidance</a>. If you cannot edit the policy, ask your Power Platform administrator to perform the change.</p>
 
 <h2 id="test">Run an end-to-end test</h2>
 <ol>
@@ -223,7 +225,7 @@ $ReportFolder  = "Shared Documents/Reports/SharePointSiteInventory/Incoming"</pr
 <li>Run the production PowerShell script and wait for it to finish collecting the inventory and uploading the in-memory CSV.</li>
 <li>Confirm that a new timestamped CSV appears in the SharePoint destination folder.</li>
 <li>Open flow run history. Verify the trigger, condition, <b>Get file content using path</b>, and <b>Send an email (V2)</b> succeed.</li>
-<li>Open the email and confirm the attached CSV is readable and includes the expected site inventory columns.</li>
+<li>For the first test, send to a test mailbox you control. Confirm the attachment opens and includes the expected report columns before switching the recipient to a production distribution list.</li>
 </ol>
 <p>Files created before the flow was enabled do not normally start a new trigger run retroactively. Run the PowerShell script again to create a fresh timestamped file when retesting.</p>
 
@@ -231,7 +233,7 @@ $ReportFolder  = "Shared Documents/Reports/SharePointSiteInventory/Incoming"</pr
 <ul>
 <li>The local report CSV is not created; the content is held in memory and uploaded directly to SharePoint.</li>
 <li>Limit permissions to the destination library because site names, URLs, admins, owners, and storage usage may be sensitive inventory data.</li>
-<li>The current certificate must be installed with an accessible private key for the same account that runs the script. For Task Scheduler, test the task under its actual run-as identity before enabling a schedule.</li>
+<li>The PFX file must be readable by the account running the script, and its folder should have restricted access. This script prompts for the PFX password interactively, so it will not run unattended in Task Scheduler as-is. For unattended scheduling, use an approved secret store or redesign authentication for a non-interactive execution context; never put the password in the script.</li>
 <li>Each run creates a new timestamped file. Decide on a retention or archive policy for uploaded reports before adding a move/delete action to the flow.</li>
 <li>Monitor flow runs and configure a failure notification if the report email is operationally important.</li>
 <li>Use the narrowest approved permissions for inventory reading and writing to the destination SharePoint site.</li>
@@ -240,14 +242,21 @@ $ReportFolder  = "Shared Documents/Reports/SharePointSiteInventory/Incoming"</pr
 <h2 id="troubleshooting">Troubleshooting</h2>
 <h3>PFX file or password error</h3>
 <p>Check that <code>$PfxPath</code> points to the correct <code>.pfx</code> file, enter the correct PFX password when prompted, and verify the PFX contains the private key. Confirm the matching public certificate is registered with the Entra app and that the certificate has not expired.</p>
-<h3>SharePoint upload denied</h3>
-<p>Confirm the Entra application's certificate is registered, the app has appropriate write access to the report site, and <code>$ReportSiteUrl</code> and <code>$ReportFolder</code> refer to an existing location.</p>
-<h3>The flow does not trigger</h3>
-<p>Confirm the flow is enabled and watches the exact destination folder. Run the script again to create a fresh timestamped CSV after the flow is on.</p>
+<h3>Authentication or SharePoint upload denied</h3>
+<p>Confirm <code>$Tenant</code> and <code>$ClientId</code> match the Entra app, the public certificate corresponding to the PFX is registered, the PFX contains the private key, admin consent has been granted, and the app has the permissions required for tenant-wide inventory, site reads, and writing to the report site. Check that <code>$AdminCenterUrl</code>, <code>$SharePointRootUrl</code>, <code>$ReportSiteUrl</code>, and <code>$ReportFolder</code> are correct.</p>
+<h3>The flow does not trigger or the condition is false</h3>
+<p>Confirm the flow is saved and turned on, the SharePoint trigger watches the correct site/library/subfolder, and the new file name begins with <code>SharePointSiteInventory_</code>. If you are retesting, run the script again after enabling the flow to create a new timestamped file.</p>
 <h3>Get file content returns 404</h3>
 <p>Use <b>Get file content using path</b>, with <b>Full Path</b> from the trigger. Check that both SharePoint actions point to the same site and that the file exists at that path.</p>
 <h3>The email arrives without a readable attachment</h3>
 <p>Set Attachment Name to <b>File name with extension</b> from the trigger and Attachment Content to <b>File Content</b> from the path-based content action.</p>
+
+<section class="card"><h2 style="margin-top:0">Official documentation</h2>
+<ul class="docs-list">
+<li><a href="https://pnp.github.io/powershell/cmdlets/Connect-PnPOnline" target="_blank" rel="noopener noreferrer">PnP PowerShell — Connect-PnPOnline</a>: certificate path, client ID, tenant, and secure PFX password parameters.</li>
+<li><a href="https://learn.microsoft.com/en-us/sharepoint/dev/business-apps/power-automate/sharepoint-connector-actions-triggers" target="_blank" rel="noopener noreferrer">Microsoft SharePoint connector actions and triggers</a>: file-created trigger and file-content actions.</li>
+<li><a href="https://learn.microsoft.com/en-us/power-platform/admin/wp-data-loss-prevention" target="_blank" rel="noopener noreferrer">Microsoft Power Platform data policies</a>: how DLP policies govern connector combinations.</li>
+</ul></section>
 
 <section class="card"><h2 style="margin-top:0">Related article</h2><p>Read the inventory report article for the fields collected, the report calculations, and the base inventory workflow.</p><div class="actions"><a class="btn primary" href="/articles/sharepoint-online-site-inventory.html">SharePoint Online Site Inventory</a><a class="btn" href="/articles/powershell-report-delivery-microsoft-graph">Graph email alternative</a></div></section>
 <footer>M365Buddy · SharePoint Online · PnP PowerShell · Power Automate</footer>
