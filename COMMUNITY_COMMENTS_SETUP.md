@@ -7,7 +7,7 @@ M365Buddy uses [Giscus](https://giscus.app/) to embed comments backed by GitHub 
 1. Open [the M365Buddy repository](https://github.com/rahulbaghel777/M365buddy).
 2. Open **Settings** and scroll to **Features**.
 3. Select **Set up discussions** and finish the initial welcome-discussion setup.
-4. Open **Discussions** and manage the categories. Create a category named **Comments** with the **Announcement** format. Keep the default **Q&A**, **Ideas**, **Show and Tell**, and **Announcements** categories enabled if you want the four community cards to work as written.
+4. Open **Discussions** and manage the categories. Create a category named **Comments** with the **Open-ended discussion** format so people can start conversations and comment on articles. Keep the default **Q&A**, **Ideas**, **Show and Tell**, and **Announcements** categories enabled if you want the four community cards to work as written.
 
 GitHub's current instructions are in [Enabling or disabling GitHub Discussions for a repository](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/enabling-or-disabling-github-discussions-for-a-repository).
 
