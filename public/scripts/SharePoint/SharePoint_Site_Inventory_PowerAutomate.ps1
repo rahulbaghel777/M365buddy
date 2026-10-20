@@ -58,8 +58,8 @@ $Tenant = "YOUR-TENANT.onmicrosoft.com"
 $ClientId = "YOUR-ENTRA-APP-CLIENT-ID"
 
 # Full path to your password-protected PFX certificate file.
-# Example: "C:\\Certificates\\SharePointAutomation.pfx"
-$PfxPath = "C:\\Certificates\\YourCertificate.pfx"
+# Example: "C:\Certificates\SharePointAutomation.pfx"
+$PfxPath = "C:\Certificates\YourCertificate.pfx"
 
 
 # -----------------------------------------------------
