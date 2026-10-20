@@ -26,7 +26,7 @@
   );
 
   const setupNotice = document.querySelector("[data-community-setup-pending]");
-  if (setupNotice && isConfigured) setupNotice.hidden = true;
+  if (setupNotice) setupNotice.hidden = isConfigured;
 
   document.querySelectorAll("[data-community-discussions-link]").forEach(function (link) {
     if (isConfigured) {
