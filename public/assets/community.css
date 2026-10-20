@@ -54,3 +54,6 @@
 .m365-community-link a{font-weight:750;color:#0878ee}
 .docs-list{padding-left:20px}
 .docs-list li{margin:7px 0}
+
+.community-btn.is-disabled,.community-card.is-disabled{opacity:.58;filter:saturate(.65);cursor:not-allowed;pointer-events:none;box-shadow:none!important;transform:none!important}
+.community-btn.is-disabled:focus,.community-card.is-disabled:focus{outline:2px solid #a7bed9;outline-offset:2px}
