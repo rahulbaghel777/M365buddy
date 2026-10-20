@@ -93,20 +93,22 @@ const M365_INDEX = [
     ]
   },
   {
-    title: "Email PowerShell Reports Using Microsoft Graph",
+    title: "Generate and Email a SharePoint Site Inventory Report with Microsoft Graph",
     type: "Article",
-    category: "Microsoft 365",
-    url: "/articles/powershell-report-delivery-microsoft-graph.html",
+    category: "SharePoint",
+    url: "/articles/powershell-report-delivery-microsoft-graph",
     description:
-      "Replace SMTP delivery with Microsoft Graph for PowerShell reports.",
-    keywords: [
-      "smtp",
-      "email",
-      "graph",
-      "sendmail",
-      "powershell",
-      "exchange online"
-    ]
+      "Generate a SharePoint site inventory, export the approved CSV, summarize storage and email the report with Microsoft Graph app-only certificate authentication.",
+    keywords: ["sharepoint", "site inventory", "graph email", "powershell", "csv", "storage", "mail.send", "mail.readwrite", "certificate authentication"]
+  },
+  {
+    title: "SharePoint Site Inventory + Graph Email PowerShell Script",
+    type: "Script",
+    category: "SharePoint",
+    url: "/articles/powershell-report-delivery-microsoft-graph",
+    description:
+      "Published PowerShell script that inventories SharePoint sites, exports CSV and sends the report through Microsoft Graph.",
+    keywords: ["sharepoint", "site inventory", "graph email", "powershell script", "csv attachment", "Mail.Send", "Mail.ReadWrite", "certificate"]
   },
   {
     title: "Email PowerShell Reports Using Power Automate",
