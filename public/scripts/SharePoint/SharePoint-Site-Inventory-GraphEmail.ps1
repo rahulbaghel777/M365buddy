@@ -71,7 +71,10 @@ $PfxPath =
 # -----------------------------------------------------
 
 # Use a secret store for production. Do not publish a real password in a public repository.
-$PfxPasswordPlainText = 'YourStrongPassword'
+$PfxPasswordPlainText = 'REPLACE-WITH-YOUR-PFX-PASSWORD'
+if ($PfxPasswordPlainText -eq 'REPLACE-WITH-YOUR-PFX-PASSWORD' -or [string]::IsNullOrWhiteSpace($PfxPasswordPlainText)) {
+    throw 'Set PfxPasswordPlainText in your private local copy before running. Never commit a real password to a public repository.'
+}
 $PfxPassword = ConvertTo-SecureString -String $PfxPasswordPlainText -AsPlainText -Force
 
 
