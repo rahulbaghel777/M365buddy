@@ -13,7 +13,7 @@
 #   - Export ONLY the approved CSV columns
 #   - Keep the approved inventory columns and calculations unchanged
 #   - Build CSV text in memory and upload directly to SharePoint (no local CSV)
-#   - Use a certificate already installed in the Windows certificate store
+#   - Authenticate directly from a PFX file; prompt securely for its password
 #
 # FINAL CSV COLUMNS:
 #
@@ -57,10 +57,9 @@ $Tenant = "YOUR-TENANT.onmicrosoft.com"
 
 $ClientId = "YOUR-ENTRA-APP-CLIENT-ID"
 
-# 40-character thumbprint of the certificate's private-key copy installed in Cert:\CurrentUser\My.
-# Enter a certificate thumbprint here, NOT the PFX password.
-# The script does not prompt for a PFX password at runtime.
-$CertificateThumbprint = "PASTE-40-CHARACTER-CERTIFICATE-THUMBPRINT-HERE"
+# Full path to your password-protected PFX certificate file.
+# Example: "C:\\Certificates\\SharePointAutomation.pfx"
+$PfxPath = "C:\\Certificates\\YourCertificate.pfx"
 
 
 # -----------------------------------------------------
@@ -127,38 +126,24 @@ Write-Host ""
 
 
 # -----------------------------------------------------
-# CHECK INSTALLED CERTIFICATE
+# CHECK PFX FILE AND PROMPT FOR PASSWORD
 # -----------------------------------------------------
 
-if ([string]::IsNullOrWhiteSpace($CertificateThumbprint))
+if ([string]::IsNullOrWhiteSpace($PfxPath) -or
+    $PfxPath -eq "C:\\Certificates\\YourCertificate.pfx")
 {
-    throw "Set CertificateThumbprint to the certificate's actual thumbprint. Do not enter the PFX password here."
+    throw "Update PfxPath in the configuration section with the full path to your .pfx file."
 }
 
-$CertificateThumbprint = $CertificateThumbprint.Trim().Replace(" ", "").ToUpperInvariant()
-if ($CertificateThumbprint -notmatch "^[A-F0-9]{40}$")
+if (-not (Test-Path -LiteralPath $PfxPath -PathType Leaf))
 {
-    throw "CertificateThumbprint must be the 40-character hexadecimal certificate thumbprint from Cert:\CurrentUser\My. It is not the PFX password. Run Get-ChildItem Cert:\CurrentUser\My | Select-Object Subject, Thumbprint, NotAfter, HasPrivateKey."
+    throw "PFX file not found: $PfxPath. Check the file path and try again."
 }
-$InstalledCertificate = Get-ChildItem -Path Cert:\CurrentUser\My -ErrorAction Stop |
-    Where-Object { $_.Thumbprint -eq $CertificateThumbprint } |
-    Select-Object -First 1
 
-if (-not $InstalledCertificate)
+$PfxPassword = Read-Host -Prompt "Enter the password for the PFX certificate" -AsSecureString
+if ($null -eq $PfxPassword -or $PfxPassword.Length -eq 0)
 {
-    throw "Certificate thumbprint $CertificateThumbprint was not found in Cert:\CurrentUser\My. Import the PFX certificate into this store first."
-}
-if (-not $InstalledCertificate.HasPrivateKey)
-{
-    throw "The installed certificate does not have an accessible private key."
-}
-if ($InstalledCertificate.NotAfter -le (Get-Date))
-{
-    throw "The installed certificate expired on $($InstalledCertificate.NotAfter)."
-}
-if ($InstalledCertificate.NotBefore -gt (Get-Date))
-{
-    throw "The installed certificate is not valid until $($InstalledCertificate.NotBefore)."
+    throw "The PFX password cannot be blank."
 }
 
 if ([string]::IsNullOrWhiteSpace($ReportSiteUrl) -or
@@ -193,7 +178,8 @@ Connect-PnPOnline `
     -Url $AdminCenterUrl `
     -ClientId $ClientId `
     -Tenant $Tenant `
-    -Thumbprint $CertificateThumbprint `
+    -CertificatePath $PfxPath `
+    -CertificatePassword $PfxPassword `
     -ErrorAction Stop
 
 
@@ -323,8 +309,11 @@ $results =
         $Tenant =
             $using:Tenant
 
-        $CertificateThumbprint =
-            $using:CertificateThumbprint
+        $PfxPath =
+            $using:PfxPath
+
+        $PfxPassword =
+            $using:PfxPassword
 
         $SharePointRootUrl =
             $using:SharePointRootUrl
@@ -471,7 +460,8 @@ $results =
                         -Url $site.Url `
                         -ClientId $ClientId `
                         -Tenant $Tenant `
-                        -Thumbprint $CertificateThumbprint `
+                        -CertificatePath $PfxPath `
+                        -CertificatePassword $PfxPassword `
                         -ReturnConnection `
                         -ErrorAction Stop
             }
@@ -1504,7 +1494,8 @@ try
         -Url $ReportSiteUrl `
         -ClientId $ClientId `
         -Tenant $Tenant `
-        -Thumbprint $CertificateThumbprint `
+        -CertificatePath $PfxPath `
+        -CertificatePassword $PfxPassword `
         -ErrorAction Stop
 
     $UploadedFile = Add-PnPFile `
