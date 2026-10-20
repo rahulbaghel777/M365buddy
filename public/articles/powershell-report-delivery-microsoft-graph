@@ -160,7 +160,7 @@
   .article .related-card a{width:100%}
 }
 
-</style>  <link rel="stylesheet" href="/assets/community.css">
+</style>  <link rel="stylesheet" href="/assets/community.css?v=20261021-2">
 </head><body>
 
 <header class="m365-header">
@@ -410,5 +410,5 @@ document.addEventListener("DOMContentLoaded",function(){wireGlobalSearch();markN
 window.M365BuddySearch={index:M365_INDEX,search:searchItems};
 })();
 </script>
-<script src="/assets/community-comments.js" defer></script>
+<script src="/assets/community-comments.js?v=20261021-2" defer></script>
 </body></html>
