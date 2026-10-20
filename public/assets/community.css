@@ -1,0 +1,43 @@
+/* M365Buddy community and GitHub comments */
+.community-page{max-width:1180px;margin:30px auto 54px;padding:0 20px;color:#263b5c}
+.community-hero{position:relative;overflow:hidden;padding:clamp(24px,4vw,44px);border:1px solid #d7e1ee;border-radius:18px;background:linear-gradient(125deg,#f2f8ff 0%,#fff 58%,#eaf4ff 100%)}
+.community-eyebrow{display:inline-flex;align-items:center;gap:7px;padding:5px 10px;border:1px solid #c9e0fa;border-radius:999px;background:#fff;color:#0878ee;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
+.community-hero h1{max-width:770px;margin:14px 0 10px;font-size:clamp(29px,4vw,44px);line-height:1.12;color:#071a3d;letter-spacing:-.035em}
+.community-hero p{max-width:760px;margin:0;color:#526987;font-size:15px;line-height:1.7}
+.community-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.community-btn{display:inline-flex;justify-content:center;align-items:center;gap:8px;min-height:42px;padding:10px 15px;border:1px solid #cbd9e8;border-radius:9px;background:#fff;color:#173961;font-size:13px;font-weight:750;text-decoration:none;transition:transform .15s ease,box-shadow .15s ease}
+.community-btn:hover{transform:translateY(-1px);box-shadow:0 5px 15px rgba(15,55,95,.09)}
+.community-btn.primary{background:#0878ee;border-color:#0878ee;color:#fff}
+.community-notice{display:flex;align-items:flex-start;gap:12px;margin:18px 0 26px;padding:15px 17px;border:1px solid #f2d28b;border-radius:11px;background:#fffbeb;color:#76500c}
+.community-notice strong{display:block;margin-bottom:3px;color:#624108}
+.community-notice p{margin:0;line-height:1.6;font-size:13px}
+.community-section{margin-top:36px}
+.community-section-head{display:flex;align-items:end;justify-content:space-between;gap:14px;margin-bottom:14px}
+.community-section-head h2{margin:0;color:#071a3d;font-size:23px;letter-spacing:-.02em}
+.community-section-head p{margin:4px 0 0;color:#617492;font-size:13px}
+.community-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.community-card{display:flex;gap:15px;align-items:flex-start;padding:19px;border:1px solid #d7e1ee;border-radius:13px;background:#fff;color:inherit;text-decoration:none;transition:border-color .15s ease,box-shadow .15s ease,transform .15s ease}
+.community-card:hover{border-color:#a8c9f0;box-shadow:0 7px 22px rgba(20,55,95,.07);transform:translateY(-2px)}
+.community-card-icon{display:grid;place-items:center;flex:0 0 43px;width:43px;height:43px;border:1px solid #d6e8fb;border-radius:12px;background:#eef7ff;color:#0878ee;font-size:20px}
+.community-card h3{margin:1px 0 5px;color:#102e53;font-size:16px}
+.community-card p{margin:0;color:#617492;font-size:13px;line-height:1.6}
+.community-card .community-card-action{display:inline-block;margin-top:12px;color:#0878ee;font-size:12px;font-weight:800}
+.community-guidelines{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.community-guideline{padding:16px;border:1px solid #d7e1ee;border-radius:11px;background:#f8fbff}
+.community-guideline strong{display:block;margin-bottom:4px;color:#173961;font-size:13px}
+.community-guideline p{margin:0;color:#617492;font-size:12.5px;line-height:1.65}
+.community-footer{margin-top:32px;padding:18px;border-top:1px solid #d7e1ee;color:#617492;font-size:12px}
+.community-footer a{color:#0878ee}
+.m365-comments{margin:34px 0 25px;padding-top:25px;border-top:1px solid #d7e1ee}
+.m365-comments-head{margin-bottom:14px}
+.m365-comments-kicker{margin:0 0 5px;color:#0878ee;font-size:10px;font-weight:850;letter-spacing:.09em;text-transform:uppercase}
+.m365-comments h2{margin:0 0 7px;color:#071a3d;font-size:23px;line-height:1.25;letter-spacing:-.02em}
+.m365-comments-intro{margin:0;color:#617492;font-size:13px;line-height:1.65}
+.m365-comments-panel{padding:18px;border:1px solid #d7e1ee;border-radius:12px;background:#f8fbff}
+.m365-comments-panel strong{display:block;margin-bottom:4px;color:#173961;font-size:13px}
+.m365-comments-panel p{margin:0;color:#617492;font-size:12.5px;line-height:1.65}
+.m365-comments-panel a{display:inline-block;margin-top:11px;color:#0878ee;font-size:12px;font-weight:800;text-decoration:none}
+.m365-comments-panel a:hover{text-decoration:underline}
+.m365-comments .giscus,.m365-comments iframe.giscus-frame{width:100%;max-width:100%}
+@media(max-width:720px){.community-grid,.community-guidelines{grid-template-columns:1fr}.community-page{padding:0 14px;margin-top:18px}.community-hero{padding:23px}.community-section-head{display:block}.community-actions .community-btn{width:100%}.community-card{padding:16px}.m365-comments h2{font-size:21px}}
+@media(prefers-reduced-motion:reduce){.community-btn,.community-card{transition:none}}
