@@ -363,7 +363,8 @@ function markNav(){
     const n=a.dataset.nav;
     if((n==="home" && (p==="/"||p.endsWith("/index.html"))) ||
        (n==="articles" && p.startsWith("/articles")) ||
-       (n==="scripts" && p.startsWith("/scripts"))) a.classList.add("active");
+       (n==="scripts" && p.startsWith("/scripts")) ||
+       (n==="community" && p.startsWith("/community")) ) a.classList.add("active");
   });
 }
 document.addEventListener("DOMContentLoaded",function(){wireGlobalSearch();markNav();});
