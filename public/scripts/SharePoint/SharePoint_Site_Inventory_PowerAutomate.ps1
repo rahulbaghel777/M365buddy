@@ -1410,7 +1410,7 @@ $CsvContent = $CsvLines -join "`r`n"
 $CsvContent += "`r`n"
 
 # Validate the actual serialized CSV header and data in memory.
-$CsvRowsForValidation = @($CsvContent | ConvertFrom-Csv)
+$CsvRowsForValidation = @($CsvLines | ConvertFrom-Csv)
 if ($CsvRowsForValidation.Count -eq 0)
 {
     throw "In-memory CSV validation failed: no data rows were parsed."
