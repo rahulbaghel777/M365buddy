@@ -29,6 +29,21 @@
   const setupNotice = document.querySelector("[data-community-setup-pending]");
   if (setupNotice && isConfigured) setupNotice.hidden = true;
 
+  document.querySelectorAll("[data-community-discussions-link]").forEach(function (link) {
+    if (isConfigured) {
+      if (link.dataset.discussionsHref) link.href = link.dataset.discussionsHref;
+      link.removeAttribute("aria-disabled");
+      link.removeAttribute("tabindex");
+      link.classList.remove("is-disabled");
+    } else {
+      if (!link.dataset.discussionsHref) link.dataset.discussionsHref = link.href;
+      link.href = "#community-discussion-status";
+      link.setAttribute("aria-disabled", "true");
+      link.setAttribute("tabindex", "-1");
+      link.classList.add("is-disabled");
+    }
+  });
+
   document.querySelectorAll("[data-giscus-comments]").forEach(function (container) {
     const fallback = container.querySelector("[data-giscus-pending]");
     if (!isConfigured) {
