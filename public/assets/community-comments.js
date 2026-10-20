@@ -2,7 +2,7 @@
    Setup prerequisites:
    1. Enable Discussions for rahulbaghel777/M365buddy.
    2. Install https://github.com/apps/giscus for this repository.
-   3. Choose an Announcements-type category on https://giscus.app and paste its category ID below.
+   3. Create a Comments category using the Announcement format, then select it on https://giscus.app and paste its category ID below.
 */
 (function () {
   "use strict";
@@ -10,7 +10,7 @@
   const config = {
     repo: "rahulbaghel777/M365buddy",
     repoId: "R_kgDOUOuk8Q",
-    category: "Announcements",
+    category: "Comments",
     // Replace after Discussions is enabled and the category is selected at giscus.app.
     categoryId: "GISCUS_CATEGORY_ID_PENDING",
     mapping: "pathname",
@@ -25,6 +25,9 @@
   const isConfigured = config.categoryId &&
     config.categoryId !== "GISCUS_CATEGORY_ID_PENDING" &&
     /^DIC_[A-Za-z0-9_]+$/.test(config.categoryId);
+
+  const setupNotice = document.querySelector("[data-community-setup-pending]");
+  if (setupNotice && isConfigured) setupNotice.hidden = true;
 
   document.querySelectorAll("[data-giscus-comments]").forEach(function (container) {
     const fallback = container.querySelector("[data-giscus-pending]");
