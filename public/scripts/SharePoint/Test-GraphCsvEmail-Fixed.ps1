@@ -6,7 +6,7 @@
     the report and does not import Microsoft Graph PowerShell modules.
 .NOTES
     Intended for CSV attachments up to 3 MB. Keep this script private because the
-    PFX password is stored as plaintext.
+    Configure the PFX password only in your private local copy; use an approved secret store for production.
 #>
 
 $ErrorActionPreference = 'Stop'
@@ -15,7 +15,7 @@ $ErrorActionPreference = 'Stop'
 $TenantId             = 'Tenant'
 $ClientId             = 'App ID/Client ID'
 $PfxPath              = 'C:\Users\username\Documents\5062x8-pnp\PnPAppCert.pfx'
-$PfxPasswordPlainText = 'YourStrongPassword' # Replace with your actual PFX password
+$PfxPasswordPlainText = 'REPLACE-WITH-YOUR-PFX-PASSWORD'
 $SenderMailbox        = 'username@5062x8.onmicrosoft.com'
 $Recipient            = 'username@5062x8.onmicrosoft.com'
 $CsvPath              = 'C:\Users\username\Documents\5062x8-pnp\New Microsoft Excel Worksheet.csv'
@@ -50,6 +50,9 @@ try {
         }
     }
     
+    if ($PfxPasswordPlainText -eq 'REPLACE-WITH-YOUR-PFX-PASSWORD') {
+        throw 'Set PfxPasswordPlainText in your private local copy before running. Never commit a real password to a public repository.'
+    }
     if (-not (Test-Path -LiteralPath $PfxPath -PathType Leaf)) {
         throw "PFX certificate file was not found: $PfxPath"
     }
