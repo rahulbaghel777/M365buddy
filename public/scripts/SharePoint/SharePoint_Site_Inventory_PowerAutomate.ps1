@@ -57,9 +57,10 @@ $Tenant = "YOUR-TENANT.onmicrosoft.com"
 
 $ClientId = "YOUR-ENTRA-APP-CLIENT-ID"
 
-# Thumbprint of the certificate's private-key copy installed in Cert:\CurrentUser\My.
+# 40-character thumbprint of the certificate's private-key copy installed in Cert:\CurrentUser\My.
+# Enter a certificate thumbprint here, NOT the PFX password.
 # The script does not prompt for a PFX password at runtime.
-$CertificateThumbprint = "YOUR-CERTIFICATE-THUMBPRINT"
+$CertificateThumbprint = "PASTE-40-CHARACTER-CERTIFICATE-THUMBPRINT-HERE"
 
 
 # -----------------------------------------------------
@@ -129,13 +130,16 @@ Write-Host ""
 # CHECK INSTALLED CERTIFICATE
 # -----------------------------------------------------
 
-if ($CertificateThumbprint -eq "YOUR-CERTIFICATE-THUMBPRINT" -or
-    [string]::IsNullOrWhiteSpace($CertificateThumbprint))
+if ([string]::IsNullOrWhiteSpace($CertificateThumbprint))
 {
-    throw "Set CertificateThumbprint in the configuration section."
+    throw "Set CertificateThumbprint to the certificate's actual thumbprint. Do not enter the PFX password here."
 }
 
-$CertificateThumbprint = $CertificateThumbprint.Replace(" ", "").ToUpperInvariant()
+$CertificateThumbprint = $CertificateThumbprint.Trim().Replace(" ", "").ToUpperInvariant()
+if ($CertificateThumbprint -notmatch "^[A-F0-9]{40}$")
+{
+    throw "CertificateThumbprint must be the 40-character hexadecimal certificate thumbprint from Cert:\CurrentUser\My. It is not the PFX password. Run Get-ChildItem Cert:\CurrentUser\My | Select-Object Subject, Thumbprint, NotAfter, HasPrivateKey."
+}
 $InstalledCertificate = Get-ChildItem -Path Cert:\CurrentUser\My -ErrorAction Stop |
     Where-Object { $_.Thumbprint -eq $CertificateThumbprint } |
     Select-Object -First 1
