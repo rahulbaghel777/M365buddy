@@ -111,31 +111,21 @@ Microsoft 365 Outlook — Send an email (V2)</pre>
 </ul>
 <div class="call warn"><b>Security note:</b> The public script does not contain a PFX password and does not ask for it at runtime. Do not commit a real password, private PFX file, or exported report data to a public repository. The certificate must already be accessible to the Windows account running the script.</div>
 
-<h2 id="certificate">One-time certificate setup (no password prompt during report runs)</h2>
-<p>The script authenticates using the certificate thumbprint in the Windows certificate store rather than loading the PFX file each time. This avoids a PFX password prompt whenever the report runs and avoids storing the password in the script.</p>
-<p>If the certificate is already installed for the Windows account that will run the script, skip the import step and find its thumbprint:</p>
-<pre>Get-ChildItem Cert:\CurrentUser\My |
-    Select-Object Subject, Thumbprint, NotAfter, HasPrivateKey</pre>
-<p>Use the thumbprint of the correct, unexpired certificate that has <code>HasPrivateKey = True</code>. The certificate's public key must also be registered with the Entra app.</p>
-<p>If the private certificate exists only as a password-protected PFX, import it into the current user's certificate store once. The import operation may require the PFX password; routine script runs will not prompt for it:</p>
-<pre>$PfxPath = "C:\Certificates\SharePointAutomationCert.pfx"
-$PfxPassword = Read-Host "Enter the PFX password for this one-time import" -AsSecureString
-$ImportedCertificate = Import-PfxCertificate &#96;
-    -FilePath $PfxPath &#96;
-    -CertStoreLocation Cert:\CurrentUser\My &#96;
-    -Password $PfxPassword
-
-$ImportedCertificate.Thumbprint</pre>
-<p>Keep the certificate private key protected. If using Task Scheduler, make sure the certificate is installed and its private key is accessible to the same Windows account that runs the scheduled task.</p>
+<h2 id="certificate">PFX certificate setup</h2>
+<p>The script authenticates directly from your password-protected PFX file. You do not need to import the certificate into the Windows certificate store or look up a thumbprint.</p>
+<p>In the script configuration, set <code>$PfxPath</code> to the full path of your certificate file. When you run the script, it prompts once for the PFX password using a secure input; the password is not stored in the script.</p>
+<pre>$PfxPath = "C:\Certificates\SharePointAutomationCert.pfx"</pre>
+<p>The PFX file must contain the private key, and its public certificate must be registered with the Entra app identified by <code>$ClientId</code>. The app must have the required SharePoint permissions and admin consent.</p>
+<p>Run the script interactively because it asks for the password at runtime. For unattended scheduled runs, do not hard-code the password in the script; use an approved secret store or another unattended authentication design.</p>
 
 <h2 id="configure-script">Configure the script</h2>
-<p>Open the downloaded script in your editor and update the configuration section near the top. Do not add a PFX password.</p>
+<p>Open the downloaded script in your editor and update the configuration section near the top. Keep the PFX password out of the script; you will enter it securely when prompted.</p>
 <table>
 <thead><tr><th>Setting</th><th>What to enter</th></tr></thead>
 <tbody>
 <tr><td><code>$Tenant</code></td><td>Your tenant domain, such as <code>contoso.onmicrosoft.com</code>.</td></tr>
 <tr><td><code>$ClientId</code></td><td>The client ID of your Entra application.</td></tr>
-<tr><td><code>$CertificateThumbprint</code></td><td>The thumbprint of the installed certificate, usually displayed without spaces.</td></tr>
+<tr><td><code>$PfxPath</code></td><td>The full path to your password-protected <code>.pfx</code> certificate file.</td></tr>
 <tr><td><code>$AdminCenterUrl</code></td><td>Your SharePoint admin-center URL.</td></tr>
 <tr><td><code>$SharePointRootUrl</code></td><td>Your tenant SharePoint root URL.</td></tr>
 <tr><td><code>$ReportSiteUrl</code></td><td>The site containing the document library/folder monitored by Power Automate.</td></tr>
@@ -152,7 +142,7 @@ $ReportFolder  = "Shared Documents/Reports/SharePointSiteInventory/Incoming"</pr
 <li>It collects the SharePoint site details using the existing tenant inventory and site-level queries.</li>
 <li>It creates the approved CSV text with <code>ConvertTo-Csv</code> in memory.</li>
 <li>It checks the CSV header and required columns without writing the CSV to disk.</li>
-<li>It connects to the report site using <code>Connect-PnPOnline -Thumbprint</code>.</li>
+<li>It connects to the report site using <code>Connect-PnPOnline -CertificatePath</code> with a securely prompted <code>-CertificatePassword</code>.</li>
 <li>It calls <code>Add-PnPFile -Folder $ReportFolder -FileName $UploadFileName -Content $CsvContent</code> to create the CSV directly in SharePoint.</li>
 </ol>
 <p>No local CSV file is created. The source PowerShell script still runs on the computer or automation host where PowerShell and PnP.PowerShell are installed.</p>
@@ -225,8 +215,8 @@ $ReportFolder  = "Shared Documents/Reports/SharePointSiteInventory/Incoming"</pr
 </ul>
 
 <h2 id="troubleshooting">Troubleshooting</h2>
-<h3>Certificate thumbprint not found</h3>
-<p>Run <code>Get-ChildItem Cert:\CurrentUser\My | Select Subject, Thumbprint, NotAfter, HasPrivateKey</code> under the same Windows account that runs the script. Confirm the configured thumbprint matches the certificate with a private key, and that the certificate has not expired.</p>
+<h3>PFX file or password error</h3>
+<p>Check that <code>$PfxPath</code> points to the correct <code>.pfx</code> file, enter the correct PFX password when prompted, and verify the PFX contains the private key. Confirm the matching public certificate is registered with the Entra app and that the certificate has not expired.</p>
 <h3>SharePoint upload denied</h3>
 <p>Confirm the Entra application's certificate is registered, the app has appropriate write access to the report site, and <code>$ReportSiteUrl</code> and <code>$ReportFolder</code> refer to an existing location.</p>
 <h3>The flow does not trigger</h3>
