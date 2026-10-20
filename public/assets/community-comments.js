@@ -9,7 +9,7 @@
     repoId: "R_kgDOUOuk8Q",
     category: "Comments",
     // Replace with the DIC_... category ID from https://giscus.app after setup.
-    categoryId: "GISCUS_CATEGORY_ID_PENDING",
+    categoryId: "DIC_kwDOUOuk8c4DJNKH",
     mapping: "pathname",
     strict: "0",
     reactionsEnabled: "1",
