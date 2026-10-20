@@ -70,11 +70,18 @@ $PfxPath =
 #
 # -----------------------------------------------------
 
-$PfxPassword =
-    ConvertTo-SecureString `
-        "YourStrongPassword" `
-        -AsPlainText `
-        -Force
+$PfxPasswordPlainText = "REPLACE_WITH_YOUR_PFX_PASSWORD"
+
+if ([string]::IsNullOrWhiteSpace($PfxPasswordPlainText) -or
+    $PfxPasswordPlainText -eq "REPLACE_WITH_YOUR_PFX_PASSWORD")
+{
+    throw "Set PfxPasswordPlainText in your private local copy. Never commit a real password to a public repository."
+}
+
+$PfxPassword = ConvertTo-SecureString `
+    -String $PfxPasswordPlainText `
+    -AsPlainText `
+    -Force
 
 
 # -----------------------------------------------------
