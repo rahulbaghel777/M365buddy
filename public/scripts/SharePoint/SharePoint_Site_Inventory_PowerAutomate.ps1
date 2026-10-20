@@ -14,6 +14,7 @@
 #   - Keep the approved inventory columns and calculations unchanged
 #   - Build CSV text in memory and upload directly to SharePoint (no local CSV)
 #   - Authenticate directly from a PFX file; prompt securely for its password
+#   - Public template: replace all YOUR-TENANT / YOUR-ENTRA placeholders before use
 #
 # FINAL CSV COLUMNS:
 #
@@ -129,10 +130,32 @@ Write-Host ""
 # CHECK PFX FILE AND PROMPT FOR PASSWORD
 # -----------------------------------------------------
 
-if ([string]::IsNullOrWhiteSpace($PfxPath) -or
-    $PfxPath -eq "C:\\Certificates\\YourCertificate.pfx")
+if ([string]::IsNullOrWhiteSpace($Tenant) -or $Tenant -like "*YOUR-TENANT*")
 {
-    throw "Update PfxPath in the configuration section with the full path to your .pfx file."
+    throw "Update Tenant with your tenant domain, for example contoso.onmicrosoft.com."
+}
+
+if ([string]::IsNullOrWhiteSpace($ClientId) -or
+    $ClientId -eq "YOUR-ENTRA-APP-CLIENT-ID" -or
+    $ClientId -notmatch "^[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}$")
+{
+    throw "Update ClientId with the application (client) ID from your Entra app registration."
+}
+
+if ([string]::IsNullOrWhiteSpace($AdminCenterUrl) -or $AdminCenterUrl -like "*YOUR-TENANT*")
+{
+    throw "Update AdminCenterUrl with your SharePoint admin-center URL."
+}
+
+if ([string]::IsNullOrWhiteSpace($SharePointRootUrl) -or $SharePointRootUrl -like "*YOUR-TENANT*")
+{
+    throw "Update SharePointRootUrl with your tenant SharePoint URL."
+}
+
+if ([string]::IsNullOrWhiteSpace($PfxPath) -or
+    $PfxPath -eq 'C:\Certificates\YourCertificate.pfx')
+{
+    throw "Update PfxPath with the full path to your .pfx file."
 }
 
 if (-not (Test-Path -LiteralPath $PfxPath -PathType Leaf))
