@@ -11,7 +11,9 @@
 #   - Retrieve SharePoint site admins
 #   - Retrieve SharePoint associated owner group members
 #   - Export ONLY the approved CSV columns
-#   - Upload the validated CSV to SharePoint for Power Automate email delivery
+#   - Keep the approved inventory columns and calculations unchanged
+#   - Build CSV text in memory and upload directly to SharePoint (no local CSV)
+#   - Use a certificate already installed in the Windows certificate store
 #
 # FINAL CSV COLUMNS:
 #
@@ -55,22 +57,9 @@ $Tenant = "YOUR-TENANT.onmicrosoft.com"
 
 $ClientId = "YOUR-ENTRA-APP-CLIENT-ID"
 
-$PfxPath =
-    "C:\Certificates\SharePointAutomationCert.pfx"
-
-
-# -----------------------------------------------------
-# CERTIFICATE PASSWORD
-# -----------------------------------------------------
-#
-# IMPORTANT:
-# Replace the placeholder with your actual certificate
-# password or preferably retrieve it from your approved
-# secret-management solution.
-#
-# -----------------------------------------------------
-
-$PfxPassword = Read-Host -Prompt "Enter the PFX certificate password" -AsSecureString
+# Thumbprint of the certificate's private-key copy installed in Cert:\CurrentUser\My.
+# The script does not prompt for a PFX password at runtime.
+$CertificateThumbprint = "YOUR-CERTIFICATE-THUMBPRINT"
 
 
 # -----------------------------------------------------
@@ -90,29 +79,11 @@ $SharePointRootUrl =
 
 
 # -----------------------------------------------------
-# OUTPUT DIRECTORY
+# UNIQUE SHAREPOINT REPORT FILE NAME
 # -----------------------------------------------------
 
-$OutputDirectory =
-    "C:\Reports\SharePointSiteInventory"
-
-
-# -----------------------------------------------------
-# UNIQUE REPORT FILE NAME
-# -----------------------------------------------------
-#
-# Date + time prevents an old CSV from being confused
-# with a newly generated report during same-day reruns.
-#
-# -----------------------------------------------------
-
-$DateStamp =
-    Get-Date -Format "yyyyMMdd_HHmmss"
-
-$OutputCsv =
-    Join-Path `
-        $OutputDirectory `
-        "SharePointSiteInventory_$DateStamp.csv"
+$DateStamp = Get-Date -Format "yyyyMMdd_HHmmss"
+$UploadFileName = "SharePointSiteInventory_$DateStamp.csv"
 
 
 # -----------------------------------------------------
@@ -155,26 +126,45 @@ Write-Host ""
 
 
 # -----------------------------------------------------
-# CHECK CERTIFICATE
+# CHECK INSTALLED CERTIFICATE
 # -----------------------------------------------------
 
-if (-not (Test-Path $PfxPath))
+if ($CertificateThumbprint -eq "YOUR-CERTIFICATE-THUMBPRINT" -or
+    [string]::IsNullOrWhiteSpace($CertificateThumbprint))
 {
-    throw "Certificate file not found: $PfxPath"
+    throw "Set CertificateThumbprint in the configuration section."
 }
 
+$CertificateThumbprint = $CertificateThumbprint.Replace(" ", "").ToUpperInvariant()
+$InstalledCertificate = Get-ChildItem -Path Cert:\CurrentUser\My -ErrorAction Stop |
+    Where-Object { $_.Thumbprint -eq $CertificateThumbprint } |
+    Select-Object -First 1
 
-# -----------------------------------------------------
-# CREATE OUTPUT DIRECTORY
-# -----------------------------------------------------
-
-if (-not (Test-Path $OutputDirectory))
+if (-not $InstalledCertificate)
 {
-    New-Item `
-        -Path $OutputDirectory `
-        -ItemType Directory `
-        -Force |
-        Out-Null
+    throw "Certificate thumbprint $CertificateThumbprint was not found in Cert:\CurrentUser\My. Import the PFX certificate into this store first."
+}
+if (-not $InstalledCertificate.HasPrivateKey)
+{
+    throw "The installed certificate does not have an accessible private key."
+}
+if ($InstalledCertificate.NotAfter -le (Get-Date))
+{
+    throw "The installed certificate expired on $($InstalledCertificate.NotAfter)."
+}
+if ($InstalledCertificate.NotBefore -gt (Get-Date))
+{
+    throw "The installed certificate is not valid until $($InstalledCertificate.NotBefore)."
+}
+
+if ([string]::IsNullOrWhiteSpace($ReportSiteUrl) -or
+    $ReportSiteUrl -like "*YOUR-TENANT*")
+{
+    throw "Update ReportSiteUrl in the configuration section."
+}
+if ([string]::IsNullOrWhiteSpace($ReportFolder))
+{
+    throw "ReportFolder is blank. Configure the destination library/folder."
 }
 
 
@@ -199,8 +189,7 @@ Connect-PnPOnline `
     -Url $AdminCenterUrl `
     -ClientId $ClientId `
     -Tenant $Tenant `
-    -CertificatePath $PfxPath `
-    -CertificatePassword $PfxPassword `
+    -Thumbprint $CertificateThumbprint `
     -ErrorAction Stop
 
 
@@ -330,11 +319,8 @@ $results =
         $Tenant =
             $using:Tenant
 
-        $PfxPath =
-            $using:PfxPath
-
-        $PfxPassword =
-            $using:PfxPassword
+        $CertificateThumbprint =
+            $using:CertificateThumbprint
 
         $SharePointRootUrl =
             $using:SharePointRootUrl
@@ -481,8 +467,7 @@ $results =
                         -Url $site.Url `
                         -ClientId $ClientId `
                         -Tenant $Tenant `
-                        -CertificatePath $PfxPath `
-                        -CertificatePassword $PfxPassword `
+                        -Thumbprint $CertificateThumbprint `
                         -ReturnConnection `
                         -ErrorAction Stop
             }
@@ -1403,67 +1388,49 @@ if ($FinalResults.Count -gt 0)
 
 
 # =====================================================
-# EXPORT CSV
+# BUILD AND VALIDATE CSV IN MEMORY
 # =====================================================
 
 Write-Host ""
-Write-Host "Exporting final CSV..." `
-    -ForegroundColor Cyan
+Write-Host "Building CSV content in memory..." -ForegroundColor Cyan
 
-
-$FinalResults |
-    Export-Csv `
-        -Path $OutputCsv `
-        -NoTypeInformation `
-        -Encoding UTF8 `
-        -Force
-
-
-Write-Host `
-    "CSV created: $OutputCsv" `
-    -ForegroundColor Green
-
-
-# =====================================================
-# FINAL CSV HEADER CHECK
-# =====================================================
-#
-# Read the actual CSV header back from disk.
-#
-# This gives an additional safeguard that the physical
-# CSV file contains only the expected columns.
-#
-# =====================================================
-
-$CsvHeader =
-    (
-        Import-Csv `
-            -Path $OutputCsv |
-        Select-Object -First 1 |
-        Get-Member `
-            -MemberType NoteProperty |
-        Select-Object -ExpandProperty Name
-    )
-
-
-$UnexpectedCsvColumns =
-    $CsvHeader |
-    Where-Object {
-        $_ -notin $ExpectedColumns
-    }
-
-
-if ($UnexpectedCsvColumns.Count -gt 0)
+if (-not $FinalResults -or $FinalResults.Count -eq 0)
 {
-    Remove-Item `
-        -Path $OutputCsv `
-        -Force `
-        -ErrorAction SilentlyContinue
-
-
-    throw `
-        "CSV validation failed. Unexpected columns: $($UnexpectedCsvColumns -join ', ')"
+    throw "No site inventory rows were generated. CSV upload cancelled."
 }
+
+# Convert the approved report objects into CSV text without creating a local file.
+$CsvLines = @($FinalResults | ConvertTo-Csv -NoTypeInformation)
+if ($CsvLines.Count -lt 2)
+{
+    throw "CSV generation did not produce a header and at least one data row."
+}
+
+$CsvContent = $CsvLines -join "`r`n"
+$CsvContent += "`r`n"
+
+# Validate the actual serialized CSV header and data in memory.
+$CsvRowsForValidation = @($CsvContent | ConvertFrom-Csv)
+if ($CsvRowsForValidation.Count -eq 0)
+{
+    throw "In-memory CSV validation failed: no data rows were parsed."
+}
+
+$CsvHeader = @(
+    $CsvRowsForValidation[0].PSObject.Properties |
+    Select-Object -ExpandProperty Name
+)
+$UnexpectedCsvColumns = @($CsvHeader | Where-Object { $_ -notin $ExpectedColumns })
+$MissingCsvColumns = @($ExpectedColumns | Where-Object { $_ -notin $CsvHeader })
+
+if ($UnexpectedCsvColumns.Count -gt 0 -or $MissingCsvColumns.Count -gt 0)
+{
+    throw "In-memory CSV validation failed. Unexpected columns: $($UnexpectedCsvColumns -join ', '); missing columns: $($MissingCsvColumns -join ', ')"
+}
+
+Write-Host "CSV content generated and validated in memory." -ForegroundColor Green
+Write-Host "Data rows: $($CsvRowsForValidation.Count)"
+Write-Host "File to create in SharePoint: $UploadFileName"
 
 
 # =====================================================
@@ -1518,31 +1485,14 @@ Write-Host ""
 
 
 # =====================================================
-# UPLOAD REPORT TO SHAREPOINT FOR POWER AUTOMATE
+# UPLOAD IN-MEMORY CSV DIRECTLY TO SHAREPOINT
 # =====================================================
 
-if (-not (Test-Path -LiteralPath $OutputCsv -PathType Leaf))
-{
-    throw "The report CSV is missing; upload cancelled: $OutputCsv"
-}
-
-if ([string]::IsNullOrWhiteSpace($ReportSiteUrl) -or
-    $ReportSiteUrl -like "*YOUR-TENANT*")
-{
-    throw "Update ReportSiteUrl in the configuration section."
-}
-
-if ([string]::IsNullOrWhiteSpace($ReportFolder))
-{
-    throw "ReportFolder is blank. Configure the destination library/folder."
-}
-
-$UploadFileName = [System.IO.Path]::GetFileName($OutputCsv)
-
 Write-Host ""
-Write-Host "Connecting to the SharePoint report destination..." -ForegroundColor Cyan
+Write-Host "Uploading the in-memory CSV directly to SharePoint..." -ForegroundColor Cyan
 Write-Host "Destination site: $ReportSiteUrl"
 Write-Host "Destination folder: $ReportFolder"
+Write-Host "Filename: $UploadFileName"
 
 try
 {
@@ -1550,14 +1500,13 @@ try
         -Url $ReportSiteUrl `
         -ClientId $ClientId `
         -Tenant $Tenant `
-        -CertificatePath $PfxPath `
-        -CertificatePassword $PfxPassword `
+        -Thumbprint $CertificateThumbprint `
         -ErrorAction Stop
 
     $UploadedFile = Add-PnPFile `
-        -Path $OutputCsv `
         -Folder $ReportFolder `
-        -NewFileName $UploadFileName `
+        -FileName $UploadFileName `
+        -Content $CsvContent `
         -ErrorAction Stop
 
     Write-Host ""
@@ -1567,13 +1516,12 @@ try
     {
         Write-Host "SharePoint path: $($UploadedFile.ServerRelativeUrl)"
     }
-    Write-Host "The local CSV is retained at: $OutputCsv"
 }
 catch
 {
     Write-Host ""
-    Write-Host "SHAREPOINT UPLOAD FAILED. The local CSV has been retained." -ForegroundColor Red
-    Write-Host "Local CSV: $OutputCsv" -ForegroundColor Yellow
+    Write-Host "SHAREPOINT UPLOAD FAILED. No local CSV was created." -ForegroundColor Red
+    Write-Host "Destination: $ReportSiteUrl / $ReportFolder" -ForegroundColor Yellow
     Write-Host "Error: $($_.Exception.Message)" -ForegroundColor Red
     throw
 }
@@ -1621,18 +1569,7 @@ Write-Host `
 
 Write-Host ""
 
-if (Test-Path $OutputCsv)
-{
-    Write-Host `
-        "CSV retained at   : $OutputCsv" `
-        -ForegroundColor Yellow
-}
-else
-{
-    Write-Host `
-        "CSV was not found at the configured local output path." `
-        -ForegroundColor DarkGray
-}
+Write-Host "CSV was generated in memory and uploaded to SharePoint." -ForegroundColor Green
 
 Write-Host ""
 
