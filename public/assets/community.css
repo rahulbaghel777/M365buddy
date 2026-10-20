@@ -41,3 +41,16 @@
 .m365-comments .giscus,.m365-comments iframe.giscus-frame{width:100%;max-width:100%}
 @media(max-width:720px){.community-grid,.community-guidelines{grid-template-columns:1fr}.community-page{padding:0 14px;margin-top:18px}.community-hero{padding:23px}.community-section-head{display:block}.community-actions .community-btn{width:100%}.community-card{padding:16px}.m365-comments h2{font-size:21px}}
 @media(prefers-reduced-motion:reduce){.community-btn,.community-card{transition:none}}
+
+/* Responsive header shared by the community landing page. */
+@media(max-width:900px){
+  body>header .m365-header-inner{height:auto!important;grid-template-columns:1fr auto!important;gap:6px 10px!important;padding:7px 14px!important}
+  body>header .m365-header-inner>div{grid-column:1/-1;grid-row:2;justify-self:stretch!important;width:100%!important}
+  body>header .m365-nav{grid-column:1/-1;flex-wrap:wrap}
+  body>header .m365-brand{font-size:21px!important}
+}
+.community-notice[hidden],.m365-comments-panel[hidden]{display:none!important}
+.m365-community-link{margin:0 auto 18px;max-width:1100px;padding:10px 14px;font-size:12px}
+.m365-community-link a{font-weight:750;color:#0878ee}
+.docs-list{padding-left:20px}
+.docs-list li{margin:7px 0}
