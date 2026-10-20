@@ -62,7 +62,7 @@
 <main id="top">
 <section class="hero"><span class="ey">PowerShell · Power Automate · Microsoft 365</span><h1>Email PowerShell Reports Using Power Automate</h1><p class="sub">Use a Power Automate flow to email a PowerShell-generated CSV without putting SMTP configuration in the script.</p></section>
 <article class="article">
-<div class="call ok"><b>Production architecture:</b> the script collects the SharePoint inventory, builds and validates the CSV in memory, uploads that text directly to SharePoint, and lets Power Automate email the uploaded file. No local CSV copy is created, and the script does not ask for the PFX password at each run.</div>
+<div class="call ok"><b>Production architecture:</b> the script collects the SharePoint inventory, builds and validates the CSV in memory, uploads that text directly to SharePoint, and lets Power Automate email the uploaded file. No local CSV copy is created. The script securely prompts for the PFX password at the start of each interactive run.</div>
 
 <h2 id="overview">What this solution does</h2>
 <p>This implementation preserves the site inventory collection and report fields from the SharePoint inventory report and changes only the delivery approach. It uses the validated report objects to build CSV text in memory, then creates a timestamped CSV file directly in the SharePoint destination folder.</p>
@@ -95,7 +95,7 @@ Microsoft 365 Outlook — Send an email (V2)</pre>
 <p><b>SharePoint Site Inventory — direct SharePoint upload for Power Automate</b></p>
 <p>This is the production-oriented version of the SharePoint inventory script. It creates the CSV in memory, validates it, uploads it directly to SharePoint, and leaves email delivery to Power Automate.</p>
 <div class="actions">
-<a class="btn primary" href="/scripts/SharePoint/SharePoint_Site_Inventory_PowerAutomate.ps1" download="SharePoint_Site_Inventory_PowerAutomate.ps1">Download production PowerShell script</a>
+<a class="btn primary" href="/scripts/SharePoint/SharePoint_Site_Inventory_PowerAutomate.ps1" download="SharePoint_Site_Inventory_PowerAutomate.ps1">Download generic PowerShell script template</a>
 <a class="btn" href="https://github.com/rahulbaghel777/M365buddy/blob/main/public/scripts/SharePoint/SharePoint_Site_Inventory_PowerAutomate.ps1">View source on GitHub</a>
 </div>
 </div>
@@ -109,7 +109,7 @@ Microsoft 365 Outlook — Send an email (V2)</pre>
 <li>An approved Power Automate SharePoint connection and Microsoft 365 Outlook connection.</li>
 <li>A DLP policy that allows SharePoint and Office 365 Outlook to be used together in the same flow.</li>
 </ul>
-<div class="call warn"><b>Security note:</b> The public script does not contain a PFX password and does not ask for it at runtime. Do not commit a real password, private PFX file, or exported report data to a public repository. The certificate must already be accessible to the Windows account running the script.</div>
+<div class="call warn"><b>Security note:</b> This is a tenant-neutral template. Replace the example tenant domain, Entra app ID, SharePoint URLs, and PFX path with your own settings before running it. The script prompts securely for the PFX password and does not hard-code it. Do not commit a real password, private PFX file, or exported report data to a public repository.</div>
 
 <h2 id="certificate">PFX certificate setup</h2>
 <p>The script authenticates directly from your password-protected PFX file. You do not need to import the certificate into the Windows certificate store or look up a thumbprint.</p>
