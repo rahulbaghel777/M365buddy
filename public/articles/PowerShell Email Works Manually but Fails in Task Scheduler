@@ -4,10 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>PowerShell Email Works Manually but Fails in Task Scheduler | M365Buddy</title>
-
-    <meta name="description"
-          content="Learn how to troubleshoot a PowerShell script that sends email successfully when run manually but fails to deliver email when executed through Windows Task Scheduler.">
+    <title>PowerShell Email Fails in Task Scheduler: Troubleshooting | M365Buddy</title>
 
     <meta name="keywords"
           content="PowerShell, Task Scheduler, SharePoint Online, SMTP, Send-MailMessage, service account, Microsoft 365, automation">
@@ -349,6 +346,17 @@
         }
     </style>
   <link rel="stylesheet" href="/assets/community.css?v=20261021-2">
+
+<meta name="description" content="Troubleshoot PowerShell email scripts that work manually but fail in Windows Task Scheduler, including execution context, recipient formatting, and testing steps.">
+<link rel="canonical" href="https://m365buddy.com/articles/PowerShell%20Email%20Works%20Manually%20but%20Fails%20in%20Task%20Scheduler">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="M365Buddy">
+<meta property="og:title" content="PowerShell Email Fails in Task Scheduler: Troubleshooting | M365Buddy">
+<meta property="og:description" content="Troubleshoot PowerShell email scripts that work manually but fail in Windows Task Scheduler, including execution context, recipient formatting, and testing steps.">
+<meta property="og:url" content="https://m365buddy.com/articles/PowerShell%20Email%20Works%20Manually%20but%20Fails%20in%20Task%20Scheduler">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"PowerShell Email Fails in Task Scheduler: Troubleshooting | M365Buddy","description":"Troubleshoot PowerShell email scripts that work manually but fail in Windows Task Scheduler, including execution context, recipient formatting, and testing steps.","url":"https://m365buddy.com/articles/PowerShell%20Email%20Works%20Manually%20but%20Fails%20in%20Task%20Scheduler","mainEntityOfPage":{"@type":"WebPage","@id":"https://m365buddy.com/articles/PowerShell%20Email%20Works%20Manually%20but%20Fails%20in%20Task%20Scheduler"},"articleSection":"PowerShell","publisher":{"@type":"Organization","name":"M365Buddy","url":"https://m365buddy.com/"}}</script>
 </head>
 
 <body>
