@@ -82,6 +82,9 @@ button,input{font:inherit}
 .cta p{margin:0;color:#405879;font-size:14px}
 .btn{display:inline-flex;align-items:center;justify-content:center;min-height:45px;padding:0 18px;border-radius:9px;background:#0878ee;color:#fff;font-weight:750}
 .btn:hover{background:#0668d8}
+.cta-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.youtube-btn{background:#d62424!important;color:#fff!important}
+.youtube-btn:hover{background:#ad1f1f!important}
 
 .footer{min-height:91px;background:linear-gradient(105deg,#062f67,#0a3e7f);color:#fff;padding:17px max(28px,calc((100% - 1300px)/2))}
 .footer-inner{display:flex;align-items:center;justify-content:space-between;gap:25px}
@@ -279,7 +282,7 @@ button,input{font:inherit}
 <meta property="og:description" content="Practical Microsoft 365 administration guides, tested SharePoint Online and PnP PowerShell scripts, Entra ID troubleshooting, and reporting automation.">
 <meta property="og:url" content="https://m365buddy.com/">
 <meta name="twitter:card" content="summary">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://m365buddy.com/#organization","name":"M365Buddy","url":"https://m365buddy.com/"},{"@type":"WebSite","@id":"https://m365buddy.com/#website","url":"https://m365buddy.com/","name":"M365Buddy","description":"Practical Microsoft 365 administration guides, tested SharePoint Online and PnP PowerShell scripts, Entra ID troubleshooting, and reporting automation.","publisher":{"@id":"https://m365buddy.com/#organization"}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://m365buddy.com/#organization","name":"M365Buddy","url":"https://m365buddy.com/","sameAs":["https://www.youtube.com/@M365buddy"]},{"@type":"WebSite","@id":"https://m365buddy.com/#website","url":"https://m365buddy.com/","name":"M365Buddy","description":"Practical Microsoft 365 administration guides, tested SharePoint Online and PnP PowerShell scripts, Entra ID troubleshooting, and reporting automation.","publisher":{"@id":"https://m365buddy.com/#organization"}}]}</script>
 
 <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=20261022">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=20261022">
@@ -354,7 +357,7 @@ button,input{font:inherit}
 
 <section class="cta">
 <div><h2>Can't find what you're looking for?</h2><p>Search the M365Buddy knowledge base for an article, script or solution.</p></div>
-<a class="btn" href="#home-search" id="focusSearch">Search M365Buddy</a>
+<div class="cta-actions"><a class="btn" href="#home-search" id="focusSearch">Search M365Buddy</a><a class="btn youtube-btn" href="https://www.youtube.com/@M365buddy" target="_blank" rel="noopener noreferrer" aria-label="Visit M365Buddy on YouTube">▶ Watch on YouTube</a></div>
 </section>
 
 </main>
@@ -362,7 +365,7 @@ button,input{font:inherit}
 <footer class="footer">
 <div class="footer-inner">
 <div><div class="footer-brand">M365<span>Buddy</span></div><div class="footer-sub">Your Guide to Microsoft 365</div></div>
-<div class="footer-links"><a href="/">Home</a><span class="sep">|</span><a href="/articles/">Articles</a><span class="sep">|</span><a href="/scripts/">Scripts</a><span class="sep">|</span><a href="/community/">Community</a><span class="sep">|</span><a href="/about/">About</a></div>
+<div class="footer-links"><a href="/">Home</a><span class="sep">|</span><a href="/articles/">Articles</a><span class="sep">|</span><a href="/scripts/">Scripts</a><span class="sep">|</span><a href="/community/">Community</a><span class="sep">|</span><a href="/about/">About</a><span class="sep">|</span><a href="https://www.youtube.com/@M365buddy" target="_blank" rel="noopener noreferrer">YouTube</a></div>
 <div class="footer-copy">© 2026 M365Buddy. All rights reserved.</div>
 </div>
 </footer>
