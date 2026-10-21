@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Generate a SharePoint Online site inventory CSV and email it with Microsoft Graph using app-only certificate authentication."><title>M365Buddy — SharePoint Site Inventory with Microsoft Graph Email</title><style>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Email SharePoint Reports with Microsoft Graph PowerShell | M365Buddy</title><style>
 .m365-header{height:62px;background:linear-gradient(105deg,#07346f,#0873c9);position:sticky;top:0;z-index:100;color:#fff}
 .m365-header-inner{height:100%;max-width:1400px;margin:auto;padding:0 18px;display:grid;grid-template-columns:225px minmax(260px,1fr) 150px;gap:14px;align-items:center}
 .m365-nav{display:flex;align-items:center;gap:2px}
@@ -161,6 +161,17 @@
 }
 
 </style>  <link rel="stylesheet" href="/assets/community.css?v=20261021-2">
+
+<meta name="description" content="Build a SharePoint site inventory report and email its CSV using Microsoft Graph, PowerShell, app-only certificate authentication, and configured mail permissions.">
+<link rel="canonical" href="https://m365buddy.com/articles/powershell-report-delivery-microsoft-graph">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="M365Buddy">
+<meta property="og:title" content="Email SharePoint Reports with Microsoft Graph PowerShell | M365Buddy">
+<meta property="og:description" content="Build a SharePoint site inventory report and email its CSV using Microsoft Graph, PowerShell, app-only certificate authentication, and configured mail permissions.">
+<meta property="og:url" content="https://m365buddy.com/articles/powershell-report-delivery-microsoft-graph">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Email SharePoint Reports with Microsoft Graph PowerShell | M365Buddy","description":"Build a SharePoint site inventory report and email its CSV using Microsoft Graph, PowerShell, app-only certificate authentication, and configured mail permissions.","url":"https://m365buddy.com/articles/powershell-report-delivery-microsoft-graph","mainEntityOfPage":{"@type":"WebPage","@id":"https://m365buddy.com/articles/powershell-report-delivery-microsoft-graph"},"articleSection":"Microsoft Graph","publisher":{"@type":"Organization","name":"M365Buddy","url":"https://m365buddy.com/"}}</script>
 </head><body>
 
 <header class="m365-header">
