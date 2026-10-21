@@ -107,7 +107,31 @@ header{height:62px;background:linear-gradient(105deg,var(--nav1),var(--nav2));po
 </aside><main id="top">
 <section class="hero"><span class="ey">SharePoint Online</span><h1>SharePoint Version Management</h1><p class="sub">Understand version history, version limits and safe version-storage governance.</p></section>
 <article class="article"><h2>Why version history matters</h2><p>Every saved document version can consume SharePoint storage. Version limits should balance recovery needs with storage governance.</p><h2>Set sensible version limits</h2><p>For controlled libraries, configure an approved maximum number of versions and review libraries with unusually high version storage.</p><h2>Before deleting versions</h2><div class="call warn"><b>Important:</b> Check retention, legal hold and compliance requirements before removing versions. Preservation requirements can override normal version cleanup.</div><h2>Report version usage</h2><p>A version report can identify files with excessive version counts and help prioritize remediation.</p>
-<section class="card"><h2 style="margin-top:0">Related Articles</h2><p>Continue with practical Microsoft 365 administration guidance on M365Buddy.</p><div class="actions"><a class="btn primary" href="/articles/">Browse All Articles</a></div></section>
+<h2>Understand where version limits are configured</h2>
+<p>Version-history limits may come from organization-level defaults, site-level settings, or settings on an individual document library. A site or library can have different settings from the organization default, so inspect the effective configuration before assuming that every library follows the same policy.</p>
+<p><a href="https://learn.microsoft.com/sharepoint/document-library-version-history-limits" target="_blank" rel="noopener noreferrer">Microsoft Learn: Version history limits overview</a> · <a href="https://learn.microsoft.com/sharepoint/site-version-limits" target="_blank" rel="noopener noreferrer">Set version limits for a site</a></p>
+<h2>Assess impact before changing limits</h2>
+<ol>
+<li>Identify libraries containing business-critical, regulated, or frequently edited documents.</li>
+<li>Review recovery objectives, retention rules, legal holds, and expected document change patterns.</li>
+<li>Measure version storage where possible and estimate which sites or libraries are contributing most.</li>
+<li>Choose whether a change should affect new libraries, existing libraries, or both.</li>
+<li>Document the approved setting, affected scope, change window, validation, and rollback considerations.</li>
+</ol>
+<h2>Important behavior after a change</h2>
+<p>Changing a site-level version history limit does not automatically trim every existing version to the new limit. Updates that apply to existing libraries can be processed asynchronously. After changing a policy, check the service's progress and verify the effective settings rather than assuming the storage reduction will occur immediately.</p>
+<p>Microsoft's guidance explains that lowering count limits may trim existing versions over time as files are updated, and that dedicated trimming actions may be needed for existing versions. Review the current documentation before scheduling a cleanup.</p>
+<p><a href="https://learn.microsoft.com/sharepoint/site-version-limits" target="_blank" rel="noopener noreferrer">Microsoft Learn: Version limits for a site</a> · <a href="https://learn.microsoft.com/sharepoint/library-version-limits" target="_blank" rel="noopener noreferrer">Version limits for a library</a></p>
+<h2>Report and clean up safely</h2>
+<ul>
+<li>Capture version counts and storage estimates before and after the change.</li>
+<li>Separate configuration changes from removal of existing historical versions.</li>
+<li>Use a pilot site or library and validate the effect before broad rollout.</li>
+<li>Keep exceptions for records, legal hold, and critical recovery scenarios documented.</li>
+<li>Confirm how the service applies the selected policy before estimating the final storage savings.</li>
+</ul>
+<p>For reporting context, start with the <a href="/articles/sharepoint-online-site-inventory.html">SharePoint site inventory guide</a> and <a href="/articles/sharepoint-storage-management.html">storage management guide</a>.</p>
+<section class="card"><h2 style="margin-top:0">Continue learning</h2><p>Connect version governance to site inventory and storage reporting.</p><div class="actions"><a class="btn primary" href="/articles/sharepoint-online-site-inventory.html">Site inventory guide</a><a class="btn" href="/articles/sharepoint-storage-management.html">Storage management</a><a class="btn" href="/scripts/SharePoint/sharepoint-version-report.html">Version report tool</a></div></section><p>Continue with practical Microsoft 365 administration guidance on M365Buddy.</p><div class="actions"><a class="btn primary" href="/articles/">Browse All Articles</a></div></section>
 <section class="m365-comments" data-giscus-comments aria-labelledby="community-comments-title">
   <div class="m365-comments-head">
     <p class="m365-comments-kicker">M365Buddy Community</p>
