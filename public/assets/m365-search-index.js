@@ -105,7 +105,7 @@ const M365_INDEX = [
     title: "SharePoint Site Inventory + Graph Email PowerShell Script",
     type: "Script",
     category: "SharePoint",
-    url: "/articles/powershell-report-delivery-microsoft-graph",
+    url: "/scripts/SharePoint/SharePoint-Site-Inventory-GraphEmail.ps1",
     description:
       "Published PowerShell script that inventories SharePoint sites, exports CSV and sends the report through Microsoft Graph.",
     keywords: ["sharepoint", "site inventory", "graph email", "powershell script", "csv attachment", "Mail.Send", "Mail.ReadWrite", "certificate"]
@@ -130,7 +130,7 @@ const M365_INDEX = [
     title: "SharePoint Site Inventory PowerShell Script",
     type: "Script",
     category: "SharePoint",
-    url: "/scripts/SharePoint/sharepoint-site-inventory-viewer",
+    url: "/scripts/SharePoint/sharepoint-site-inventory-viewer.html",
     description:
       "View the published SharePoint Online site inventory PowerShell script.",
     keywords: [
@@ -168,9 +168,9 @@ const M365_INDEX = [
   },
   {
     title: "SharePoint Storage Report",
-    type: "Script",
+    type: "Article",
     category: "SharePoint",
-    url: "/scripts/",
+    url: "/articles/sharepoint-storage-management.html",
     description:
       "SharePoint Online storage reporting scripts.",
     keywords: [
@@ -178,5 +178,8 @@ const M365_INDEX = [
       "storage report",
       "powershell"
     ]
-  }
+  },
+  {title:"Create a Self-Signed Certificate for Microsoft Entra App Authentication",type:"Article",category:"Microsoft Entra",url:"/articles/entra-id-self-signed-certificate.html",description:"Create and export a PowerShell self-signed certificate, upload the public certificate, and protect the private key.",keywords:["entra id","certificate","self-signed","pfx","cer","powershell","authentication"]},
+  {title:"Email SharePoint Inventory Reports with Power Automate",type:"Article",category:"Power Automate",url:"/articles/powershell-report-delivery-power-automate.html",description:"Create a SharePoint inventory CSV with PowerShell and deliver it using Power Automate, including certificate setup and troubleshooting.",keywords:["sharepoint","power automate","powershell","email report","csv","certificate","outlook"]},
+  {title:"PowerShell Email Works Manually but Fails in Task Scheduler",type:"Article",category:"PowerShell",url:"/articles/PowerShell%20Email%20Works%20Manually%20but%20Fails%20in%20Task%20Scheduler",description:"Troubleshoot email scripts that work manually but fail in Windows Task Scheduler, including execution context and recipient formatting.",keywords:["powershell","task scheduler","email","smtp","scheduled task","troubleshooting"]}
 ];
