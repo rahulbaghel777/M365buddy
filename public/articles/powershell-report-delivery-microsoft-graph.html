@@ -1,0 +1,425 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Email SharePoint Reports with Microsoft Graph PowerShell | M365Buddy</title><style>
+.m365-header{height:62px;background:linear-gradient(105deg,#07346f,#0873c9);position:sticky;top:0;z-index:100;color:#fff}
+.m365-header-inner{height:100%;max-width:1400px;margin:auto;padding:0 18px;display:grid;grid-template-columns:225px minmax(260px,1fr) 150px;gap:14px;align-items:center}
+.m365-nav{display:flex;align-items:center;gap:2px}
+.m365-nav a{display:flex;align-items:center;min-height:36px;padding:0 11px;border-radius:8px;color:#fff!important;font-size:13px;font-weight:700;text-decoration:none}
+.m365-nav a:hover,.m365-nav a.active{background:rgba(255,255,255,.12)}
+.m365-search{position:relative;width:min(100%,480px);justify-self:center}
+.m365-search input{width:100%;height:36px;border:1px solid rgba(255,255,255,.42);border-radius:9px;background:rgba(255,255,255,.07);color:#fff;padding:0 12px 0 42px;outline:0;font-size:12px}
+.m365-search input::placeholder{color:#e3effb}
+.m365-search input:focus{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.12)}
+.m365-search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:17px;height:17px;color:#fff;pointer-events:none}
+.m365-search-icon svg{width:100%;height:100%}
+.m365-brand{justify-self:end;color:#fff!important;text-decoration:none;font-size:23px;font-weight:800;letter-spacing:-.4px;white-space:nowrap}
+.m365-brand span{color:#9bd3ff}
+.m365-results{display:none;position:absolute;left:0;right:0;top:42px;background:#fff;border:1px solid #d5dfeb;border-radius:9px;box-shadow:0 10px 28px rgba(15,23,42,.18);overflow:hidden;z-index:500}
+.m365-results.show{display:block}
+.m365-result{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 11px;border-bottom:1px solid #edf1f6;color:#172033!important;text-decoration:none!important;background:#fff}
+.m365-result:hover{background:#eff6ff}
+.m365-result-title{font-size:11.5px;font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.m365-result-desc{font-size:10px;color:#647084;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.m365-result-type{font-size:9.5px;color:#2563eb;background:#eff6ff;border:1px solid #bfdbfe;border-radius:999px;padding:2px 6px;white-space:nowrap}
+.m365-result-empty{padding:11px;color:#647084;font-size:11px}
+@media(max-width:900px){
+  .m365-header{height:auto;padding:7px 0}
+  .m365-header-inner{grid-template-columns:1fr auto;gap:6px 10px}
+  .m365-search{grid-column:1/-1;grid-row:2;width:100%}
+}
+
+:root{--ink:#071a3d;--text:#263b5c;--muted:#617492;--line:#d7e1ee;--soft:#f4f8fd;--blue:#0878ee;--code:#0b1830}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f7faff;color:var(--text);font:13px/1.6 "Segoe UI",Arial,sans-serif}a{color:var(--blue);text-decoration:none}
+.layout{max-width:1400px;margin:18px auto;display:grid;grid-template-columns:215px minmax(0,1fr) 225px;gap:18px;padding:0 18px}
+.side{position:sticky;top:80px;height:max-content;background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px;box-shadow:0 2px 10px rgba(20,55,95,.07)}.side b{display:block;color:#4d6380;font-size:10px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}.side a{display:block;padding:6px 8px;color:#617492;font-size:11.5px;border-radius:7px}.side a:hover{background:#f1f7ff;color:var(--blue)}.side a.active{background:#eaf4ff;color:var(--blue);font-weight:700}
+.hero,.article{background:#fff;border:1px solid var(--line);border-radius:11px}.hero{padding:22px;margin-bottom:13px}.ey{display:inline-block;background:#edf6ff;border:1px solid #c9e0fa;color:var(--blue);padding:3px 8px;border-radius:999px;font-size:9.5px;font-weight:800}.hero h1{font-size:28px;line-height:1.18;color:var(--ink);margin:10px 0 7px}.sub{color:var(--muted);font-size:13.5px}.article{padding:24px}.article h2{font-size:19px;color:var(--ink);margin:28px 0 8px;scroll-margin-top:75px}.article h3{font-size:14px;color:var(--ink);margin:18px 0 6px}.article p{margin:7px 0}.article li{margin:4px 0}.article pre{background:#0b1830;color:#f1f5f9;padding:15px 16px;border:1px solid #263b5c;border-radius:9px;overflow:auto;font:12px/1.7 Consolas,"Cascadia Code",monospace;white-space:pre;tab-size:4;box-shadow:inset 4px 0 0 #1684f8}.article pre code{display:block;background:transparent!important;color:#f1f5f9!important;padding:0!important;border-radius:0;font:inherit;white-space:pre}.article code{background:#edf2f7;color:#183153;padding:1px 4px;border-radius:4px;font:11px Consolas,monospace}.call{padding:11px 13px;border:1px solid #c8def7;background:#eef7ff;border-radius:8px;margin:13px 0}.call.ok{background:#f0fdf4;border-color:#bbf7d0}.call.warn{background:#fffbeb;border-color:#fde68a}.card{background:var(--soft);border:1px solid var(--line);border-radius:9px;padding:13px;margin:15px 0}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.btn{display:inline-flex;border:1px solid var(--line);background:#fff;border-radius:6px;padding:6px 10px;font-size:11px;font-weight:750;color:var(--text)}.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}.btn:hover{transform:translateY(-1px);box-shadow:0 5px 14px rgba(8,120,238,.14);border-color:#8bbdf5}.btn.primary:hover{background:#0565cc}.action-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 15px;border:1px solid #0878ee;border-radius:9px;background:#0878ee;color:#fff!important;font-size:12px;font-weight:800;box-shadow:0 4px 10px rgba(8,120,238,.18);transition:transform .15s,box-shadow .15s,background .15s}.action-btn:hover{background:#0565cc;transform:translateY(-1px);box-shadow:0 7px 16px rgba(8,120,238,.22)}.action-btn.secondary{background:#fff;color:#075db7!important;border-color:#bfd8f5;box-shadow:none}.action-btn.secondary:hover{background:#eff7ff}.action-row{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 18px}.related-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:14px 0}.related-card{display:flex;flex-direction:column;align-items:flex-start;gap:7px;padding:15px;border:1px solid var(--line);border-radius:10px;background:linear-gradient(145deg,#fff,#f5f9ff);min-height:135px}.related-card strong{color:var(--ink);font-size:13px}.related-card p{font-size:11.5px;color:var(--muted);margin:0;flex:1}.related-card a{font-weight:750;font-size:11.5px}@media(max-width:600px){.related-grid{grid-template-columns:1fr}.action-btn{width:100%}}.article-search-box{display:flex;gap:5px;margin-bottom:6px}.article-search-wrap{position:relative;flex:1}.article-search-wrap input{width:100%;height:34px;border:1px solid #cbd9e8;border-radius:7px;padding:0 8px 0 32px;font-size:11px;outline:0}.article-search-wrap svg{position:absolute;left:9px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:#68809d}.match-btn{width:31px;height:34px;border:1px solid #cbd9e8;background:#fff;border-radius:7px;cursor:pointer}.search-count{font-size:10px;color:#72859e;margin-bottom:10px}.toc a{display:block;padding:5px 7px;font-size:10.5px;color:#617492;border-radius:6px}.toc a:hover{background:#f1f7ff;color:var(--blue)}.toc a.h3{padding-left:15px;font-size:10px}.match-highlight{outline:2px solid #9ac2ea;outline-offset:1px;background:#fff8cc}.current-match{outline:2px solid #0878ee;outline-offset:1px;background:#fff2a8}footer{margin-top:22px;border-top:1px solid var(--line);padding-top:13px;color:var(--muted);font-size:10.5px}
+@media(max-width:1100px){.layout{grid-template-columns:minmax(0,1fr) 205px}.left{display:none}}@media(max-width:850px){.layout{grid-template-columns:1fr}.right{display:none}}
+
+/* Sharper article-wide links, code blocks, and responsive data tables */
+.article a:not(.action-btn){
+  color:#075db7;
+  font-weight:650;
+  text-decoration:underline;
+  text-decoration-color:#a8cef8;
+  text-decoration-thickness:1px;
+  text-underline-offset:3px;
+  border-radius:4px;
+  transition:color .15s ease,background .15s ease,text-decoration-color .15s ease;
+}
+.article a:not(.action-btn):hover{
+  color:#06499a;
+  background:#eff7ff;
+  text-decoration-color:#0878ee;
+}
+.article a:not(.action-btn):focus-visible,.article .action-btn:focus-visible{
+  outline:3px solid #93c5fd;
+  outline-offset:3px;
+}
+.article .related-card a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  align-self:flex-start;
+  gap:7px;
+  padding:7px 11px;
+  margin-top:3px;
+  border:1px solid #bed8f6;
+  border-radius:7px;
+  background:#fff;
+  color:#075db7;
+  font-size:11.5px;
+  font-weight:800;
+  text-decoration:none;
+  box-shadow:0 1px 2px rgba(15,45,85,.04);
+  transition:background .15s ease,border-color .15s ease,transform .15s ease,box-shadow .15s ease;
+}
+.article .related-card a:hover{
+  background:#edf6ff;
+  border-color:#78b4f2;
+  color:#06499a;
+  text-decoration:none;
+  transform:translateY(-1px);
+  box-shadow:0 4px 10px rgba(8,90,170,.09);
+}
+.article .table-wrap{
+  width:100%;
+  margin:14px 0 16px;
+  overflow-x:auto;
+  border:1px solid #d5e1ef;
+  border-radius:10px;
+  background:#fff;
+  box-shadow:0 3px 10px rgba(15,45,85,.045);
+  -webkit-overflow-scrolling:touch;
+}
+.article table{
+  width:100%;
+  min-width:640px;
+  border:0;
+  border-collapse:separate;
+  border-spacing:0;
+  background:#fff;
+  font-size:12px;
+  line-height:1.55;
+}
+.article table thead th{
+  position:relative;
+  padding:12px 14px;
+  background:linear-gradient(180deg,#edf5ff,#e5f0fc);
+  color:#102c51;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.015em;
+  text-align:left;
+  vertical-align:top;
+  border-bottom:1px solid #c9dced;
+  white-space:normal;
+}
+.article table th+th,.article table td+td{border-left:1px solid #e6edf5}
+.article table tbody td{
+  padding:12px 14px;
+  color:#304762;
+  vertical-align:top;
+  border-bottom:1px solid #e7edf5;
+  overflow-wrap:anywhere;
+}
+.article table tbody tr:nth-child(even) td{background:#f8fbff}
+.article table tbody tr:hover td{background:#eff7ff}
+.article table tbody tr:last-child td{border-bottom:0}
+.article table td code{
+  display:inline-block;
+  padding:3px 6px;
+  border:1px solid #dce8f5;
+  border-radius:5px;
+  background:#edf4fb;
+  color:#12355b;
+  font-size:11px;
+  white-space:normal;
+  overflow-wrap:anywhere;
+}
+.article pre{
+  background:#07162b;
+  color:#f8fbff;
+  border:1px solid #243b59;
+  border-radius:10px;
+  box-shadow:inset 4px 0 0 #1684f8,0 4px 12px rgba(7,22,43,.08);
+}
+.article pre code{
+  display:block;
+  background:transparent!important;
+  color:#f8fbff!important;
+  -webkit-text-fill-color:#f8fbff!important;
+  opacity:1!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  font:12px/1.8 Consolas,"Cascadia Code",monospace!important;
+  white-space:pre;
+  overflow-wrap:normal;
+}
+@media(max-width:700px){
+  .article table{font-size:11.5px;min-width:600px}
+  .article table thead th,.article table tbody td{padding:10px 11px}
+  .article .related-card a{width:100%}
+}
+
+</style>  <link rel="stylesheet" href="/assets/community.css?v=20261021-2">
+
+<meta name="description" content="Build a SharePoint site inventory report and email its CSV using Microsoft Graph, PowerShell, app-only certificate authentication, and configured mail permissions.">
+<link rel="canonical" href="https://m365buddy.com/articles/powershell-report-delivery-microsoft-graph.html">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="M365Buddy">
+<meta property="og:title" content="Email SharePoint Reports with Microsoft Graph PowerShell | M365Buddy">
+<meta property="og:description" content="Build a SharePoint site inventory report and email its CSV using Microsoft Graph, PowerShell, app-only certificate authentication, and configured mail permissions.">
+<meta property="og:url" content="https://m365buddy.com/articles/powershell-report-delivery-microsoft-graph.html">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Email SharePoint Reports with Microsoft Graph PowerShell | M365Buddy","description":"Build a SharePoint site inventory report and email its CSV using Microsoft Graph, PowerShell, app-only certificate authentication, and configured mail permissions.","url":"https://m365buddy.com/articles/powershell-report-delivery-microsoft-graph.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://m365buddy.com/articles/powershell-report-delivery-microsoft-graph.html"},"articleSection":"Microsoft Graph","publisher":{"@type":"Organization","name":"M365Buddy","url":"https://m365buddy.com/"}}</script>
+</head><body>
+
+<header class="m365-header">
+  <div class="m365-header-inner">
+    <nav class="m365-nav" aria-label="Main navigation">
+      <a href="/" data-nav="home">Home</a>
+      <a href="/articles/" data-nav="articles">Articles</a>
+      <a href="/scripts/" data-nav="scripts">Scripts</a>
+      <a href="/community/" data-nav="community">Community</a>
+    </nav>
+    <div class="m365-search">
+      <span class="m365-search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg></span>
+      <input type="search" data-m365-search placeholder="Search M365Buddy..." autocomplete="off" aria-label="Search M365Buddy">
+    </div>
+    <a class="m365-brand" href="/">M365<span>Buddy</span></a>
+  </div>
+</header>
+
+<div class="layout">
+<aside class="side left">
+    <b>All Articles</b>
+    <a href="/articles/sharepoint-online-site-inventory.html">SharePoint Online Site Inventory</a>
+    <a href="/articles/entra-id-pnp-certificate-authentication.html">Entra ID Certificate Authentication</a>
+    <a href="/articles/sharepoint-storage-management.html">SharePoint Storage Management</a>
+    <a href="/articles/sharepoint-site-lifecycle.html">SharePoint Site Lifecycle Management</a>
+    <a href="/articles/sharepoint-version-management.html">SharePoint Version Management</a>
+    <a class="active" href="#top">Email PowerShell Reports Using Microsoft Graph</a>
+    </aside>
+<main id="top">
+<section class="hero"><span class="ey">SharePoint Online · PowerShell · Microsoft Graph</span><h1>Generate and Email a SharePoint Site Inventory Report with Microsoft Graph</h1><p class="sub">A combined PowerShell example that inventories SharePoint sites, exports the approved CSV columns, summarizes storage, and emails the report through Microsoft Graph app-only certificate authentication.</p></section>
+<article class="article">
+  <div class="callout"><strong>What this script does</strong><p>This combined script inventories SharePoint Online site collections, collects the configured site metadata, exports the approved nine-column CSV, displays storage-utilization summaries, and emails the CSV through Microsoft Graph using app-only certificate authentication. It does not use SMTP or require the Microsoft Graph PowerShell module. The inventory logic and storage calculations are part of the script and should be reviewed before you adapt it for a different tenant.</p></div>
+
+  <h2>Download the latest PowerShell script</h2>
+  <p>Download the matching script and article version below. The script link points to the published file in the <code>public/scripts/SharePoint</code> folder of the M365Buddy website. If you maintain the site in GitHub, replace the repository file with the updated PS1 provided alongside this article, then commit and deploy both files.</p>
+  <div class="action-row"><a class="action-btn" href="/scripts/SharePoint/SharePoint-Site-Inventory-GraphEmail.ps1?v=20261020-3" download="SharePoint-Site-Inventory-GraphEmail.ps1">⬇ Download PowerShell script</a><a class="action-btn secondary" href="https://github.com/rahulbaghel777/M365buddy/blob/main/public/scripts/SharePoint/SharePoint-Site-Inventory-GraphEmail.ps1" target="_blank" rel="noopener">↗ View on GitHub</a><a class="action-btn secondary" href="https://raw.githubusercontent.com/rahulbaghel777/M365buddy/main/public/scripts/SharePoint/SharePoint-Site-Inventory-GraphEmail.ps1" target="_blank" rel="noopener">⌘ Open raw PS1</a><a class="action-btn secondary" href="/M365buddy-script-editor.html?script=%2Fscripts%2FSharePoint%2FSharePoint-Site-Inventory-GraphEmail.ps1">✎ Open in Script Editor</a></div>
+
+  <h2>Prerequisites</h2>
+  <ol>
+    <li><strong>Windows PowerShell 7.4 or later.</strong> Run this in PowerShell 7 (<code>pwsh</code>), not Windows PowerShell 5.1. Current PnP.PowerShell releases require PowerShell 7.4 or later.</li>
+    <li><strong>PnP.PowerShell.</strong> Install the module in the same PowerShell 7 environment you will use to run the script.</li>
+    <li><strong>An existing Entra ID app registration</strong> configured for the SharePoint inventory workload, including its approved SharePoint/Graph application permissions. Keep the permissions required by your working inventory workflow; do not remove them when adding mail permissions.</li>
+    <li><strong>A valid PFX certificate with a private key.</strong> The public certificate that matches the PFX must be uploaded to the app registration. The PFX path and password must be correct on the computer running the script.</li>
+    <li><strong>A SharePoint administrator endpoint and tenant root URL</strong> for the correct tenant, and an app that is authorized to run the inventory operations in the script.</li>
+    <li><strong>An Exchange Online mailbox for the sender.</strong> The address in <code>$From</code> must be a mailbox in the tenant, and the app must be allowed to send from it.</li>
+    <li><strong>Write access to the report output folder</strong> and enough local disk space for the generated CSV.</li>
+    <li><strong>Approved credential handling.</strong> Do not publish your real PFX password, private certificate, client secrets, or tenant-sensitive output in a public repository.</li>
+  </ol>
+  <p>Official references: <a href="https://pnp.github.io/powershell/articles/installation.html" target="_blank" rel="noopener">Install PnP.PowerShell</a> · <a href="https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows" target="_blank" rel="noopener">Install PowerShell 7 on Windows</a>.</p>
+
+  <h2>Required Microsoft Graph email permissions</h2>
+  <p>The email flow creates a draft, creates an attachment upload session, uploads the CSV in chunks, and then sends the draft. Therefore, it needs <strong>both</strong> of the following Microsoft Graph <strong>Application permissions</strong> on the app registration.</p>
+  <div class="table-wrap"><table><thead><tr><th>Permission</th><th>Type</th><th>Why it is needed</th><th>Required status</th></tr></thead><tbody>
+    <tr><td><code>Mail.Send</code></td><td>Application</td><td>Allows the app to send the completed draft as the configured sender.</td><td>Admin consent granted</td></tr>
+    <tr><td><code>Mail.ReadWrite</code></td><td>Application</td><td>Allows the app to create the draft and create the message attachment upload session.</td><td>Admin consent granted</td></tr>
+  </tbody></table></div>
+  <p><strong>Where to configure them:</strong> Microsoft Entra admin center → <em>App registrations</em> → your app → <em>API permissions</em> → <em>Add a permission</em> → <em>Microsoft Graph</em> → <em>Application permissions</em>. Search for each permission, add it, and select <em>Grant admin consent</em>. Confirm that both permissions show the granted status. Do not add them as Delegated permissions for this certificate-based app-only flow.</p>
+  <p>The older direct <code>sendMail</code> approach used <code>Mail.Send</code>; this combined script's draft/upload-session approach also needs <code>Mail.ReadWrite</code>. After permission or admin-consent changes, rerun the script so it requests a fresh app-only access token. If Exchange application RBAC or another application-access restriction is configured in your tenant, make sure it permits this app to use the sender mailbox.</p>
+  <p>Official references: <a href="https://learn.microsoft.com/en-us/graph/api/user-sendmail?view=graph-rest-1.0" target="_blank" rel="noopener">Microsoft Graph sendMail permissions</a> · <a href="https://learn.microsoft.com/en-us/graph/api/attachment-createuploadsession?view=graph-rest-1.0" target="_blank" rel="noopener">Attachment upload-session permissions</a> · <a href="https://learn.microsoft.com/en-us/graph/outlook-large-attachments" target="_blank" rel="noopener">Attach large files with Microsoft Graph</a>.</p>
+
+  <h2>Install or verify PnP.PowerShell</h2>
+  <p>Open PowerShell 7.4 or later. Check the current version and whether the module is available:</p>
+  <pre><code>$PSVersionTable.PSVersion
+Get-Module PnP.PowerShell -ListAvailable</code></pre>
+  <p>If the module is not installed in that PowerShell 7 environment, install it for your user:</p>
+  <pre><code>Install-Module PnP.PowerShell -Scope CurrentUser</code></pre>
+  <p>If your organization manages PowerShell modules centrally, follow its approved installation and execution-policy process rather than bypassing policy.</p>
+
+  <h2>Update the script configuration</h2>
+  <p>Open the downloaded <code>.ps1</code> file in a text editor and update the values in the <strong>CONFIGURATION</strong> section. Do not change the report calculations or output-column validation unless you deliberately intend to change the inventory.</p>
+  <div class="table-wrap"><table><thead><tr><th>Setting</th><th>What to enter</th><th>Notes</th></tr></thead><tbody>
+    <tr><td><code>$Tenant</code></td><td>Your tenant ID or tenant domain, for example <code>contoso.onmicrosoft.com</code>.</td><td>Must identify the same tenant as the app registration and SharePoint URLs.</td></tr>
+    <tr><td><code>$ClientId</code></td><td>The app registration's Application (client) ID.</td><td>Use the ID for the app whose public certificate and permissions are configured.</td></tr>
+    <tr><td><code>$PfxPath</code></td><td>The complete local path to the PFX file.</td><td>The PFX must contain the private key and match the public certificate uploaded to Entra.</td></tr>
+    <tr><td><code>$PfxPasswordPlainText</code></td><td>Your local PFX password or the approved secret-injection approach used by your organization.</td><td>The sample variable is plain text in the file; do not commit a real password to GitHub. Prefer an approved secret store for production.</td></tr>
+    <tr><td><code>$AdminCenterUrl</code></td><td>Your SharePoint admin URL, e.g. <code>https://contoso-admin.sharepoint.com</code>.</td><td>Use your tenant's actual admin endpoint.</td></tr>
+    <tr><td><code>$SharePointRootUrl</code></td><td>Your SharePoint root URL, e.g. <code>https://contoso.sharepoint.com</code>.</td><td>Use the actual root domain for your tenant.</td></tr>
+    <tr><td><code>$OutputDirectory</code></td><td>A local folder where the script can create the report.</td><td>The script creates the folder if it does not exist, but the run account must be able to write there.</td></tr>
+    <tr><td><code>$From</code></td><td>The sender mailbox, e.g. <code>reports@contoso.com</code>.</td><td>The mailbox must exist and be permitted for this app.</td></tr>
+    <tr><td><code>$To</code></td><td>One or more recipient email addresses.</td><td>All configured recipients receive the same message and can see the other addresses in the To field.</td></tr>
+    <tr><td><code>$ThrottleLimit</code></td><td>The parallel-processing limit already configured in the script.</td><td>Keep the existing value initially; change it only if you understand the effect on tenant requests and local resources.</td></tr>
+  </tbody></table></div>
+
+  <h2>Send to multiple recipients</h2>
+  <p>Add each recipient address inside the <code>$To</code> array. Put each address in quotes. PowerShell allows one address per line as shown below; commas can also be used between entries.</p>
+  <pre><code>$To = @(
+    'user1@contoso.com'
+    'user2@contoso.com'
+    'user3@contoso.com'
+)</code></pre>
+  <p>Replace the sample addresses with real recipients. The script sends one report email to the whole list; it does not send an individual copy to each person. Recipients can see one another in the <strong>To</strong> field. The current script does not implement Bcc.</p>
+
+  <h2>Run the script</h2>
+  <ol>
+    <li>Save the downloaded PS1 file in a local folder, for example <code>C:\Scripts\SharePoint\</code>.</li>
+    <li>Confirm all placeholder values are replaced, especially the tenant, client ID, certificate path/password, SharePoint URLs, sender, and recipients.</li>
+    <li>Open <strong>PowerShell 7.4 or later</strong> and move to the folder where you saved the script.</li>
+    <li>Run the script:</li>
+  </ol>
+  <pre><code>Set-Location "C:\Scripts\SharePoint"
+.\SharePoint-Site-Inventory-GraphEmail.ps1</code></pre>
+  <p>Replace the example folder with your actual location. Keep the window open while the inventory is collected. Runtime depends on tenant size, site count, network performance, and throttling.</p>
+
+  <h2>What the script creates and emails</h2>
+  <ul>
+    <li>Connects to SharePoint Online using PnP.PowerShell and app-only certificate authentication.</li>
+    <li>Collects site metadata, site collection administrators, associated SharePoint owners, group visibility, storage usage, and other fields used by the existing inventory workflow.</li>
+    <li>Exports a CSV with exactly these nine approved columns: <code>SiteName</code>, <code>SiteUrl</code>, <code>SiteType</code>, <code>Template</code>, <code>WebCreatedDate</code>, <code>Office365Visibility</code>, <code>StorageGB</code>, <code>SiteCollectionAdmins</code>, and <code>SPOwners</code>.</li>
+    <li>Displays the total site count and storage summary in the PowerShell console.</li>
+    <li>Creates a Graph draft, uploads the CSV using the attachment upload session in sequential chunks, and requests Graph to send the email.</li>
+    <li>Uses a report subject that includes the current date, total storage used, and site count. The HTML email body includes inventory and storage summary information.</li>
+  </ul>
+  <h3>CSV file location and cleanup</h3>
+  <p>The local CSV is written under <code>$OutputDirectory</code>. Its filename uses a date suffix, such as <code>-SPOSiteConsumption_20261020.csv</code>. Because the filename is date-based, a rerun on the same date reuses that path and overwrites the previous CSV. After Graph accepts the send request, the script removes the generated CSV. If the Graph email operation fails, it keeps the CSV and prints the exact path for troubleshooting.</p>
+
+  <h2>Attachment size and service limits</h2>
+  <p>This version uploads the CSV in chunks and does not apply the old script's fixed 3 MB cutoff. This does <strong>not</strong> mean attachments are unlimited. Microsoft's Graph upload-session guidance describes the large-attachment path for files from 3 MB to 150 MB, and Exchange Online and your organization's mail-flow policies can impose a lower maximum message size. Check your tenant's effective message-size limit before sending very large reports.</p>
+  <p>Reference: <a href="https://learn.microsoft.com/en-us/graph/outlook-large-attachments" target="_blank" rel="noopener">Microsoft Graph: Attach large files to Outlook messages or events</a>.</p>
+
+  <h2>Troubleshooting</h2>
+  <ul>
+    <li><strong><code>403 Forbidden</code> / <code>ErrorAccessDenied</code>:</strong> confirm that both <code>Mail.Send</code> and <code>Mail.ReadWrite</code> are Microsoft Graph <strong>Application</strong> permissions with admin consent. Rerun the script so it requests a fresh token. Then confirm <code>$From</code> is a real mailbox and check Exchange application RBAC/access restrictions. Do not add unrelated permissions unless the failing Graph request and error point to them.</li>
+    <li><strong>Invalid client, AADSTS, or token error:</strong> verify <code>$Tenant</code>, <code>$ClientId</code>, PFX path/password, certificate expiry, private-key availability, and that the uploaded public certificate matches the local PFX.</li>
+    <li><strong>Sender mailbox not found or send denied:</strong> check the sender spelling, mailbox provisioning, and whether app-access restrictions permit the app to use that mailbox.</li>
+    <li><strong>SharePoint connection or inventory errors:</strong> verify the existing PnP app permissions, certificate authentication, SharePoint admin URL, tenant root URL, installed PnP.PowerShell module, and tenant/site-level access.</li>
+    <li><strong>CSV missing or invalid:</strong> check <code>$OutputDirectory</code>, available disk space, and the CSV path printed in the console. The script validates the expected column list before emailing.</li>
+    <li><strong>Attachment upload or message-size failure:</strong> verify the upload-session request succeeded and check Exchange Online and mail-flow message-size limits. Chunking does not override service or tenant limits.</li>
+    <li><strong>Email worked but you cannot find it:</strong> check the recipient's Inbox, Junk Email, quarantine, and any mail-flow rules; also check the sender's Sent Items if available.</li>
+  </ul>
+
+  <h2>Security and operations notes</h2>
+  <ul>
+    <li>The sample keeps <code>$PfxPasswordPlainText</code> in the script for ease of demonstration. For production, retrieve it from an approved secret store or prompt securely; never publish a real password or the private PFX file.</li>
+    <li>Use a dedicated app registration and mailbox where appropriate. Assign only approved permissions, and restrict which mailboxes the application can access using your organization's supported Exchange controls.</li>
+    <li>The script's successful Graph response means Graph accepted the send request; it is not a guarantee that every recipient's mail system delivered it to the Inbox.</li>
+    <li>Test configuration changes on a controlled run before using the report for production governance decisions. Do not change the report's storage calculations or CSV schema unless you explicitly want a different report.</li>
+  </ul>
+
+  <h2>Related articles and scripts</h2>
+  <p>Continue with these M365Buddy guides for the inventory workflow, certificate authentication, storage governance, and alternative report-delivery options.</p>
+  <div class="related-grid">
+    <div class="related-card"><strong>SharePoint Online Site Inventory</strong><p>Learn how to export and review SharePoint Online site inventory and storage usage.</p><a href="/articles/sharepoint-online-site-inventory.html">Read article →</a></div>
+    <div class="related-card"><strong>Entra ID Certificate Authentication</strong><p>Set up an app registration, certificate authentication, permissions, and admin consent for PnP PowerShell.</p><a href="/articles/entra-id-pnp-certificate-authentication.html">Read article →</a></div>
+    <div class="related-card"><strong>SharePoint Storage Management</strong><p>Review SharePoint storage consumption and practical storage-governance options.</p><a href="/articles/sharepoint-storage-management.html">Read article →</a></div>
+    <div class="related-card"><strong>SharePoint Site Lifecycle Management</strong><p>Explore site ownership, inactivity, and lifecycle-governance processes.</p><a href="/articles/sharepoint-site-lifecycle.html">Read article →</a></div>
+    <div class="related-card"><strong>SharePoint Version Management</strong><p>Understand version history, version limits, and their impact on storage.</p><a href="/articles/sharepoint-version-management.html">Read article →</a></div>
+    <div class="related-card"><strong>M365Buddy Script Library</strong><p>Browse PowerShell scripts and open published source in the M365Buddy Script Editor.</p><a href="/scripts/">Browse scripts →</a></div>
+    <div class="related-card"><strong>Email PowerShell Reports Using Power Automate</strong><p>Explore a Power Automate alternative for delivering PowerShell CSV reports.</p><a href="/articles/powershell-report-delivery-power-automate.html">Read article →</a></div>
+    <div class="related-card"><strong>SharePoint Site Inventory PowerShell Script</strong><p>Open the existing inventory script resource on M365Buddy.</p><a href="/scripts/SharePoint/sharepoint-site-inventory-viewer.html">View script →</a></div>
+  </div>
+<section class="m365-comments" data-giscus-comments aria-labelledby="community-comments-title">
+  <div class="m365-comments-head">
+    <p class="m365-comments-kicker">M365Buddy Community</p>
+    <h2 id="community-comments-title">Discuss this article</h2>
+    <p class="m365-comments-intro">Have a question, correction, or a helpful tip? Join the discussion. Posting and replying uses your GitHub account; please keep tenant details and credentials out of public comments.</p>
+  </div>
+  <div class="m365-comments-panel" data-giscus-pending>
+    <strong>GitHub comments are being connected</strong>
+    <p>The embedded discussion will appear here after GitHub Discussions is enabled for M365Buddy and the comments category is configured.</p>
+    <a href="/community/">Visit the M365Buddy Community →</a>
+    <a href="https://github.com/rahulbaghel777/M365buddy/issues" target="_blank" rel="noopener noreferrer">Report an issue on GitHub →</a>
+  </div>
+</section>
+</article>
+</main>
+<aside class="side right">
+<b>Search in this article</b>
+<div class="article-search-box"><div class="article-search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg><input id="articleSearch" type="search" placeholder="Search in this article" autocomplete="off"></div><button class="match-btn" id="prevMatch" title="Previous match">↑</button><button class="match-btn" id="nextMatch" title="Next match">↓</button></div>
+<div class="search-count" id="searchCount"></div><b>On This Page</b><div id="toc" class="toc"></div>
+</aside>
+</div>
+<script>
+(function(){
+ const root=document.querySelector(".article"), input=document.getElementById("articleSearch"), count=document.getElementById("searchCount"), prev=document.getElementById("prevMatch"), next=document.getElementById("nextMatch"), toc=document.getElementById("toc");
+ const heads=[...root.querySelectorAll("h2,h3")];
+ heads.forEach((h,i)=>{if(!h.id)h.id="section-"+i;const a=document.createElement("a");a.href="#"+h.id;a.textContent=h.textContent;a.className=h.tagName.toLowerCase();toc.appendChild(a);});
+ const nodes=[...root.querySelectorAll("p,li,td,h2,h3,pre,.call,.card")].filter(x=>!x.closest(".actions")&&!x.querySelector(".match-highlight"));
+ let matches=[],idx=-1;
+ function clear(){root.querySelectorAll(".match-highlight,.current-match").forEach(x=>x.classList.remove("match-highlight","current-match"));}
+ function scan(){
+   clear();matches=[];idx=-1;const q=input.value.trim().toLowerCase();
+   if(!q){count.textContent="";return;}
+   nodes.forEach(n=>{if(n.textContent.toLowerCase().includes(q)){n.classList.add("match-highlight");matches.push(n);}});
+   if(matches.length){idx=0;matches[0].classList.add("current-match");matches[0].scrollIntoView({behavior:"smooth",block:"center"});count.textContent="1 / "+matches.length;}else count.textContent="0 matches";
+ }
+ function go(dir){if(!matches.length)return;matches[idx]?.classList.remove("current-match");idx=(idx+dir+matches.length)%matches.length;matches[idx].classList.add("current-match");matches[idx].scrollIntoView({behavior:"smooth",block:"center"});count.textContent=(idx+1)+" / "+matches.length;}
+ input.addEventListener("input",scan);input.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();go(e.shiftKey?-1:1);}if(e.key==="Escape"){input.value="";scan();}});next.addEventListener("click",()=>go(1));prev.addEventListener("click",()=>go(-1));
+})();
+</script>
+<script>
+(function(){
+"use strict";
+const M365_INDEX = [{"title":"Export All SharePoint Online Sites Using PnP PowerShell","type":"Article","category":"SharePoint","url":"/articles/sharepoint-online-site-inventory.html","description":"Generate a SharePoint Online site inventory and storage usage report using PnP PowerShell.","keywords":["sharepoint","site inventory","storage","pnp powershell","powershell","csv"]},{"title":"Register an Entra ID App for PnP PowerShell Certificate Authentication","type":"Article","category":"Microsoft Entra","url":"/articles/entra-id-pnp-certificate-authentication.html","description":"Configure an Entra ID application, certificate, permissions and authentication for PnP PowerShell.","keywords":["entra id","certificate","app registration","pnp powershell","admin consent"]},{"title":"SharePoint Storage Management","type":"Article","category":"SharePoint","url":"/articles/sharepoint-storage-management.html","description":"Understand SharePoint Online storage consumption and practical storage governance.","keywords":["sharepoint","storage","quota","capacity","usage","report"]},{"title":"SharePoint Site Lifecycle Management","type":"Article","category":"SharePoint","url":"/articles/sharepoint-site-lifecycle.html","description":"Manage inactive SharePoint sites with lifecycle and ownership processes.","keywords":["sharepoint","lifecycle","inactive sites","attestation","governance"]},{"title":"SharePoint Version Management","type":"Article","category":"SharePoint","url":"/articles/sharepoint-version-management.html","description":"Understand SharePoint version history, version limits and storage governance.","keywords":["sharepoint","versions","version history","version limit","storage"]},{"title":"Generate and Email a SharePoint Site Inventory Report with Microsoft Graph","type":"Article","category":"SharePoint","url":"/articles/powershell-report-delivery-microsoft-graph","description":"Generate a SharePoint Online site inventory, export the approved CSV, summarize storage and email the report with Microsoft Graph app-only certificate authentication.","keywords":["sharepoint","site inventory","graph email","powershell","csv","storage","mail.send","mail.readwrite","certificate authentication"]},{"title":"Email PowerShell Reports Using Power Automate","type":"Article","category":"Power Automate","url":"/articles/powershell-report-delivery-power-automate.html","description":"Use Power Automate and Microsoft 365 Outlook to email PowerShell CSV reports.","keywords":["smtp","email","power automate","outlook","powershell","csv"]},{"title":"SharePoint Site Inventory PowerShell Script","type":"Script","category":"SharePoint","url":"/scripts/SharePoint/sharepoint-site-inventory-viewer.html","description":"View the published SharePoint Online site inventory PowerShell script.","keywords":["sharepoint","powershell","site inventory","script"]},{"title":"SharePoint Version Report","type":"Script","category":"SharePoint","url":"/scripts/SharePoint/sharepoint-version-report.html","description":"SharePoint Online version usage reporting script.","keywords":["sharepoint","version report","powershell"]},{"title":"SharePoint Recycle Bin Report","type":"Script","category":"SharePoint","url":"/scripts/SharePoint/sharepoint-recycle-bin-report.html","description":"SharePoint Online recycle bin reporting script.","keywords":["sharepoint","recycle bin","powershell"]},{"title":"SharePoint Storage Report","type":"Script","category":"SharePoint","url":"/scripts/","description":"SharePoint Online storage reporting scripts.","keywords":["sharepoint","storage report","powershell"]},{"title":"SharePoint Site Inventory + Graph Email PowerShell Script","type":"Script","category":"SharePoint","url":"/articles/powershell-report-delivery-microsoft-graph","description":"Published PowerShell script that inventories SharePoint sites, exports CSV and sends the report through Microsoft Graph.","keywords":["sharepoint","site inventory","graph email","powershell script","csv attachment","Mail.Send","Mail.ReadWrite","certificate"]}];
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));}
+function scoreItem(item,q){
+  const Q=q.toLowerCase();
+  const title=item.title.toLowerCase(), text=(item.title+" "+item.type+" "+item.category+" "+item.description+" "+item.keywords.join(" ")).toLowerCase();
+  if(!text.includes(Q)) return 0;
+  let s=1;
+  if(title===Q)s+=100;
+  if(title.includes(Q))s+=60;
+  if(item.category.toLowerCase().includes(Q))s+=30;
+  if(item.type.toLowerCase().includes(Q))s+=20;
+  if(item.description.toLowerCase().includes(Q))s+=15;
+  s+=item.keywords.filter(k=>k.toLowerCase().includes(Q)).length*10;
+  return s;
+}
+function searchItems(q,type){
+  q=(q||"").trim();
+  if(!q)return [];
+  return M365_INDEX.map(x=>({...x,score:scoreItem(x,q)})).filter(x=>x.score>0 && (!type||type==="All"||x.type===type)).sort((a,b)=>b.score-a.score);
+}
+function wireGlobalSearch(){
+  document.querySelectorAll("[data-m365-search]").forEach(input=>{
+    const wrap=input.closest(".m365-search")||input.parentElement;
+    let box=wrap.querySelector(".m365-results");
+    if(!box){box=document.createElement("div");box.className="m365-results";wrap.appendChild(box);}
+    function render(){
+      const q=input.value.trim(), items=searchItems(q).slice(0,7);
+      if(!q){box.classList.remove("show");box.innerHTML="";return;}
+      box.classList.add("show");
+      if(!items.length){box.innerHTML='<div class="m365-result-empty">No matching articles or scripts.</div>';return;}
+      box.innerHTML=items.map(x=>'<a class="m365-result" href="'+x.url+'"><div style="min-width:0"><div class="m365-result-title">'+esc(x.title)+'</div><div class="m365-result-desc">'+esc(x.description)+'</div></div><span class="m365-result-type">'+esc(x.type)+'</span></a>').join("");
+    }
+    input.addEventListener("input",render);
+    input.addEventListener("focus",render);
+    input.addEventListener("keydown",function(e){
+      if(e.key==="Enter"){e.preventDefault();const q=input.value.trim();if(q)location.href="/search.html?q="+encodeURIComponent(q);}
+      if(e.key==="Escape"){input.value="";box.classList.remove("show");}
+    });
+  });
+  document.addEventListener("click",function(e){
+    document.querySelectorAll(".m365-results").forEach(box=>{if(!box.parentElement.contains(e.target))box.classList.remove("show");});
+  });
+}
+function markNav(){
+  const p=location.pathname;
+  document.querySelectorAll(".m365-nav a[data-nav]").forEach(a=>{
+    const n=a.dataset.nav;
+    if((n==="home" && (p==="/"||p.endsWith("/index.html"))) ||
+       (n==="articles" && p.startsWith("/articles")) ||
+       (n==="scripts" && p.startsWith("/scripts")) ||
+       (n==="community" && p.startsWith("/community")) ) a.classList.add("active");
+  });
+}
+document.addEventListener("DOMContentLoaded",function(){wireGlobalSearch();markNav();});
+window.M365BuddySearch={index:M365_INDEX,search:searchItems};
+})();
+</script>
+<script src="/assets/community-comments.js?v=20261021-3" defer></script>
+</body></html>
