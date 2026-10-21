@@ -1,3 +1,16 @@
+/* 
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+/sitemap.xml
+  Content-Type: application/xml; charset=utf-8
+  Cache-Control: public, max-age=300
+
+/robots.txt
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=300
+
 /scripts/SharePoint/SharePoint_Site_Inventory.ps1
   Content-Type: application/octet-stream
   Content-Disposition: attachment; filename="SharePoint_Site_Inventory.ps1"
