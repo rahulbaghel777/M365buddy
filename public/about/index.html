@@ -10,7 +10,10 @@
   <meta property="og:title" content="About M365Buddy | Microsoft 365 Administration">
   <meta property="og:description" content="Practical Microsoft 365 administration guides, SharePoint Online scripts, and troubleshooting resources.">
   <meta property="og:url" content="https://m365buddy.com/about/">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://m365buddy.com/assets/rahul-baghel-profile.jpg">
+  <meta property="og:image:alt" content="Rahul Baghel, creator of M365Buddy">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://m365buddy.com/assets/rahul-baghel-profile.jpg">
   <title>About M365Buddy | Microsoft 365 Administration</title>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"AboutPage","name":"About M365Buddy","url":"https://m365buddy.com/about/","description":"Information about M365Buddy and its Microsoft 365 administration resources.","isPartOf":{"@type":"WebSite","name":"M365Buddy","url":"https://m365buddy.com/"}}</script>
   <style>
@@ -33,6 +36,10 @@
     .item{padding:18px;border:1px solid #d7e1ee;border-radius:13px;background:#fbfdff}
     .item h3{margin:0 0 5px;color:#173961;font-size:16px}.item p{margin:0;color:#617492;font-size:14px}
     .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+    .creator-mini{display:flex;align-items:center;gap:18px;margin:5px 0 16px}
+    .creator-avatar{width:92px;height:92px;flex:0 0 92px;object-fit:cover;object-position:center 42%;border:3px solid #fff;border-radius:50%;box-shadow:0 5px 16px rgba(7,26,61,.14)}
+    .creator-mini p{margin:4px 0;color:#617492;font-size:14px}
+    @media(max-width:620px){.creator-mini{align-items:flex-start;gap:13px}.creator-avatar{width:74px;height:74px;flex-basis:74px}}
     .btn{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 15px;border:1px solid #cbd9e8;border-radius:9px;background:#fff;color:#173961;font-size:13px;font-weight:750}
     .btn.primary{background:#0878ee;border-color:#0878ee;color:#fff}
     footer{max-width:980px;margin:0 auto;padding:0 22px 28px;color:#617492;font-size:12px}
@@ -66,15 +73,21 @@
     </div>
   </section>
   <section class="panel" aria-labelledby="creator-heading">
-  <h2 id="creator-heading">Meet the creator</h2>
-  <p>M365Buddy is created by <strong>Rahul Baghel</strong>, who focuses on practical Microsoft 365, SharePoint Online, PowerShell automation, and Power Platform guidance.</p>
-  <p>Learn more about the person behind the guides, scripts, and YouTube tutorials.</p>
-  <div class="actions">
-    <a class="btn primary" href="/about/creator/">Meet Rahul Baghel</a>
-    <a class="btn" href="https://www.linkedin.com/in/rahul-baghel777/" target="_blank" rel="noopener noreferrer">LinkedIn profile</a>
-    <a class="btn" href="https://www.youtube.com/@M365buddy" target="_blank" rel="noopener noreferrer">YouTube channel</a>
-  </div>
-</section>
+    <h2 id="creator-heading">Meet the creator</h2>
+    <div class="creator-mini">
+      <img class="creator-avatar" src="/assets/rahul-baghel-profile.jpg" alt="Rahul Baghel, creator of M365Buddy" width="256" height="256" loading="lazy">
+      <div>
+        <strong>Rahul Baghel</strong>
+        <p>Creator of M365Buddy, sharing practical Microsoft 365, SharePoint Online, PowerShell automation, and Power Platform guidance.</p>
+      </div>
+    </div>
+    <p>Learn more about the person behind the guides, scripts, and YouTube tutorials.</p>
+    <div class="actions">
+      <a class="btn primary" href="/about/creator/">Meet Rahul Baghel</a>
+      <a class="btn" href="https://www.linkedin.com/in/rahul-baghel777/" target="_blank" rel="noopener noreferrer">LinkedIn profile</a>
+      <a class="btn" href="https://www.youtube.com/@M365buddy" target="_blank" rel="noopener noreferrer">YouTube channel</a>
+    </div>
+  </section>
 <section class="panel">
     <h2>What you'll find here</h2>
     <div class="grid">
