@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://m365buddy.com/</loc></url>
+  <url><loc>https://m365buddy.com/about/</loc></url>
   <url><loc>https://m365buddy.com/articles/</loc></url>
   <url><loc>https://m365buddy.com/scripts/</loc></url>
   <url><loc>https://m365buddy.com/community/</loc></url>
@@ -10,7 +11,7 @@
   <url><loc>https://m365buddy.com/articles/sharepoint-storage-management.html</loc></url>
   <url><loc>https://m365buddy.com/articles/sharepoint-site-lifecycle.html</loc></url>
   <url><loc>https://m365buddy.com/articles/sharepoint-version-management.html</loc></url>
-  <url><loc>https://m365buddy.com/articles/powershell-report-delivery-microsoft-graph</loc></url>
+  <url><loc>https://m365buddy.com/articles/powershell-report-delivery-microsoft-graph.html</loc></url>
   <url><loc>https://m365buddy.com/articles/powershell-report-delivery-power-automate.html</loc></url>
   <url><loc>https://m365buddy.com/articles/PowerShell%20Email%20Works%20Manually%20but%20Fails%20in%20Task%20Scheduler</loc></url>
   <url><loc>https://m365buddy.com/scripts/SharePoint/sharepoint-site-inventory-viewer.html</loc></url>
