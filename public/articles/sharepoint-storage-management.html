@@ -107,7 +107,31 @@ header{height:62px;background:linear-gradient(105deg,var(--nav1),var(--nav2));po
 </aside><main id="top">
 <section class="hero"><span class="ey">SharePoint Online</span><h1>SharePoint Storage Management</h1><p class="sub">Understand storage consumption, reporting and practical SharePoint storage governance.</p></section>
 <article class="article"><h2>Understand SharePoint storage</h2><p>SharePoint Online storage is consumed across document libraries, site assets, pages, recycle bins and version history. A site inventory helps identify where storage is being consumed.</p><h2>What should you report?</h2><ul><li>Site URL and title</li><li>Current storage usage</li><li>Allocated storage</li><li>Over-utilization</li><li>Site type and ownership</li></ul><h2>Use PowerShell for repeatable reporting</h2><p>For larger tenants, PnP PowerShell is useful for collecting consistent storage data across sites and exporting it to CSV.</p><h2>Practical governance</h2><p>Review high-consumption sites, version history, recycle bins and inactive sites before increasing tenant storage.</p>
-<section class="card"><h2 style="margin-top:0">Related Articles</h2><p>Continue with practical Microsoft 365 administration guidance on M365Buddy.</p><div class="actions"><a class="btn primary" href="/articles/">Browse All Articles</a></div></section>
+<h2>Find storage usage in the admin center</h2>
+<p>For a current tenant-level view, open the SharePoint admin center and review <b>Active sites</b>. The storage summary provides total and available space, while individual site details help identify higher-consumption sites. Storage figures can lag by 24–48 hours, so avoid treating a recently changed number as an immediate real-time measurement.</p>
+<p><a href="https://learn.microsoft.com/sharepoint/manage-site-collection-storage-limits" target="_blank" rel="noopener noreferrer">Microsoft Learn: Manage site storage limits</a></p>
+<h2>Build a useful storage report</h2>
+<p>Collect consistent fields that help administrators compare sites and decide what to investigate. A practical report can include:</p>
+<ul>
+<li>Site title and URL, site type, and owner or administrator contacts.</li>
+<li>Current storage used, storage limit or quota where applicable, and percentage of capacity used.</li>
+<li>Last activity or modification indicators, clearly labelled so readers know what the date represents.</li>
+<li>Version-history usage where the reporting method supports it, plus links to sites that need follow-up.</li>
+<li>Report timestamp, collection errors, and sites that were skipped so the report is auditable.</li>
+</ul>
+<h2>Investigate before buying more storage</h2>
+<ol>
+<li>Confirm whether the usage number is tenant-level or site-level and when it was last refreshed.</li>
+<li>Identify sites with high storage or rapid growth, then check the large libraries and content owners.</li>
+<li>Review version history, retention requirements, recycle-bin behavior, and inactive content as separate investigation areas.</li>
+<li>Ask content owners about business need and recovery requirements before removing data.</li>
+<li>After approved changes, rerun the report and compare the results after the service has had time to update.</li>
+</ol>
+<div class="call warn"><b>Important:</b> Don't delete documents or versions just to reduce a storage number. Confirm retention policies, legal holds, eDiscovery needs, and business recovery requirements first.</div>
+<h2>Choose the right storage mode</h2>
+<p>SharePoint supports automatic pooled storage management by default. Some organizations use manual site storage limits for specific governance needs. Confirm how your tenant is configured before interpreting site limits or recommending a quota change; Microsoft's guidance describes the available options and their implications.</p>
+<p>To automate inventory, use the <a href="/articles/sharepoint-online-site-inventory.html">SharePoint Online site inventory guide</a>. To explore related operational tools, see the <a href="/scripts/">M365Buddy scripts catalog</a>.</p>
+<section class="card"><h2 style="margin-top:0">Continue learning</h2><p>Related guides for finding storage usage and deciding what needs attention.</p><div class="actions"><a class="btn primary" href="/articles/sharepoint-online-site-inventory.html">Site inventory guide</a><a class="btn" href="/articles/sharepoint-version-management.html">Version management</a><a class="btn" href="/articles/sharepoint-site-lifecycle.html">Site lifecycle</a></div></section><p>Continue with practical Microsoft 365 administration guidance on M365Buddy.</p><div class="actions"><a class="btn primary" href="/articles/">Browse All Articles</a></div></section>
 <section class="m365-comments" data-giscus-comments aria-labelledby="community-comments-title">
   <div class="m365-comments-head">
     <p class="m365-comments-kicker">M365Buddy Community</p>
