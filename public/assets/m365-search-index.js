@@ -1,21 +1,6 @@
 
 const M365_INDEX = [
   {
-    title: "SharePoint Online Site Inventory Article",
-    type: "Article",
-    category: "SharePoint",
-    url: "/articles/sharepoint-online-site-inventory.html",
-    description:
-      "Step-by-step guide to the SharePoint Online site inventory PowerShell script, prerequisites, configuration and report output.",
-    keywords: [
-      "sharepoint",
-      "site inventory article",
-      "inventory script guide",
-      "pnp powershell",
-      "storage report"
-    ]
-  },
-  {
     title: "Export All SharePoint Online Sites Using PnP PowerShell",
     type: "Article",
     category: "SharePoint",
@@ -167,12 +152,12 @@ const M365_INDEX = [
     ]
   },
   {
-    title: "SharePoint Storage Report",
+    title: "SharePoint Storage Management Guide",
     type: "Article",
     category: "SharePoint",
     url: "/articles/sharepoint-storage-management.html",
     description:
-      "SharePoint Online storage reporting scripts.",
+      "Understand SharePoint Online storage consumption, reporting, and practical storage governance.",
     keywords: [
       "sharepoint",
       "storage report",
