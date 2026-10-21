@@ -96,7 +96,7 @@ const M365_INDEX = [
     title: "Generate and Email a SharePoint Site Inventory Report with Microsoft Graph",
     type: "Article",
     category: "SharePoint",
-    url: "/articles/powershell-report-delivery-microsoft-graph",
+    url: "/articles/powershell-report-delivery-microsoft-graph.html",
     description:
       "Generate a SharePoint site inventory, export the approved CSV, summarize storage and email the report with Microsoft Graph app-only certificate authentication.",
     keywords: ["sharepoint", "site inventory", "graph email", "powershell", "csv", "storage", "mail.send", "mail.readwrite", "certificate authentication"]
