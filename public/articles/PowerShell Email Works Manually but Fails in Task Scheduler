@@ -349,7 +349,6 @@
 
 <meta name="description" content="Troubleshoot PowerShell email scripts that work manually but fail in Windows Task Scheduler, including execution context, recipient formatting, and testing steps.">
 <link rel="canonical" href="https://m365buddy.com/articles/PowerShell%20Email%20Works%20Manually%20but%20Fails%20in%20Task%20Scheduler">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="M365Buddy">
 <meta property="og:title" content="PowerShell Email Fails in Task Scheduler: Troubleshooting | M365Buddy">
@@ -357,6 +356,12 @@
 <meta property="og:url" content="https://m365buddy.com/articles/PowerShell%20Email%20Works%20Manually%20but%20Fails%20in%20Task%20Scheduler">
 <meta name="twitter:card" content="summary">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"PowerShell Email Fails in Task Scheduler: Troubleshooting | M365Buddy","description":"Troubleshoot PowerShell email scripts that work manually but fail in Windows Task Scheduler, including execution context, recipient formatting, and testing steps.","url":"https://m365buddy.com/articles/PowerShell%20Email%20Works%20Manually%20but%20Fails%20in%20Task%20Scheduler","mainEntityOfPage":{"@type":"WebPage","@id":"https://m365buddy.com/articles/PowerShell%20Email%20Works%20Manually%20but%20Fails%20in%20Task%20Scheduler"},"articleSection":"PowerShell","publisher":{"@type":"Organization","name":"M365Buddy","url":"https://m365buddy.com/"}}</script>
+
+<link rel="icon" type="image/svg+xml" href="/favicon.svg?v=20261022">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=20261022">
+<link rel="shortcut icon" href="/favicon.ico?v=20261022">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=20261022">
+<meta name="theme-color" content="#0878ee">
 </head>
 
 <body>
