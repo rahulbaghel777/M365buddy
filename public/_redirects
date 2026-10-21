@@ -1,0 +1,4 @@
+# Permanent URLs for canonical content paths
+/articles.html /articles/ 301
+/articles/powershell-report-delivery-microsoft-graph /articles/powershell-report-delivery-microsoft-graph.html 301
+/articles/powershell-report-delivery-microsoft-graph/ /articles/powershell-report-delivery-microsoft-graph.html 301
