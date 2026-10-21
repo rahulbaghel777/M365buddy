@@ -698,19 +698,8 @@ button,input,select{font:inherit}
         Microsoft Entra
       </a>
 
-      <a href="#" class="category-link" data-filter="OneDrive">
-        <span class="category-icon">
-          <svg viewBox="0 0 24 24"><path d="M8.2 19.2h10.1a3.7 3.7 0 0 0 .6-7.35A6.4 6.4 0 0 0 7 9.2 4.9 4.9 0 0 0 8.2 19.2Z" fill="#1685df"/><path d="M3.8 16.8a4.9 4.9 0 0 0 4.4 2.4h10.1" fill="none" stroke="#0d67b9" stroke-width="1.3"/></svg>
-        </span>
-        OneDrive
-      </a>
-
-      <a href="#" class="category-link" data-filter="Power Platform">
-        <span class="category-icon">
-          <svg viewBox="0 0 24 24"><path d="m7 2 7 4-3 5 6 4-7 7-5-5 3-5-5-4 4-6Z" fill="#a62aa5"/><path d="m11 11 4 3-4 4" fill="none" stroke="#ef6adf" stroke-width="1.3"/></svg>
-        </span>
-        Power Platform
-      </a>
+            <a href="#" class="category-link" data-filter="Power Automate"><span class="category-icon" aria-hidden="true">⚡</span> Power Automate</a>
+      <a href="#" class="category-link" data-filter="PowerShell"><span class="category-icon" aria-hidden="true">&gt;_</span> PowerShell</a>
     </aside>
 
     <section class="results">
@@ -719,8 +708,10 @@ button,input,select{font:inherit}
           <button class="filter active" data-filter="All">All Articles</button>
           <button class="filter" data-filter="SharePoint">SharePoint</button>
           <button class="filter" data-filter="Microsoft Entra">Microsoft Entra</button>
-          <button class="filter" data-filter="OneDrive">OneDrive</button>
-          <button class="filter" data-filter="Power Platform">Power Platform</button>
+          <button class="filter" data-filter="Power Automate">Power Automate</button>
+          <button class="filter" data-filter="PowerShell">PowerShell</button>
+          
+          
         </div>
 
         <label class="sort">
@@ -803,6 +794,30 @@ const ARTICLES = [
     url:"/articles/powershell-report-delivery-microsoft-graph",
     description:"Configure prerequisites, app-only certificate authentication, Graph mail permissions and a complete SharePoint inventory-to-email workflow.",
     tags:["Microsoft Graph","PowerShell","Site Inventory","CSV"]
+  },
+  {
+    title:"Create a Self-Signed Certificate for Microsoft Entra App Authentication",
+    category:"Microsoft Entra",
+    date:"Oct 2026",
+    url:"/articles/entra-id-self-signed-certificate.html",
+    description:"Create and export a self-signed certificate with PowerShell, upload the public certificate, and protect the private key.",
+    tags:["Microsoft Entra","Certificate","PowerShell"]
+  },
+  {
+    title:"Email SharePoint Inventory Reports with Power Automate",
+    category:"Power Automate",
+    date:"Oct 2026",
+    url:"/articles/powershell-report-delivery-power-automate.html",
+    description:"Create a SharePoint inventory CSV with PowerShell and deliver it using Power Automate, with certificate setup and troubleshooting.",
+    tags:["Power Automate","PowerShell","Reporting"]
+  },
+  {
+    title:"PowerShell Email Works Manually but Fails in Task Scheduler",
+    category:"PowerShell",
+    date:"Oct 2026",
+    url:"/articles/PowerShell%20Email%20Works%20Manually%20but%20Fails%20in%20Task%20Scheduler",
+    description:"Troubleshoot email scripts that work manually but fail in Windows Task Scheduler, including execution context and recipient formatting.",
+    tags:["PowerShell","Task Scheduler","Troubleshooting"]
   }
 ];
 
