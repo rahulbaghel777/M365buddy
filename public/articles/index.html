@@ -772,6 +772,8 @@ button,input,select{font:inherit}
       <a href="/">Home</a><span class="sep">|</span>
       <a href="/articles/">Articles</a><span class="sep">|</span>
       <a href="/scripts/">Scripts</a><span class="sep">|</span>
+      <a href="/community/">Community</a><span class="sep">|</span>
+      <a href="/about/">About</a>
     </div>
     <div class="footer-copy">© 2026 M365Buddy. All rights reserved.</div>
   </div>
@@ -853,7 +855,9 @@ const ARTICLES = [
   }
 ];
 
-let activeFilter="All";
+const requestedCategory = new URLSearchParams(window.location.search).get("category") || "All";
+const validCategories = new Set(["All","SharePoint","Microsoft Entra","Power Automate","PowerShell"]);
+let activeFilter = validCategories.has(requestedCategory) ? requestedCategory : "All";
 
 const grid=document.getElementById("articleGrid");
 const search=document.getElementById("articleSearch");
@@ -935,6 +939,7 @@ search.addEventListener("input",render);
 sortSelect.addEventListener("change",render);
 
 
+document.querySelectorAll(".category-link,.filter").forEach(x=>x.classList.toggle("active",x.dataset.filter===activeFilter));
 render();
 </script>
 <script>
