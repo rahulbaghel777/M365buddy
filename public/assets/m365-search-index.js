@@ -201,11 +201,11 @@ const M365_INDEX = [
 // Shared search API used by pages that load this asset.
 (function (global) {
   "use strict";
-  const normalize = value => String(value || "").toLowerCase().normalize("NFKD").replace(/[\\u0300-\\u036f]/g, "").replace(/[^a-z0-9]+/g, " ").trim();
+  const normalize = value => String(value || "").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, " ").trim();
   function search(query, type) {
     const q = normalize(query);
     if (!q) return [];
-    const terms = q.split(/\\s+/).filter(Boolean);
+    const terms = q.split(/\s+/).filter(Boolean);
     return M365_INDEX.map(item => {
       const title = normalize(item.title), category = normalize(item.category), description = normalize(item.description);
       const keywords = normalize((item.keywords || []).join(" "));
