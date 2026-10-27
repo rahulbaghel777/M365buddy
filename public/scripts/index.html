@@ -48,6 +48,31 @@ footer{margin-top:34px;border-top:1px solid var(--border);padding:18px 0;color:v
   h1{font-size:26px}
   .nav-left{gap:11px}
 }
+.m365-header{height:62px;background:linear-gradient(105deg,#07346f,#0873c9);position:sticky;top:0;z-index:100;color:#fff}
+.m365-header-inner{height:100%;max-width:1400px;margin:auto;padding:0 18px;display:grid;grid-template-columns:225px minmax(260px,1fr) 150px;gap:14px;align-items:center}
+.m365-nav{display:flex;align-items:center;gap:2px}
+.m365-nav a{display:flex;align-items:center;min-height:36px;padding:0 11px;border-radius:8px;color:#fff!important;font-size:13px;font-weight:700;text-decoration:none}
+.m365-nav a:hover,.m365-nav a.active{background:rgba(255,255,255,.12)}
+.m365-search{position:relative;width:min(100%,480px);justify-self:center}
+.m365-search input{width:100%;height:36px;border:1px solid rgba(255,255,255,.42);border-radius:9px;background:rgba(255,255,255,.07);color:#fff;padding:0 12px 0 42px;outline:0;font-size:12px}
+.m365-search input::placeholder{color:#e3effb}
+.m365-search input:focus{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.12)}
+.m365-search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:17px;height:17px;color:#fff;pointer-events:none}
+.m365-search-icon svg{width:100%;height:100%}
+.m365-brand{justify-self:end;color:#fff!important;text-decoration:none;font-size:23px;font-weight:800;letter-spacing:-.4px;white-space:nowrap}
+.m365-brand span{color:#9bd3ff}
+
+.m365-results{display:none;position:absolute;top:calc(100% + 8px);left:0;right:0;z-index:200;max-height:420px;overflow:auto;background:#fff;border:1px solid #d7e1ee;border-radius:11px;box-shadow:0 16px 40px rgba(7,26,61,.18);padding:6px}
+.m365-results.show{display:block}
+.m365-result{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:10px;border-radius:7px;text-decoration:none;color:#173961}
+.m365-result:hover,.m365-result:focus-visible{background:#eff6ff}
+.m365-result-title{font-size:12px;font-weight:750;line-height:1.4}.m365-result-desc{margin-top:3px;color:#617492;font-size:11px;line-height:1.4}
+.m365-result-type{flex-shrink:0;padding:3px 6px;border-radius:5px;background:#eff6ff;color:#075fc4;font-size:10px;font-weight:750}
+.m365-result-empty{padding:12px;color:#617492;font-size:12px}
+.m365-header a:focus-visible,.m365-search input:focus-visible,.btn:focus-visible{outline:3px solid #93c5fd;outline-offset:2px}
+@media(max-width:900px){.m365-header{height:auto;min-height:62px}.m365-header-inner{grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;padding:10px 16px}.m365-nav{grid-column:1;grid-row:1;flex-wrap:wrap}.m365-brand{grid-column:2;grid-row:1;font-size:20px}.m365-search{grid-column:1/-1;grid-row:2;width:100%;max-width:none}}
+@media(max-width:520px){.m365-header-inner{padding:9px 10px}.m365-nav{gap:1px}.m365-nav a{min-height:34px;padding:0 8px;font-size:12px}.m365-brand{font-size:17px}}
+
 </style>
 
 <meta name="description" content="Browse practical PowerShell scripts for SharePoint Online inventory, version history, recycle bins, Microsoft Graph reporting, and Microsoft 365 administration.">
@@ -67,18 +92,20 @@ footer{margin-top:34px;border-top:1px solid var(--border);padding:18px 0;color:v
 <meta name="theme-color" content="#0878ee">
 </head>
 <body>
-<header>
-<nav class="nav">
-  <div class="nav-left">
-    <a href="https://m365buddy.com/">Home</a>
-    <a href="https://m365buddy.com/articles">Articles</a>
-    <a href="https://m365buddy.com/scripts/">Scripts</a>
-    <a href="https://m365buddy.com/community/">Community</a>
+<header class="m365-header">
+  <div class="m365-header-inner">
+    <nav class="m365-nav" aria-label="Main navigation">
+      <a href="/" data-nav="home">Home</a>
+      <a href="/articles/" data-nav="articles">Articles</a>
+      <a href="/scripts/" data-nav="scripts">Scripts</a>
+      <a href="/community/" data-nav="community">Community</a>
+    </nav>
+    <div class="m365-search">
+      <span class="m365-search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg></span>
+      <input type="search" data-m365-search placeholder="Search M365Buddy..." autocomplete="off" aria-label="Search M365Buddy">
+    </div>
+    <a class="m365-brand" href="/">M365<span>Buddy</span></a>
   </div>
-  <div class="nav-right">
-    <a class="brand" href="https://m365buddy.com/">M365Buddy</a>
-  </div>
-</nav>
 </header>
 
 <main class="page">
@@ -164,5 +191,27 @@ footer{margin-top:34px;border-top:1px solid var(--border);padding:18px 0;color:v
   M365Buddy · SharePoint Online · PowerShell · Microsoft 365 · <a href="/about/">About M365Buddy</a> · <a href="/about/creator/">Creator</a> · <a href="https://www.youtube.com/@M365buddy" target="_blank" rel="noopener noreferrer">YouTube tutorials</a>
 </footer>
 </main>
+
+<script src="/assets/m365-search-index.js?v=20261028-1"></script>
+<script>
+(function(){
+ const input=document.querySelector("[data-m365-search]");
+ if(!input)return;
+ const wrap=input.closest(".m365-search");
+ const box=document.createElement("div");box.className="m365-results";box.setAttribute("role","listbox");wrap.appendChild(box);
+ const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+ function render(){
+   const q=input.value.trim();
+   if(!q){box.classList.remove("show");box.innerHTML="";return;}
+   const hits=window.M365BuddySearch?window.M365BuddySearch.search(q).slice(0,7):[];
+   box.innerHTML=hits.length?hits.map(x=>'<a class="m365-result" role="option" href="'+esc(x.url)+'"><div style="min-width:0"><div class="m365-result-title">'+esc(x.title)+'</div><div class="m365-result-desc">'+esc(x.description||"")+'</div></div><span class="m365-result-type">'+esc(x.type||"Result")+'</span></a>').join(""):'<div class="m365-result-empty">No matching articles or scripts.</div>';
+   box.classList.add("show");
+ }
+ input.addEventListener("input",render);input.addEventListener("focus",render);
+ input.addEventListener("keydown",e=>{if(e.key==="Enter"&&input.value.trim()){e.preventDefault();location.href="/search.html?q="+encodeURIComponent(input.value.trim())}if(e.key==="Escape"){input.value="";render();}});
+ document.addEventListener("click",e=>{if(!wrap.contains(e.target))box.classList.remove("show")});
+ document.querySelectorAll("[data-nav]").forEach(a=>{const p=location.pathname,n=a.dataset.nav;if((n==="home"&&(p==="/"||p==="/index.html"))||(n==="articles"&&p.startsWith("/articles"))||(n==="scripts"&&p.startsWith("/scripts"))||(n==="community"&&p.startsWith("/community")))a.classList.add("active")});
+})();
+</script>
 </body>
 </html>
