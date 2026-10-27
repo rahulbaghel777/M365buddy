@@ -914,6 +914,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 <link rel="shortcut icon" href="/favicon.ico?v=20261022">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=20261022">
 <meta name="theme-color" content="#0878ee">
+<link rel="stylesheet" href="/assets/m365-common.css?v=20261028-4">
 </head>
 
 <body>
@@ -932,7 +933,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
     </nav>
     <div class="header-search">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg>
-        <input id="globalSearch" type="search" placeholder="Search M365Buddy..." aria-label="Search M365Buddy" autocomplete="off">
+        <input id="globalSearch" data-m365-search type="search" placeholder="Search M365Buddy..." aria-label="Search M365Buddy" autocomplete="off">
         <button class="clear-global" type="button" id="clearGlobalSearch" aria-label="Clear site search" title="Clear">×</button>
     </div>
     <div class="top-actions">
@@ -4574,5 +4575,7 @@ updatePosition();
 </script>
 
 <footer style="max-width:1120px;margin:24px auto 0;padding:18px 16px 28px;border-top:1px solid #d7e1ee;text-align:center;color:#617492;font:13px/1.5 Segoe UI,Arial,sans-serif"><a href="https://www.youtube.com/@M365buddy" target="_blank" rel="noopener noreferrer" style="color:#c62828;font-weight:750;text-decoration:none">▶ Watch M365Buddy tutorials on YouTube</a></footer>
+<script src="/assets/m365-search-index.js?v=20261028-4"></script>
+<script src="/assets/m365-global-search.js?v=20261028-4"></script>
 </body>
 </html>
