@@ -10,7 +10,7 @@
     document.querySelectorAll("[data-m365-search]").forEach(function (input) {
       if (input.dataset.m365SearchReady === "true") return;
       input.dataset.m365SearchReady = "true";
-      var wrap = input.closest(".m365-search, .m365-header-search, .global-search") || input.parentElement;
+      var wrap = input.closest(".m365-search, .m365-header-search, .global-search, .header-search") || input.parentElement;
       if (!wrap) return;
       var box = wrap.querySelector(".m365-results, .global-results");
       if (!box) {
