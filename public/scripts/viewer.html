@@ -94,6 +94,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 }
 </style>
 <link rel="stylesheet" href="/assets/community.css?v=20261021-2">
+<link rel="stylesheet" href="/assets/m365-common.css?v=20261028-3">
 </head>
 <body>
 <header class="m365-header"><div class="m365-header-inner">
@@ -129,4 +130,6 @@ const input=document.getElementById("globalSearch"),wrap=input&&input.closest(".
 if(input&&wrap){const box=document.createElement("div");box.className="m365-results";wrap.appendChild(box);function render(){const q=input.value.trim().toLowerCase();if(!q){box.classList.remove("show");box.innerHTML="";return;}const hits=items.filter(x=>(x.title+" "+x.desc).toLowerCase().includes(q)).slice(0,6);box.innerHTML=hits.length?hits.map(x=>'<a class="m365-result" href="'+x.url+'"><strong>'+x.title+'</strong><small>'+x.desc+'</small></a>').join(""):'<div class="m365-result-empty">No matching articles found.</div>';box.classList.add("show");}input.addEventListener("input",render);input.addEventListener("focus",render);input.addEventListener("keydown",e=>{if(e.key==="Enter"&&input.value.trim())location.href="/search.html?q="+encodeURIComponent(input.value.trim());if(e.key==="Escape"){input.value="";box.classList.remove("show");}});document.addEventListener("click",e=>{if(!wrap.contains(e.target))box.classList.remove("show");});}
 const p=location.pathname;document.querySelectorAll(".m365-nav a[data-nav]").forEach(a=>{const n=a.dataset.nav;if((n==="home"&&(p==="/"||p==="/index.html"))||(n==="articles"&&p.startsWith("/articles"))||(n==="scripts"&&p.startsWith("/scripts"))||(n==="community"&&p.startsWith("/community")))a.classList.add("active");});
 })();</script>
+<script src="/assets/m365-search-index.js?v=20261028-3"></script>
+<script src="/assets/m365-global-search.js?v=20261028-3"></script>
 </body></html>
