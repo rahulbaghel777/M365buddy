@@ -24,7 +24,7 @@
 .side{position:sticky;top:78px;height:max-content;background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px;box-shadow:0 2px 10px rgba(20,55,95,.07)}
 .side b,.side h3{display:block;color:#4d6380;font-size:10px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 8px}.side a{display:block;padding:6px 8px;color:#617492;font-size:11.5px;border-radius:7px;border-bottom:0}.side a:hover,.side a.active{background:#f1f7ff;color:var(--blue)}
 .side .article-search-wrap{position:relative;margin-bottom:8px}.side .article-search-wrap input{width:100%;height:32px;border:1px solid #cbd9e8;border-radius:7px;padding:0 8px 0 30px;font-size:11px}.side .article-search-wrap svg{position:absolute;left:8px;top:9px;width:14px;height:14px}
-.main{min-width:0;padding:0;background:transparent;border:0;border-radius:0;box-shadow:none}.main .hero{background:#fff;border:1px solid var(--line);border-radius:11px;padding:22px;margin-bottom:13px}.main .hero h1{font-size:28px;line-height:1.18;letter-spacing:-.7px;margin:10px 0 7px;color:var(--ink)}.main .hero .lead{color:var(--muted);font-size:13.5px;margin:0}.main .article{background:#fff;border:1px solid var(--line);border-radius:11px;padding:24px}
+.main{min-width:0;padding:0;background:transparent;border:0;border-radius:0;box-shadow:none}.main .hero{background:#fff;border:1px solid var(--line);border-radius:11px;padding:22px;margin-bottom:13px}.main .hero h1{font-size:28px;line-height:1.18;letter-spacing:-.7px;margin:10px 0 7px;color:var(--ink)}.main .hero .lead{color:var(--muted);font-size:13.5px;margin:0}.ey{display:inline-flex;align-items:center;padding:4px 9px;border:1px solid #cfe2f8;background:#eff7ff;border-radius:999px;color:#0878ee;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase}.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}.tag{display:inline-flex;align-items:center;padding:4px 8px;border:1px solid #dbe7f5;border-radius:6px;background:#f7faff;color:#526984;font-size:10px;font-weight:650}.hero .creator-byline a:hover{text-decoration:underline}.main .hero{padding:25px 26px}.main .hero h1{max-width:850px;font-size:32px;line-height:1.15;letter-spacing:-.85px;margin:12px 0 10px}.main .hero .lead{max-width:850px;font-size:14px;line-height:1.65}.script-panel{margin:18px 0 22px;border:1px solid #cfdceb;border-radius:10px;overflow:hidden;background:#0c1930;color:#e5edf9}.script-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 14px;background:#142744;border-bottom:1px solid #2b3e5c}.script-toolbar strong{font-size:12px;color:#fff}.script-toolbar span{font-size:10px;color:#b7c8df}.script-actions{display:flex;flex-wrap:wrap;gap:7px}.script-actions a,.script-actions button{display:inline-flex;align-items:center;justify-content:center;padding:6px 9px;border:1px solid #49627f;border-radius:6px;background:#1c3658;color:#fff;font:600 11px Inter,"Segoe UI",Arial,sans-serif;text-decoration:none;cursor:pointer}.script-actions a:hover,.script-actions button:hover{background:#28517e}.script-panel pre{margin:0;padding:16px;overflow:auto;max-height:460px;white-space:pre;tab-size:4}.script-panel code{background:transparent;color:#e5edf9;padding:0;border-radius:0;font:12px/1.65 Consolas,"Cascadia Code",monospace}.script-note{margin-top:8px;color:var(--muted);font-size:12px}.main .article{background:#fff;border:1px solid var(--line);border-radius:11px;padding:24px}
 .workflow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:16px 0}.workflow-step{border:1px solid #cfe0f3;border-radius:9px;padding:12px;background:linear-gradient(180deg,#f5faff,#fff);text-align:center}.workflow-step .num{width:26px;height:26px;display:grid;place-items:center;margin:0 auto 7px;border-radius:50%;background:#0878ee;color:#fff;font-weight:800;font-size:12px}.workflow-step strong{display:block;font-size:12px;color:var(--ink)}.workflow-step span{display:block;color:var(--muted);font-size:10px;margin-top:3px}
 @media(max-width:1150px){.layout{grid-template-columns:minmax(0,1fr) 200px}.left{display:none}.m365-header-inner{grid-template-columns:200px minmax(200px,1fr) 130px}}
 @media(max-width:900px){.layout{grid-template-columns:1fr}.right{display:none}.m365-header{height:auto;padding:7px 0}.m365-header-inner{grid-template-columns:1fr auto;gap:6px 10px}.m365-search{grid-column:1/-1;grid-row:2;width:100%}}
@@ -42,8 +42,9 @@
 <p class="creator-byline" style="margin:7px 0 0;color:#617492;font-size:12px;line-height:1.5">By <a href="/about/creator/" style="font-weight:750;color:#0878ee">Rahul Baghel</a>, creator of M365Buddy</p>
 <p class="lead">Automate recurring inventory reports for SharePoint Online using Azure Automation, a compatible PowerShell runtime, PnP.PowerShell, certificate-based app authentication, and Microsoft Graph email delivery.</p><div class="tags"><span class="tag">Azure Automation</span><span class="tag">PowerShell 7.4</span><span class="tag">PnP.PowerShell</span><span class="tag">Entra ID</span><span class="tag">Microsoft Graph</span></div></section>
 <article class="article">
-<p>Maintaining an inventory of thousands of SharePoint Online sites manually can be time-consuming. A scheduled runbook can collect site information, export a report, and send it to the right recipients without requiring an administrator to run the script interactively.</p>
-<div class="callout"><strong>What you’ll build:</strong> A scheduled Azure Automation runbook that inventories SharePoint Online sites, creates a report, and emails the output.</div>
+<p>Maintaining an inventory of thousands of SharePoint Online sites manually can be time-consuming. This guide pairs the setup walkthrough with a practical PowerShell runbook pattern, so you can configure Azure Automation, review the code, and adapt the reporting logic before publishing it.</p>
+<div class="callout"><strong>What this guide includes:</strong> Azure Automation setup, certificate-based SharePoint authentication, Microsoft Graph mail delivery, configuration variables, and an in-page script panel with copy and edit-source actions.</div>
+<div class="callout warning"><strong>Before you run it:</strong> Treat the script as a starting point for your tenant. Validate permissions, runtime/module compatibility, mailbox access, report columns, and execution duration in a test Automation Account before scheduling it in production.</div>
 <h2 id="architecture">Architecture and prerequisites</h2><div class="workflow" role="img" aria-label="Workflow: Azure Automation runbook connects to SharePoint using certificate authentication, creates a report, then sends it using Microsoft Graph"><div class="workflow-step"><span class="num">1</span><strong>Azure Automation</strong><span>Scheduled runbook</span></div><div class="workflow-step"><span class="num">2</span><strong>Certificate auth</strong><span>Entra app + PnP</span></div><div class="workflow-step"><span class="num">3</span><strong>Inventory report</strong><span>Collect and export data</span></div><div class="workflow-step"><span class="num">4</span><strong>Graph email</strong><span>Send report attachment</span></div></div>
 <p>The solution uses an Azure Automation Account to host the runbook and runtime environment. An Entra ID app registration authenticates to SharePoint Online with a certificate. A separate Graph email configuration handles report delivery, and a sender mailbox is identified by the <code>MailFrom</code> variable.</p>
 <ul><li>An Azure subscription and permission to manage Azure Automation resources.</li><li>SharePoint Online administrative access and an Entra app registration with approved API permissions.</li><li>A certificate and corresponding PFX material, protected password, and a supported PowerShell runtime.</li><li>A dedicated sender mailbox and Microsoft Graph configuration if the runbook sends email.</li></ul>
@@ -82,6 +83,55 @@
 <div class="callout"><strong>Delivery checkpoint:</strong> Test the report with a small recipient list first. Confirm the CSV or Excel attachment opens correctly, the report date is included, and no internal-only fields or unintended recipients are present.</div>
 <p>The report columns depend on your script. They may include site name, URL, creation date, last activity, owner details, storage consumption, template or site type, and group privacy details when those fields are collected. Validate the actual output before publishing or distributing it.</p>
 <p>Related guides: <a href="/articles/sharepoint-storage-management.html">SharePoint storage management</a>, <a href="/articles/sharepoint-site-lifecycle.html">site lifecycle management</a>, <a href="/articles/sharepoint-version-management.html">version management</a>, and <a href="/articles/powershell-report-delivery-microsoft-graph.html">PowerShell report delivery using Microsoft Graph</a>.</p>
+<h2 id="script">11. Review and edit the PowerShell script</h2>
+<p>The example below shows the core structure for connecting to the SharePoint admin center with certificate-based app authentication and retrieving the tenant site inventory. The full runbook design should also include the report columns, retry/error handling, group visibility lookup, CSV export, and Graph email delivery described above. Keep credentials and certificate material in Azure Automation variables or an approved secret store—not in the script.</p>
+<div class="script-panel" id="runbookScript">
+  <div class="script-toolbar"><div><strong>PowerShell · Azure Automation</strong><br><span>Core connection and inventory pattern</span></div><div class="script-actions"><button type="button" id="copyRunbookScript">Copy script</button><a href="https://github.com/rahulbaghel777/M365buddy/edit/main/public/articles/azure-automation-sharepoint-site-inventory.html" target="_blank" rel="noopener noreferrer">Edit in GitHub</a></div></div>
+  <pre><code id="runbookScriptCode">$ErrorActionPreference = "Stop"
+
+# Store these values as Azure Automation variables.
+$Tenant    = Get-AutomationVariable -Name "Tenant"
+$ClientId  = Get-AutomationVariable -Name "ClientId"
+$PfxBase64 = Get-AutomationVariable -Name "PfxBase64"
+$PfxPasswordString = Get-AutomationVariable -Name "PFX Password"
+
+# Convert the PFX password to the SecureString expected by PnP.PowerShell.
+$PfxPassword = ConvertTo-SecureString -String $PfxPasswordString -AsPlainText -Force
+
+Import-Module PnP.PowerShell -ErrorAction Stop
+
+$AdminUrl = "https://YOUR-TENANT-admin.sharepoint.com"
+
+$AdminConnection = Connect-PnPOnline `
+    -Url $AdminUrl `
+    -ClientId $ClientId `
+    -CertificateBase64Encoded $PfxBase64 `
+    -CertificatePassword $PfxPassword `
+    -Tenant $Tenant `
+    -ReturnConnection `
+    -ErrorAction Stop
+
+$Sites = Get-PnPTenantSite -Connection $AdminConnection -Detailed -ErrorAction Stop
+
+$Results = foreach ($Site in $Sites) {
+    [PSCustomObject]@{
+        SiteName         = $Site.Title
+        SiteUrl          = $Site.Url
+        StorageUsedGB    = [math]::Round(([double]$Site.StorageUsageCurrent / 1024), 2)
+        LastActivityDate = if ($Site.LastContentModifiedDate) {
+            ([datetime]$Site.LastContentModifiedDate).ToString("yyyy-MM-dd")
+        } else {
+            ""
+        }
+    }
+}
+
+$Results | Export-Csv -Path "$env:TEMP\SharePoint-SiteInventory.csv" -NoTypeInformation -Encoding UTF8
+
+Write-Host "Sites discovered: $(@($Sites).Count)"
+Write-Host "Inventory exported to $env:TEMP\SharePoint-SiteInventory.csv"</code></pre>
+</div>
+<p class="script-note">This is an illustrative core example, not the complete production runbook. The full implementation must be reviewed and tested with the exact tenant variables, app permissions, output requirements, and email settings. The “Edit in GitHub” action opens this article’s source so the script section can be maintained alongside the guide.</p>
 <h2 id="troubleshooting">Troubleshooting</h2>
 <table><thead><tr><th>Issue</th><th>What to check</th></tr></thead><tbody>
 <tr><td>PnP cmdlets unavailable</td><td>Confirm the runbook runtime and package availability.</td></tr><tr><td>Authentication failure</td><td>Validate tenant/client IDs, certificate, PFX password, certificate validity, and permissions.</td></tr><tr><td>Run fails partway through a large inventory</td><td>Review logs and implement resilient token refresh and retry handling where needed.</td></tr><tr><td>Missing owner data</td><td>Check whether an owner group exists and handle null owner-group values.</td></tr><tr><td>Report created but email fails</td><td>Check Graph authentication, <code>MailFrom</code>, <code>MailTo</code>, app permissions, and Exchange restrictions.</td></tr><tr><td>Multiple recipients fail</td><td>Parse commas, semicolons, or line breaks consistently and create a separate recipient object per address.</td></tr><tr><td>Attachment too large</td><td>Compress the report or use an approved storage location and secure link; verify the permissions needed for the selected method.</td></tr>
@@ -90,7 +140,7 @@
 <ul><li>Use least privilege and review high-impact application permissions.</li><li>Protect certificate material, passwords, and client secrets.</li><li>Monitor certificate and secret expiry dates.</li><li>Keep module versions and runbook changes under change control.</li><li>Review failed jobs and validate report completeness.</li><li>Confirm recipients and report-retention requirements.</li></ul>
 <h2>Conclusion</h2>
 <p>Azure Automation can reduce manual effort by running SharePoint Online inventory reporting on a recurring schedule. The key is to validate the entire process—from authentication and site collection through report generation and email delivery—before relying on it for ongoing governance.</p>
-</article></main><aside class="side right"><h3>In this article</h3><a href="#architecture">Architecture and prerequisites</a><a href="#automation-account">Create Automation Account</a><a href="#runtime">PowerShell runtime</a><a href="#packages">Required packages</a><a href="#authentication">Certificate authentication</a><a href="#variables">Automation variables</a><a href="#mailbox">Sender mailbox</a><a href="#runbook">Publish runbook</a><a href="#test-job">Test the job</a><a href="#schedule">Scheduling</a><a href="#troubleshooting">Troubleshooting</a><hr><h3>Related guides</h3><a href="/articles/sharepoint-online-site-inventory.html">SharePoint site inventory</a><a href="/articles/entra-id-pnp-certificate-authentication.html">PnP certificate authentication</a><a href="/articles/sharepoint-storage-management.html">Storage management</a><a href="/articles/sharepoint-site-lifecycle.html">Site lifecycle</a><a href="/articles/powershell-report-delivery-microsoft-graph.html">Graph email delivery</a></aside></div>
+</article></main><aside class="side right"><h3>In this article</h3><a href="#architecture">Architecture and prerequisites</a><a href="#automation-account">Create Automation Account</a><a href="#runtime">PowerShell runtime</a><a href="#packages">Required packages</a><a href="#authentication">Certificate authentication</a><a href="#variables">Automation variables</a><a href="#mailbox">Sender mailbox</a><a href="#runbook">Publish runbook</a><a href="#test-job">Test the job</a><a href="#schedule">Scheduling</a><a href="#script">PowerShell script</a><a href="#troubleshooting">Troubleshooting</a><hr><h3>Related guides</h3><a href="/articles/sharepoint-online-site-inventory.html">SharePoint site inventory</a><a href="/articles/entra-id-pnp-certificate-authentication.html">PnP certificate authentication</a><a href="/articles/sharepoint-storage-management.html">Storage management</a><a href="/articles/sharepoint-site-lifecycle.html">Site lifecycle</a><a href="/articles/powershell-report-delivery-microsoft-graph.html">Graph email delivery</a></aside></div>
 <footer>© 2026 M365Buddy · <a href="/articles/">All articles</a> · <a href="/about/creator/">About the creator</a></footer>
 <script>
 (function(){
@@ -104,7 +154,7 @@ const items=[
 ];
 const input=document.getElementById("globalSearch"),wrap=input&&input.closest(".m365-search");
 if(input&&wrap){const box=document.createElement("div");box.className="m365-results";wrap.appendChild(box);function render(){const q=input.value.trim().toLowerCase();if(!q){box.classList.remove("show");box.innerHTML="";return;}const hits=items.filter(x=>(x.title+" "+x.desc).toLowerCase().includes(q)).slice(0,6);box.innerHTML=hits.length?hits.map(x=>'<a class="m365-result" href="'+x.url+'"><strong>'+x.title+'</strong><small>'+x.desc+'</small></a>').join(""):'<div class="m365-result-empty">No matching articles found.</div>';box.classList.add("show");}input.addEventListener("input",render);input.addEventListener("focus",render);input.addEventListener("keydown",e=>{if(e.key==="Enter"&&input.value.trim())location.href="/search.html?q="+encodeURIComponent(input.value.trim());if(e.key==="Escape"){input.value="";box.classList.remove("show");}});document.addEventListener("click",e=>{if(!wrap.contains(e.target))box.classList.remove("show");});}
-const p=location.pathname;document.querySelectorAll(".m365-nav a[data-nav]").forEach(a=>{const n=a.dataset.nav;if((n==="home"&&(p==="/"||p==="/index.html"))||(n==="articles"&&p.startsWith("/articles"))||(n==="scripts"&&p.startsWith("/scripts"))||(n==="community"&&p.startsWith("/community")))a.classList.add("active");});
+const copyScriptButton=document.getElementById("copyRunbookScript");const scriptCode=document.getElementById("runbookScriptCode");if(copyScriptButton&&scriptCode){copyScriptButton.addEventListener("click",async()=>{const original=copyScriptButton.textContent;try{await navigator.clipboard.writeText(scriptCode.textContent);copyScriptButton.textContent="Copied!";}catch(e){const range=document.createRange();range.selectNodeContents(scriptCode);const selection=window.getSelection();selection.removeAllRanges();selection.addRange(range);copyScriptButton.textContent="Select and copy";}setTimeout(()=>{copyScriptButton.textContent=original;},1800);});}const p=location.pathname;document.querySelectorAll(".m365-nav a[data-nav]").forEach(a=>{const n=a.dataset.nav;if((n==="home"&&(p==="/"||p==="/index.html"))||(n==="articles"&&p.startsWith("/articles"))||(n==="scripts"&&p.startsWith("/scripts"))||(n==="community"&&p.startsWith("/community")))a.classList.add("active");});
 const left=document.getElementById("leftArticleSearch");if(left)left.addEventListener("input",()=>{const q=left.value.toLowerCase();document.querySelectorAll("#leftArticleLinks a").forEach(a=>a.style.display=a.textContent.toLowerCase().includes(q)?"block":"none");});
 })();
 </script><link rel="stylesheet" href="/assets/community.css?v=20261021-2">
