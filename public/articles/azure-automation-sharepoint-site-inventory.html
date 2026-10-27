@@ -45,6 +45,17 @@
 .script-note{margin:10px 0 18px;font-size:13px;color:#617492}
 @media(max-width:650px){.script-launcher{align-items:stretch}.script-launcher-copy{flex-basis:100%}.script-launcher-actions{width:100%;gap:8px}.script-launcher-actions a{flex:1 1 120px}}
 
+
+/* M365Buddy shared desktop header layout */
+@media(min-width:901px){
+  .m365-header-inner{
+    grid-template-columns:minmax(0,1fr) minmax(280px,min(38vw,520px)) minmax(0,1fr)!important;
+    gap:24px!important;
+  }
+  .m365-nav{justify-self:start}
+  .m365-search,.global-search{justify-self:center;width:100%;max-width:520px}
+  .m365-brand{justify-self:end}
+}
 </style></head><body>
 <header class="m365-header"><div class="m365-header-inner">
 <nav class="m365-nav" aria-label="Main navigation"><a href="/" data-nav="home">Home</a><a href="/articles/" data-nav="articles">Articles</a><a href="/scripts/" data-nav="scripts">Scripts</a><a href="/community/" data-nav="community">Community</a></nav>
