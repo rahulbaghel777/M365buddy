@@ -135,19 +135,44 @@
     </div>
   </footer>
 </main>
+<script src="/assets/m365-search-index.js?v=20261028-2"></script>
 <script>
 (function(){
+  "use strict";
   const input=document.getElementById("communitySearch");
-  if(input){
-    input.addEventListener("keydown",function(e){
-      if(e.key==="Enter"){
-        e.preventDefault();
-        const q=input.value.trim();
-        if(q) location.href="/search.html?q="+encodeURIComponent(q);
-      }
-      if(e.key==="Escape") input.value="";
-    });
+  if(!input)return;
+  const wrap=input.closest(".m365-header-search");
+  const box=document.createElement("div");
+  box.className="m365-results";
+  box.setAttribute("role","listbox");
+  wrap.appendChild(box);
+  function esc(value){return String(value).replace(/[&<>"']/g,function(ch){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch];});}
+  function render(){
+    const q=input.value.trim();
+    if(!q){box.classList.remove("show");box.innerHTML="";return;}
+    const hits=window.M365BuddySearch?window.M365BuddySearch.search(q).slice(0,7):[];
+    if(!hits.length){
+      box.innerHTML='<div class="m365-result-empty">No matches yet. Press Enter to view search results.</div>';
+      box.classList.add("show");
+      return;
+    }
+    box.innerHTML=hits.map(function(item){
+      return '<a class="m365-result" role="option" href="'+esc(item.url)+'"><span><strong>'+esc(item.title)+'</strong><small>'+esc(item.category)+' · '+esc(item.description||"")+'</small></span><em>'+esc(item.type)+'</em></a>';
+    }).join("");
+    box.classList.add("show");
   }
+  input.addEventListener("input",render);
+  input.addEventListener("focus",render);
+  input.addEventListener("keydown",function(e){
+    if(e.key==="Enter"){
+      e.preventDefault();
+      const q=input.value.trim();
+      if(q)location.href="/search.html?q="+encodeURIComponent(q);
+    }
+    if(e.key==="Escape"){input.value="";box.classList.remove("show");box.innerHTML="";}
+    if(e.key==="ArrowDown"){const first=box.querySelector("a");if(first){e.preventDefault();first.focus();}}
+  });
+  document.addEventListener("click",function(e){if(!wrap.contains(e.target))box.classList.remove("show");});
 })();
 </script>
 <script src="/assets/community-comments.js?v=20261021-3" defer></script>
