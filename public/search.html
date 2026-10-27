@@ -55,6 +55,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 <link rel="shortcut icon" href="/favicon.ico?v=20261022">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=20261022">
 <meta name="theme-color" content="#0878ee">
+<link rel="stylesheet" href="/assets/m365-common.css?v=20261028-4">
 </head><body>
 <header class="m365-header">
   <div class="m365-header-inner">
@@ -94,64 +95,7 @@ const q=new URLSearchParams(location.search).get("q")||"";input.value=q;
 document.addEventListener("DOMContentLoaded",()=>setTimeout(render,0));
 })();
 </script>
-<script>
-(function(){
-"use strict";
-const M365_INDEX = [{"title":"Export All SharePoint Online Sites Using PnP PowerShell","type":"Article","category":"SharePoint","url":"/articles/sharepoint-online-site-inventory.html","description":"Generate a SharePoint Online site inventory and storage usage report using PnP PowerShell.","keywords":["sharepoint","site inventory","storage","pnp powershell","powershell","csv"]},{"title":"Register an Entra ID App for PnP PowerShell Certificate Authentication","type":"Article","category":"Microsoft Entra","url":"/articles/entra-id-pnp-certificate-authentication.html","description":"Configure an Entra ID application, certificate, permissions and authentication for PnP PowerShell.","keywords":["entra id","certificate","app registration","pnp powershell","admin consent"]},{"title":"Create a Self-Signed Certificate for Microsoft Entra App Authentication","type":"Article","category":"Microsoft Entra","url":"/articles/entra-id-self-signed-certificate.html","description":"Create and export a self-signed certificate with PowerShell, upload the public certificate, and protect the private key.","keywords":["entra id","certificate","self-signed","pfx","cer","powershell","authentication"]},{"title":"SharePoint Storage Management","type":"Article","category":"SharePoint","url":"/articles/sharepoint-storage-management.html","description":"Understand SharePoint Online storage consumption and practical storage governance.","keywords":["sharepoint","storage","quota","capacity","usage","report"]},{"title":"SharePoint Site Lifecycle Management","type":"Article","category":"SharePoint","url":"/articles/sharepoint-site-lifecycle.html","description":"Manage inactive SharePoint sites with lifecycle and ownership processes.","keywords":["sharepoint","lifecycle","inactive sites","attestation","governance"]},{"title":"SharePoint Version Management","type":"Article","category":"SharePoint","url":"/articles/sharepoint-version-management.html","description":"Understand SharePoint version history, version limits and storage governance.","keywords":["sharepoint","versions","version history","version limit","storage"]},{"title":"Generate and Email a SharePoint Site Inventory Report with Microsoft Graph","type":"Article","category":"SharePoint","url":"/articles/powershell-report-delivery-microsoft-graph.html","description":"Generate a SharePoint Online site inventory, export the approved CSV, summarize storage and email the report with Microsoft Graph app-only certificate authentication.","keywords":["sharepoint","site inventory","graph email","powershell","csv","storage","mail.send","mail.readwrite","certificate authentication"]},{"title":"Email PowerShell Reports Using Power Automate","type":"Article","category":"Power Automate","url":"/articles/powershell-report-delivery-power-automate.html","description":"Use Power Automate and Microsoft 365 Outlook to email PowerShell CSV reports.","keywords":["smtp","email","power automate","outlook","powershell","csv"]},{"title":"SharePoint Site Inventory PowerShell Script","type":"Script","category":"SharePoint","url":"/scripts/SharePoint/sharepoint-site-inventory-viewer.html","description":"View the published SharePoint Online site inventory PowerShell script.","keywords":["sharepoint","powershell","site inventory","script"]},{"title":"SharePoint Version Report","type":"Script","category":"SharePoint","url":"/scripts/SharePoint/sharepoint-version-report.html","description":"SharePoint Online version usage reporting script.","keywords":["sharepoint","version report","powershell"]},{"title":"SharePoint Recycle Bin Report","type":"Script","category":"SharePoint","url":"/scripts/SharePoint/sharepoint-recycle-bin-report.html","description":"SharePoint Online recycle bin reporting script.","keywords":["sharepoint","recycle bin","powershell"]},{"title":"SharePoint Site Inventory + Graph Email PowerShell Script","type":"Script","category":"SharePoint","url":"/scripts/SharePoint/SharePoint-Site-Inventory-GraphEmail.ps1","description":"Published PowerShell script that inventories SharePoint sites, exports CSV and sends the report through Microsoft Graph.","keywords":["sharepoint","site inventory","graph email","powershell script","csv attachment","Mail.Send","Mail.ReadWrite","certificate"]},{"title":"PowerShell Email Works Manually but Fails in Task Scheduler","type":"Article","category":"PowerShell","url":"/articles/PowerShell%20Email%20Works%20Manually%20but%20Fails%20in%20Task%20Scheduler.html","description":"Troubleshoot email scripts that work manually but fail in Windows Task Scheduler, including execution context and recipient formatting.","keywords":["powershell","task scheduler","email","smtp","scheduled task","troubleshooting"]}];
-function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));}
-function scoreItem(item,q){
-  const Q=q.toLowerCase();
-  const title=item.title.toLowerCase(), text=(item.title+" "+item.type+" "+item.category+" "+item.description+" "+item.keywords.join(" ")).toLowerCase();
-  if(!text.includes(Q)) return 0;
-  let s=1;
-  if(title===Q)s+=100;
-  if(title.includes(Q))s+=60;
-  if(item.category.toLowerCase().includes(Q))s+=30;
-  if(item.type.toLowerCase().includes(Q))s+=20;
-  if(item.description.toLowerCase().includes(Q))s+=15;
-  s+=item.keywords.filter(k=>k.toLowerCase().includes(Q)).length*10;
-  return s;
-}
-function searchItems(q,type){
-  q=(q||"").trim();
-  if(!q)return [];
-  return M365_INDEX.map(x=>({...x,score:scoreItem(x,q)})).filter(x=>x.score>0 && (!type||type==="All"||x.type===type)).sort((a,b)=>b.score-a.score);
-}
-function wireGlobalSearch(){
-  document.querySelectorAll("[data-m365-search]").forEach(input=>{
-    const wrap=input.closest(".m365-search")||input.parentElement;
-    let box=wrap.querySelector(".m365-results");
-    if(!box){box=document.createElement("div");box.className="m365-results";wrap.appendChild(box);}
-    function render(){
-      const q=input.value.trim(), items=searchItems(q).slice(0,7);
-      if(!q){box.classList.remove("show");box.innerHTML="";return;}
-      box.classList.add("show");
-      if(!items.length){box.innerHTML='<div class="m365-result-empty">No matching articles or scripts.</div>';return;}
-      box.innerHTML=items.map(x=>'<a class="m365-result" href="'+x.url+'"><div style="min-width:0"><div class="m365-result-title">'+esc(x.title)+'</div><div class="m365-result-desc">'+esc(x.description)+'</div></div><span class="m365-result-type">'+esc(x.type)+'</span></a>').join("");
-    }
-    input.addEventListener("input",render);
-    input.addEventListener("focus",render);
-    input.addEventListener("keydown",function(e){
-      if(e.key==="Enter"){e.preventDefault();const q=input.value.trim();if(q)location.href="/search.html?q="+encodeURIComponent(q);}
-      if(e.key==="Escape"){input.value="";box.classList.remove("show");}
-    });
-  });
-  document.addEventListener("click",function(e){
-    document.querySelectorAll(".m365-results").forEach(box=>{if(!box.parentElement.contains(e.target))box.classList.remove("show");});
-  });
-}
-function markNav(){
-  const p=location.pathname;
-  document.querySelectorAll(".m365-nav a[data-nav]").forEach(a=>{
-    const n=a.dataset.nav;
-    if((n==="home" && (p==="/"||p.endsWith("/index.html"))) ||
-       (n==="articles" && p.startsWith("/articles")) ||
-       (n==="scripts" && p.startsWith("/scripts")) ||
-       (n==="community" && p.startsWith("/community"))) a.classList.add("active");
-  });
-}
-document.addEventListener("DOMContentLoaded",function(){wireGlobalSearch();markNav();});
-window.M365BuddySearch={index:M365_INDEX,search:searchItems};
-})();
-</script><footer style="max-width:1120px;margin:24px auto 0;padding:18px 16px 28px;border-top:1px solid #d7e1ee;text-align:center;color:#617492;font:13px/1.5 Segoe UI,Arial,sans-serif"><a href="https://www.youtube.com/@M365buddy" target="_blank" rel="noopener noreferrer" style="color:#c62828;font-weight:750;text-decoration:none">▶ Watch M365Buddy tutorials on YouTube</a></footer>
+<footer style="max-width:1120px;margin:24px auto 0;padding:18px 16px 28px;border-top:1px solid #d7e1ee;text-align:center;color:#617492;font:13px/1.5 Segoe UI,Arial,sans-serif"><a href="https://www.youtube.com/@M365buddy" target="_blank" rel="noopener noreferrer" style="color:#c62828;font-weight:750;text-decoration:none">▶ Watch M365Buddy tutorials on YouTube</a></footer>
+<script src="/assets/m365-search-index.js?v=20261028-4"></script>
+<script src="/assets/m365-global-search.js?v=20261028-4"></script>
 </body></html>
