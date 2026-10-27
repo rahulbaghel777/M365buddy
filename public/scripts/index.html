@@ -130,70 +130,61 @@ footer{margin-top:34px;border-top:1px solid var(--border);padding:18px 0;color:v
 
 <section class="section">
   <div class="section-head">
-    <h2>SharePoint</h2>
-    <span>PowerShell automation</span>
+    <h2>Published scripts</h2>
+    <span id="script-count">Loading catalogue…</span>
   </div>
-
-  <div class="grid">
-    <article class="card">
-      <h3>SharePoint Online Site Inventory</h3>
-      <p>Generate a SharePoint Online site inventory and storage report using PnP PowerShell, Microsoft Entra ID certificate authentication and CSV export.</p>
-      <div class="tags">
-        <span class="tag">PowerShell 7+</span>
-        <span class="tag">PnP PowerShell</span>
-        <span class="tag">SharePoint Online</span>
-        <span class="tag">CSV</span>
-      </div>
-      <div class="actions">
-        <a class="btn primary" href="/scripts/SharePoint/sharepoint-site-inventory-viewer.html">View Script</a>
-        <a class="btn" href="/M365buddy-script-editor.html?script=%2Fscripts%2FSharePoint%2FSharePoint_Site_Inventory.ps1">Open in Editor</a>
-        <a class="btn" href="/scripts/SharePoint/SharePoint_Site_Inventory.ps1" download>Download .PS1</a>
-      </div>
-    </article>
-    <article class="card">
-      <h3>SharePoint Site Inventory + Graph Email</h3>
-      <p>Collect SharePoint Online site inventory, export the approved nine-column CSV, summarize storage and email the report with Microsoft Graph certificate authentication.</p>
-      <div class="tags">
-        <span class="tag">PowerShell 7.4+</span><span class="tag">PnP PowerShell</span><span class="tag">Microsoft Graph</span><span class="tag">CSV</span>
-      </div>
-      <div class="actions">
-        <a class="btn primary" href="/articles/powershell-report-delivery-microsoft-graph">Read Guide</a>
-        <a class="btn" href="/M365buddy-script-editor.html?script=%2Fscripts%2FSharePoint%2FSharePoint-Site-Inventory-GraphEmail.ps1">Open in Editor</a>
-        <a class="btn" href="/scripts/SharePoint/SharePoint-Site-Inventory-GraphEmail.ps1" download="SharePoint-Site-Inventory-GraphEmail.ps1">Download .PS1</a>
-      </div>
-    </article>
-    <article class="card">
-      <h3>SharePoint Site Inventory + Power Automate</h3>
-      <p>Generate a SharePoint Online inventory report with PowerShell and connect it to a Power Automate delivery workflow.</p>
-      <div class="tags">
-        <span class="tag">PowerShell 7+</span><span class="tag">PnP PowerShell</span><span class="tag">Power Automate</span><span class="tag">CSV</span>
-      </div>
-      <div class="actions">
-        <a class="btn primary" href="/articles/powershell-report-delivery-power-automate.html">Read Guide</a>
-        <a class="btn" href="/M365buddy-script-editor.html?script=%2Fscripts%2FSharePoint%2FSharePoint_Site_Inventory_PowerAutomate.ps1">Open in Editor</a>
-        <a class="btn" href="/scripts/SharePoint/SharePoint_Site_Inventory_PowerAutomate.ps1" download="SharePoint_Site_Inventory_PowerAutomate.ps1">Download .PS1</a>
-      </div>
-    </article>
-    <article class="card">
-      <h3>SharePoint Version Report</h3>
-      <p>Open the SharePoint version-report tool to review versioning information and investigate version-storage usage.</p>
-      <div class="tags"><span class="tag">SharePoint Online</span><span class="tag">Versioning</span><span class="tag">Reporting</span></div>
-      <div class="actions">
-        <a class="btn primary" href="/scripts/SharePoint/sharepoint-version-report.html">Open Report Tool</a>
-        <a class="btn" href="/articles/sharepoint-version-management.html">Read Guide</a>
-      </div>
-    </article>
-    <article class="card">
-      <h3>SharePoint Recycle Bin Report</h3>
-      <p>Open the recycle-bin reporting tool and review first-stage and second-stage recycle-bin cleanup considerations.</p>
-      <div class="tags"><span class="tag">SharePoint Online</span><span class="tag">Recycle Bin</span><span class="tag">Reporting</span></div>
-      <div class="actions">
-        <a class="btn primary" href="/scripts/SharePoint/sharepoint-recycle-bin-report.html">Open Report Tool</a>
-        <a class="btn" href="/articles/sharepoint-storage-management.html">Read Guide</a>
-      </div>
-    </article>
+  <div class="catalog-controls">
+    <label class="catalog-search-label" for="catalog-search">Filter scripts</label>
+    <input id="catalog-search" type="search" placeholder="Search by script name, category, or capability…" autocomplete="off">
+    <div id="catalog-categories" class="catalog-categories" aria-label="Filter by category"></div>
+  </div>
+  <div id="script-catalog" class="grid" aria-live="polite">
+    <p>Loading published scripts…</p>
   </div>
 </section>
+
+<style>
+.catalog-controls{display:grid;grid-template-columns:minmax(220px,1fr);gap:8px;margin:0 0 14px}
+.catalog-search-label{font-size:12px;font-weight:700;color:var(--muted)}
+#catalog-search{width:100%;min-height:42px;padding:9px 12px;border:1px solid var(--border);border-radius:8px;background:#fff;color:var(--text);font:inherit}
+.catalog-categories{display:flex;gap:7px;flex-wrap:wrap}
+.catalog-filter{border:1px solid var(--border);background:#fff;border-radius:999px;padding:6px 11px;color:var(--muted);font-size:12px;cursor:pointer}
+.catalog-filter[aria-pressed="true"]{background:#eff6ff;border-color:#93c5fd;color:#1d4ed8;font-weight:700}
+.catalog-empty{grid-column:1/-1;padding:22px;border:1px dashed var(--border);border-radius:10px;color:var(--muted);background:#fff}
+.catalog-card .category{color:var(--accent);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+.catalog-card h3{overflow-wrap:anywhere}
+@media(max-width:700px){.catalog-card{min-height:0}}
+</style>
+<script src="/assets/m365-script-catalog.js?v=20261028-1"></script>
+<script>
+(function(){
+  const catalog=window.M365BuddyScriptCatalog||[];
+  const host=document.getElementById("script-catalog");
+  const search=document.getElementById("catalog-search");
+  const count=document.getElementById("script-count");
+  const filters=document.getElementById("catalog-categories");
+  if(!host||!search||!count||!filters)return;
+  let category="All";
+  const esc=value=>String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const categories=["All",...new Set(catalog.map(item=>item.category))];
+  filters.innerHTML=categories.map(value=>'<button type="button" class="catalog-filter" data-category="'+esc(value)+'" aria-pressed="'+(value==="All")+'">'+esc(value)+'</button>').join("");
+  filters.addEventListener("click",event=>{
+    const button=event.target.closest("[data-category]");
+    if(!button)return;
+    category=button.dataset.category;
+    filters.querySelectorAll("[data-category]").forEach(item=>item.setAttribute("aria-pressed",String(item===button)));
+    render();
+  });
+  function render(){
+    const q=search.value.trim().toLowerCase();
+    const items=catalog.filter(item=>(category==="All"||item.category===category)&&[item.name,item.category,item.description,...(item.tags||[])].join(" ").toLowerCase().includes(q));
+    count.textContent=items.length+" of "+catalog.length+" published scripts";
+    host.innerHTML=items.length?items.map(item=>'<article class="card catalog-card"><div class="category">'+esc(item.category)+'</div><h3>'+esc(item.name)+'</h3><p>'+esc(item.description)+'</p><div class="tags">'+(item.tags||[]).map(tag=>'<span class="tag">'+esc(tag)+'</span>').join("")+'</div><div class="actions"><a class="btn primary" href="/M365buddy-script-editor.html?script='+encodeURIComponent(item.path)+'">Open in Editor</a><a class="btn" href="'+esc(item.path)+'" download>Download .PS1</a></div></article>').join(""):'<div class="catalog-empty">No scripts match that search. Try another keyword or select All.</div>';
+  }
+  search.addEventListener("input",render);
+  render();
+})();
+</script>
 
 <div class="callout">
   <strong>More scripts are coming.</strong>
