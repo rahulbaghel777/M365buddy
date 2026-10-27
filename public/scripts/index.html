@@ -75,6 +75,17 @@ footer{margin-top:34px;border-top:1px solid var(--border);padding:18px 0;color:v
 
 
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+/* Shared desktop header alignment: navigation left, search centered, brand right */
+@media(min-width:901px){
+  .m365-header-inner{
+    grid-template-columns:minmax(0,1fr) minmax(280px,min(38vw,520px)) minmax(0,1fr)!important;
+    gap:24px!important;
+  }
+  .m365-nav{justify-self:start}
+  .m365-search,.m365-header-search{justify-self:center;width:100%;max-width:520px}
+  .m365-brand{justify-self:end}
+}
 </style>
 
 <meta name="description" content="Browse practical PowerShell scripts for SharePoint Online inventory, version history, recycle bins, Microsoft Graph reporting, and Microsoft 365 administration.">
@@ -194,7 +205,7 @@ footer{margin-top:34px;border-top:1px solid var(--border);padding:18px 0;color:v
 </footer>
 </main>
 
-<script src="/assets/m365-search-index.js?v=20261028-1"></script>
+<script src="/assets/m365-search-index.js?v=20261028-2"></script>
 <script>
 (function(){
  const input=document.querySelector("[data-m365-search]");
