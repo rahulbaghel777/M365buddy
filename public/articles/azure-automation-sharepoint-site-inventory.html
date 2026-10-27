@@ -32,6 +32,19 @@
 
 
 
+
+/* Script viewer/editor launch actions: intentional spacing and responsive wrapping */
+.script-launcher{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;padding:17px 19px;margin:18px 0 22px;border:1px solid #c9def7;border-radius:10px;background:#eef7ff}
+.script-launcher-copy{display:flex;flex-direction:column;gap:4px;min-width:220px;flex:1 1 300px}
+.script-launcher-copy strong{display:block;font-size:15px;line-height:1.4;color:#071a3d}
+.script-launcher-copy span{display:block;font-size:12px;line-height:1.5;color:#617492}
+.script-launcher-actions{display:flex;align-items:center;justify-content:flex-start;gap:10px;flex:0 0 auto;flex-wrap:wrap}
+.script-launcher-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:8px 16px;border:1px solid #b8cde4;border-radius:7px;background:#fff;color:#075fc4!important;font:650 13px/1.2 Inter,"Segoe UI",Arial,sans-serif;text-decoration:none;white-space:nowrap}
+.script-launcher-actions a:first-child{background:#0878ee;border-color:#0878ee;color:#fff!important}
+.script-launcher-actions a:hover{filter:brightness(.97);box-shadow:0 1px 4px #0b37631c}
+.script-note{margin:10px 0 18px;font-size:13px;color:#617492}
+@media(max-width:650px){.script-launcher{align-items:stretch}.script-launcher-copy{flex-basis:100%}.script-launcher-actions{width:100%;gap:8px}.script-launcher-actions a{flex:1 1 120px}}
+
 </style></head><body>
 <header class="m365-header"><div class="m365-header-inner">
 <nav class="m365-nav" aria-label="Main navigation"><a href="/" data-nav="home">Home</a><a href="/articles/" data-nav="articles">Articles</a><a href="/scripts/" data-nav="scripts">Scripts</a><a href="/community/" data-nav="community">Community</a></nav>
@@ -44,7 +57,7 @@
 <p class="creator-byline" style="margin:7px 0 0;color:#617492;font-size:12px;line-height:1.5">By <a href="/about/creator/" style="font-weight:750;color:#0878ee">Rahul Baghel</a>, creator of M365Buddy</p>
 <p class="lead">Automate recurring inventory reports for SharePoint Online using Azure Automation, a compatible PowerShell runtime, PnP.PowerShell, certificate-based app authentication, and Microsoft Graph email delivery.</p><div class="tags"><span class="tag">Azure Automation</span><span class="tag">PowerShell 7.4</span><span class="tag">PnP.PowerShell</span><span class="tag">Entra ID</span><span class="tag">Microsoft Graph</span></div></section>
 <article class="article">
-<p>This guide explains how to configure and use the accompanying <strong>Azure Automation SharePoint Online Site Consumption Report</strong> runbook. Follow the setup steps, configure the required Automation variables and app permissions, then use the built-in script viewer/editor below to review, customize, copy, or download the PowerShell file without leaving this page.</p>
+<p>This guide explains how to configure and use the accompanying <strong>Azure Automation SharePoint Online Site Consumption Report</strong> runbook. Follow the setup steps, configure the required Automation variables and app permissions, then choose the separate read-only script viewer or M365Buddy editor to review, customize, copy, or download the PowerShell file.</p>
 <div class="script-launcher">
   <div class="script-launcher-copy"><strong>PowerShell runbook</strong><span>Open the read-only viewer or the separate M365Buddy editor</span></div>
   <div class="script-launcher-actions"><a href="/scripts/viewer.html?script=sharepoint-site-inventory">View script</a><a href="/scripts/editor.html?script=sharepoint-site-inventory">Edit script</a></div>
