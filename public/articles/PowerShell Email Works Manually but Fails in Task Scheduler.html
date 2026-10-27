@@ -344,7 +344,14 @@
                 gap: 12px;
             }
         }
-    </style>
+    
+.m365-header{height:62px;background:linear-gradient(105deg,#07346f,#0873c9);position:sticky;top:0;z-index:100;color:#fff}
+.m365-header-inner{height:100%;max-width:1400px;margin:auto;padding:0 18px;display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,min(38vw,520px)) minmax(0,1fr);gap:24px;align-items:center}
+.m365-nav{display:flex;align-items:center;gap:2px}.m365-nav a{display:flex;align-items:center;min-height:36px;padding:0 11px;border-radius:8px;color:#fff!important;font-size:13px;font-weight:700;text-decoration:none}.m365-nav a:hover{background:rgba(255,255,255,.12)}
+.m365-search{position:relative;width:100%;max-width:520px;justify-self:center}.m365-search input{width:100%;height:36px;border:1px solid rgba(255,255,255,.42);border-radius:9px;background:rgba(255,255,255,.07);color:#fff;padding:0 12px 0 42px;font-size:12px}.m365-search input::placeholder{color:#e3effb}.m365-search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:17px;height:17px;color:#fff;pointer-events:none}.m365-search-icon svg{width:100%;height:100%}
+.m365-brand{justify-self:end;color:#fff!important;text-decoration:none;font-size:23px;font-weight:800;white-space:nowrap}.m365-brand span{color:#9bd3ff}
+@media(max-width:900px){.m365-header{height:auto;padding:8px 0}.m365-header-inner{grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;padding:0 14px}.m365-nav{grid-column:1;grid-row:1;flex-wrap:wrap}.m365-brand{grid-column:2;grid-row:1;font-size:19px}.m365-search{grid-column:1/-1;grid-row:2;max-width:none}}
+</style>
   <link rel="stylesheet" href="/assets/community.css?v=20261021-2">
 
 <meta name="description" content="Troubleshoot PowerShell email scripts that work manually but fail in Windows Task Scheduler, including execution context, recipient formatting, and testing steps.">
@@ -363,9 +370,24 @@
 <link rel="shortcut icon" href="/favicon.ico?v=20261022">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=20261022">
 <meta name="theme-color" content="#0878ee">
+<link rel="stylesheet" href="/assets/m365-common.css?v=20261028-5">
 </head>
 
 <body>
+
+<header class="m365-header">
+  <div class="m365-header-inner">
+    <nav class="m365-nav" aria-label="Main navigation">
+      <a href="/">Home</a><a href="/articles/">Articles</a><a href="/scripts/">Scripts</a><a href="/community/">Community</a>
+    </nav>
+    <div class="m365-search">
+      <span class="m365-search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg></span>
+      <input type="search" data-m365-search placeholder="Search M365Buddy..." autocomplete="off" aria-label="Search M365Buddy">
+    </div>
+    <a class="m365-brand" href="/">M365<span>Buddy</span></a>
+  </div>
+</header>
+
 
 <div class="article-wrapper">
     <p class="m365-community-link"><a href="/community/">Join the M365Buddy Community →</a></p>
@@ -1116,5 +1138,7 @@ Send-MailMessage `
 </div>
 
 <script src="/assets/community-comments.js?v=20261021-3" defer></script>
-<footer style="margin:18px auto;text-align:center;color:#617492;font-size:12px"><a href="https://www.youtube.com/@M365buddy" target="_blank" rel="noopener noreferrer">Watch M365Buddy on YouTube</a></footer></body>
+<footer style="margin:18px auto;text-align:center;color:#617492;font-size:12px"><a href="https://www.youtube.com/@M365buddy" target="_blank" rel="noopener noreferrer">Watch M365Buddy on YouTube</a></footer><script src="/assets/m365-search-index.js?v=20261028-5"></script>
+<script src="/assets/m365-global-search.js?v=20261028-5"></script>
+</body>
 </html>
