@@ -43,7 +43,7 @@
 <p class="lead">Automate recurring inventory reports for SharePoint Online using Azure Automation, a compatible PowerShell runtime, PnP.PowerShell, certificate-based app authentication, and Microsoft Graph email delivery.</p><div class="tags"><span class="tag">Azure Automation</span><span class="tag">PowerShell 7.4</span><span class="tag">PnP.PowerShell</span><span class="tag">Entra ID</span><span class="tag">Microsoft Graph</span></div></section>
 <article class="article">
 <p>Maintaining an inventory of thousands of SharePoint Online sites manually can be time-consuming. This guide pairs the setup walkthrough with a practical PowerShell runbook pattern, so you can configure Azure Automation, review the code, and adapt the reporting logic before publishing it.</p>
-<div class="callout"><strong>What this guide includes:</strong> Azure Automation setup, certificate-based SharePoint authentication, Microsoft Graph mail delivery, configuration variables, and an in-page script panel with copy and edit-source actions.</div>
+<div class="callout"><strong>What this guide includes:</strong> Azure Automation setup, certificate-based SharePoint authentication, Microsoft Graph mail delivery, configuration variables, and a linked full PowerShell runbook with view, download, and edit actions.</div>
 <div class="callout warning"><strong>Before you run it:</strong> Treat the script as a starting point for your tenant. Validate permissions, runtime/module compatibility, mailbox access, report columns, and execution duration in a test Automation Account before scheduling it in production.</div>
 <h2 id="architecture">Architecture and prerequisites</h2><div class="workflow" role="img" aria-label="Workflow: Azure Automation runbook connects to SharePoint using certificate authentication, creates a report, then sends it using Microsoft Graph"><div class="workflow-step"><span class="num">1</span><strong>Azure Automation</strong><span>Scheduled runbook</span></div><div class="workflow-step"><span class="num">2</span><strong>Certificate auth</strong><span>Entra app + PnP</span></div><div class="workflow-step"><span class="num">3</span><strong>Inventory report</strong><span>Collect and export data</span></div><div class="workflow-step"><span class="num">4</span><strong>Graph email</strong><span>Send report attachment</span></div></div>
 <p>The solution uses an Azure Automation Account to host the runbook and runtime environment. An Entra ID app registration authenticates to SharePoint Online with a certificate. A separate Graph email configuration handles report delivery, and a sender mailbox is identified by the <code>MailFrom</code> variable.</p>
@@ -86,52 +86,13 @@
 <h2 id="script">11. Review and edit the PowerShell script</h2>
 <p>The example below shows the core structure for connecting to the SharePoint admin center with certificate-based app authentication and retrieving the tenant site inventory. The full runbook design should also include the report columns, retry/error handling, group visibility lookup, CSV export, and Graph email delivery described above. Keep credentials and certificate material in Azure Automation variables or an approved secret store—not in the script.</p>
 <div class="script-panel" id="runbookScript">
-  <div class="script-toolbar"><div><strong>PowerShell · Azure Automation</strong><br><span>Core connection and inventory pattern</span></div><div class="script-actions"><button type="button" id="copyRunbookScript">Copy script</button><a href="https://github.com/rahulbaghel777/M365buddy/edit/main/public/articles/azure-automation-sharepoint-site-inventory.html" target="_blank" rel="noopener noreferrer">Edit in GitHub</a></div></div>
-  <pre><code id="runbookScriptCode">$ErrorActionPreference = "Stop"
-
-# Store these values as Azure Automation variables.
-$Tenant    = Get-AutomationVariable -Name "Tenant"
-$ClientId  = Get-AutomationVariable -Name "ClientId"
-$PfxBase64 = Get-AutomationVariable -Name "PfxBase64"
-$PfxPasswordString = Get-AutomationVariable -Name "PFX Password"
-
-# Convert the PFX password to the SecureString expected by PnP.PowerShell.
-$PfxPassword = ConvertTo-SecureString -String $PfxPasswordString -AsPlainText -Force
-
-Import-Module PnP.PowerShell -ErrorAction Stop
-
-$AdminUrl = "https://YOUR-TENANT-admin.sharepoint.com"
-
-$AdminConnection = Connect-PnPOnline `
-    -Url $AdminUrl `
-    -ClientId $ClientId `
-    -CertificateBase64Encoded $PfxBase64 `
-    -CertificatePassword $PfxPassword `
-    -Tenant $Tenant `
-    -ReturnConnection `
-    -ErrorAction Stop
-
-$Sites = Get-PnPTenantSite -Connection $AdminConnection -Detailed -ErrorAction Stop
-
-$Results = foreach ($Site in $Sites) {
-    [PSCustomObject]@{
-        SiteName         = $Site.Title
-        SiteUrl          = $Site.Url
-        StorageUsedGB    = [math]::Round(([double]$Site.StorageUsageCurrent / 1024), 2)
-        LastActivityDate = if ($Site.LastContentModifiedDate) {
-            ([datetime]$Site.LastContentModifiedDate).ToString("yyyy-MM-dd")
-        } else {
-            ""
-        }
-    }
-}
-
-$Results | Export-Csv -Path "$env:TEMP\SharePoint-SiteInventory.csv" -NoTypeInformation -Encoding UTF8
-
-Write-Host "Sites discovered: $(@($Sites).Count)"
-Write-Host "Inventory exported to $env:TEMP\SharePoint-SiteInventory.csv"</code></pre>
+  <div class="script-toolbar"><div><strong>Full PowerShell runbook · Azure Automation</strong><br><span>1,268 lines · SharePoint inventory, group visibility, CSV export, and Graph email delivery</span></div><div class="script-actions"><a href="https://github.com/rahulbaghel777/M365buddy/blob/main/public/scripts/SharePoint/azure-automation-sharepoint-site-inventory.ps1" target="_blank" rel="noopener noreferrer">View full script</a><a href="https://raw.githubusercontent.com/rahulbaghel777/M365buddy/main/public/scripts/SharePoint/azure-automation-sharepoint-site-inventory.ps1" target="_blank" rel="noopener noreferrer" download="azure-automation-sharepoint-site-inventory.ps1">Download .ps1</a><a href="https://github.com/rahulbaghel777/M365buddy/edit/main/public/scripts/SharePoint/azure-automation-sharepoint-site-inventory.ps1" target="_blank" rel="noopener noreferrer">Edit script</a></div></div>
+  <div style="padding:16px;background:#0c1930;color:#e5edf9">
+    <p style="margin:0 0 9px;color:#e5edf9"><strong>Use the linked file for the complete runbook.</strong> The script is maintained separately from this article so you can download the exact <code style="background:#243651;color:#e5edf9">.ps1</code> file, review changes in GitHub, or edit it in the repository.</p>
+    <p style="margin:0;color:#c4d3e5;font-size:12px;line-height:1.7">The runbook reads configuration from Azure Automation variables, connects to SharePoint using PnP certificate authentication, collects tenant/site details, exports a CSV, and sends the report using Microsoft Graph. Review the tenant-specific admin URL, permissions, variable protection, runtime limits, and mail delivery behavior before deploying it.</p>
+  </div>
 </div>
-<p class="script-note">This is an illustrative core example, not the complete production runbook. The full implementation must be reviewed and tested with the exact tenant variables, app permissions, output requirements, and email settings. The “Edit in GitHub” action opens this article’s source so the script section can be maintained alongside the guide.</p>
+<p class="script-note">Security note: the repository version contains a tenant-specific SharePoint admin URL in its configuration. Replace it with your own tenant URL before adapting the script. The visible file scan did not find hard-coded client-secret values, access tokens, private-key blocks, or embedded PFX data; still review the full file and repository history before using or redistributing it.</p>
 <h2 id="troubleshooting">Troubleshooting</h2>
 <table><thead><tr><th>Issue</th><th>What to check</th></tr></thead><tbody>
 <tr><td>PnP cmdlets unavailable</td><td>Confirm the runbook runtime and package availability.</td></tr><tr><td>Authentication failure</td><td>Validate tenant/client IDs, certificate, PFX password, certificate validity, and permissions.</td></tr><tr><td>Run fails partway through a large inventory</td><td>Review logs and implement resilient token refresh and retry handling where needed.</td></tr><tr><td>Missing owner data</td><td>Check whether an owner group exists and handle null owner-group values.</td></tr><tr><td>Report created but email fails</td><td>Check Graph authentication, <code>MailFrom</code>, <code>MailTo</code>, app permissions, and Exchange restrictions.</td></tr><tr><td>Multiple recipients fail</td><td>Parse commas, semicolons, or line breaks consistently and create a separate recipient object per address.</td></tr><tr><td>Attachment too large</td><td>Compress the report or use an approved storage location and secure link; verify the permissions needed for the selected method.</td></tr>
@@ -154,7 +115,7 @@ const items=[
 ];
 const input=document.getElementById("globalSearch"),wrap=input&&input.closest(".m365-search");
 if(input&&wrap){const box=document.createElement("div");box.className="m365-results";wrap.appendChild(box);function render(){const q=input.value.trim().toLowerCase();if(!q){box.classList.remove("show");box.innerHTML="";return;}const hits=items.filter(x=>(x.title+" "+x.desc).toLowerCase().includes(q)).slice(0,6);box.innerHTML=hits.length?hits.map(x=>'<a class="m365-result" href="'+x.url+'"><strong>'+x.title+'</strong><small>'+x.desc+'</small></a>').join(""):'<div class="m365-result-empty">No matching articles found.</div>';box.classList.add("show");}input.addEventListener("input",render);input.addEventListener("focus",render);input.addEventListener("keydown",e=>{if(e.key==="Enter"&&input.value.trim())location.href="/search.html?q="+encodeURIComponent(input.value.trim());if(e.key==="Escape"){input.value="";box.classList.remove("show");}});document.addEventListener("click",e=>{if(!wrap.contains(e.target))box.classList.remove("show");});}
-const copyScriptButton=document.getElementById("copyRunbookScript");const scriptCode=document.getElementById("runbookScriptCode");if(copyScriptButton&&scriptCode){copyScriptButton.addEventListener("click",async()=>{const original=copyScriptButton.textContent;try{await navigator.clipboard.writeText(scriptCode.textContent);copyScriptButton.textContent="Copied!";}catch(e){const range=document.createRange();range.selectNodeContents(scriptCode);const selection=window.getSelection();selection.removeAllRanges();selection.addRange(range);copyScriptButton.textContent="Select and copy";}setTimeout(()=>{copyScriptButton.textContent=original;},1800);});}const p=location.pathname;document.querySelectorAll(".m365-nav a[data-nav]").forEach(a=>{const n=a.dataset.nav;if((n==="home"&&(p==="/"||p==="/index.html"))||(n==="articles"&&p.startsWith("/articles"))||(n==="scripts"&&p.startsWith("/scripts"))||(n==="community"&&p.startsWith("/community")))a.classList.add("active");});
+const p=location.pathname;document.querySelectorAll(".m365-nav a[data-nav]").forEach(a=>{const n=a.dataset.nav;if((n==="home"&&(p==="/"||p==="/index.html"))||(n==="articles"&&p.startsWith("/articles"))||(n==="scripts"&&p.startsWith("/scripts"))||(n==="community"&&p.startsWith("/community")))a.classList.add("active");});
 const left=document.getElementById("leftArticleSearch");if(left)left.addEventListener("input",()=>{const q=left.value.toLowerCase();document.querySelectorAll("#leftArticleLinks a").forEach(a=>a.style.display=a.textContent.toLowerCase().includes(q)?"block":"none");});
 })();
 </script><link rel="stylesheet" href="/assets/community.css?v=20261021-2">
