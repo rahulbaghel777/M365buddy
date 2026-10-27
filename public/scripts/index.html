@@ -153,6 +153,7 @@ footer{margin-top:34px;border-top:1px solid var(--border);padding:18px 0;color:v
 .catalog-empty{grid-column:1/-1;padding:22px;border:1px dashed var(--border);border-radius:10px;color:var(--muted);background:#fff}
 .catalog-card .category{color:var(--accent);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
 .catalog-card h3{overflow-wrap:anywhere}
+.catalog-card h3 a{color:inherit;text-decoration:none;text-underline-offset:4px}.catalog-card h3 a:hover,.catalog-card h3 a:focus-visible{color:var(--accent);text-decoration:underline}.catalog-card h3 a[aria-disabled="true"]{cursor:default}
 @media(max-width:700px){.catalog-card{min-height:0}}
 </style>
 <script src="/assets/m365-script-catalog.js?v=20261028-1"></script>
@@ -179,7 +180,7 @@ footer{margin-top:34px;border-top:1px solid var(--border);padding:18px 0;color:v
     const q=search.value.trim().toLowerCase();
     const items=catalog.filter(item=>(category==="All"||item.category===category)&&[item.name,item.category,item.description,...(item.tags||[])].join(" ").toLowerCase().includes(q));
     count.textContent=items.length+" of "+catalog.length+" published scripts";
-    host.innerHTML=items.length?items.map(item=>'<article class="card catalog-card"><div class="category">'+esc(item.category)+'</div><h3>'+esc(item.name)+'</h3><p>'+esc(item.description)+'</p><div class="tags">'+(item.tags||[]).map(tag=>'<span class="tag">'+esc(tag)+'</span>').join("")+'</div><div class="actions"><a class="btn primary" href="/M365buddy-script-editor.html?script='+encodeURIComponent(item.path)+'">Open in Editor</a><a class="btn" href="'+esc(item.path)+'" download>Download .PS1</a></div></article>').join(""):'<div class="catalog-empty">No scripts match that search. Try another keyword or select All.</div>';
+    host.innerHTML=items.length?items.map(item=>'<article class="card catalog-card"><div class="category">'+esc(item.category)+'</div><h3><a class="script-article-link" href="'+esc(item.articleUrl||"#") +'"'+(item.articleUrl?'':' aria-disabled="true" title="Article coming soon"')+'>'+esc(item.name)+'</a></h3><p>'+esc(item.description)+'</p><div class="tags">'+(item.tags||[]).map(tag=>'<span class="tag">'+esc(tag)+'</span>').join("")+'</div><div class="actions"><a class="btn primary" href="/M365buddy-script-editor.html?script='+encodeURIComponent(item.path)+'">Open in Editor</a><a class="btn" href="'+esc(item.path)+'" download>Download .PS1</a></div></article>').join(""):'<div class="catalog-empty">No scripts match that search. Try another keyword or select All.</div>';
   }
   search.addEventListener("input",render);
   render();
