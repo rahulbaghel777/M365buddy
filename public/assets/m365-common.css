@@ -3,3 +3,13 @@
 .m365-search input::selection{background:#fff;color:#0757a8}
 button,a,input,select{font-family:inherit}
 @media(max-width:900px){.m365-header-inner{grid-template-columns:auto 1fr auto!important}.m365-nav a{padding:0 7px!important}.m365-brand{font-size:18px!important}}
+
+/* Shared header search dropdown used by every content page */
+.m365-results,.global-results{display:none;position:absolute;left:0;right:0;top:calc(100% + 7px);z-index:500;max-height:420px;overflow:auto;padding:6px;border:1px solid #d7e1ee;border-radius:11px;background:#fff;box-shadow:0 16px 40px rgba(7,26,61,.18)}
+.m365-results.show,.global-results.show{display:block}
+.m365-result,.global-result{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:10px;border-radius:7px;color:#173961!important;text-decoration:none!important;background:#fff}
+.m365-result:hover,.m365-result:focus-visible,.global-result:hover,.global-result:focus-visible{background:#eff6ff}
+.m365-result-title,.global-result-title{display:block;font-size:12px;font-weight:750;line-height:1.4}
+.m365-result-desc{display:block;margin-top:3px;color:#617492;font-size:11px;line-height:1.4}
+.m365-result-type,.global-result-type{flex-shrink:0;padding:3px 6px;border-radius:5px;background:#eff6ff;color:#075fc4;font-size:10px;font-weight:750}
+.m365-result-empty,.global-empty{padding:12px;color:#617492;font-size:12px}
