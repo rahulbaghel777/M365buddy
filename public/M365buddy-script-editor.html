@@ -1258,6 +1258,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 
 <script>
 
+/* Shared catalogue for published scripts */
+<script src="/assets/m365-script-catalog.js?v=20261028-1"></script>
+
 (function () {
 
 "use strict";
@@ -2564,124 +2567,87 @@ function openCreateModal() {
    M365BUDDY SCRIPT CHOOSER
 ========================================================= */
 
-function openM365ScriptChooser() {
+async function openM365ScriptChooser() {
 
-    modalTitle.textContent =
-        "Choose an M365Buddy Script";
+    modalTitle.textContent = "Choose an M365Buddy Script";
+    const catalogue = Array.isArray(window.M365BuddyScriptCatalog)
+        ? window.M365BuddyScriptCatalog
+        : [];
 
-    const scripts =
-        ORIGINAL_SCRIPTS;
+    if (!catalogue.length) {
+        modalBody.innerHTML = '<div class="empty"><div class="empty-title">Script catalogue unavailable</div><div class="empty-text">Refresh the page and try again.</div></div>';
+        modalFoot.innerHTML = '<button type="button" class="btn" id="modalBack">Back</button><button type="button" class="btn" id="modalCancel">Cancel</button>';
+        document.getElementById("modalBack").addEventListener("click", openCreateModal);
+        document.getElementById("modalCancel").addEventListener("click", closeModal);
+        return;
+    }
 
-    modalBody.innerHTML =
-
-        scripts.map(
-            function (script) {
-
-                return `
-
-                    <div
-                        class="option"
-                        data-original-script="${escapeHtml(script.id)}">
-
-                        <div class="option-icon">
-                            📜
-                        </div>
-
-                        <div>
-
-                            <div class="option-title">
-                                ${escapeHtml(script.name)}
-                            </div>
-
-                            <div class="option-desc">
-                                ${escapeHtml(script.description || "")}
-                            </div>
-
-                        </div>
-
-                    </div>
-                `;
-            }
-        ).join("");
-
+    modalBody.innerHTML = `
+      <label for="publishedScriptFilter" style="display:block;font-size:12px;font-weight:700;margin-bottom:8px">Search published scripts</label>
+      <input id="publishedScriptFilter" class="modal-input" type="search" placeholder="Search name, category, or capability…" autocomplete="off">
+      <div id="publishedScriptOptions" style="margin-top:12px"></div>
+    `;
     modalFoot.innerHTML = `
-
-        <button
-            type="button"
-            class="btn"
-            id="modalBack">
-            Back
-        </button>
-
-        <button
-            type="button"
-            class="btn"
-            id="modalCancel">
-            Cancel
-        </button>
+      <button type="button" class="btn" id="modalBack">Back</button>
+      <button type="button" class="btn" id="modalCancel">Cancel</button>
     `;
 
-    document
-        .querySelectorAll(
-            "[data-original-script]"
-        )
-        .forEach(
-            function (option) {
+    const filter = document.getElementById("publishedScriptFilter");
+    const optionsHost = document.getElementById("publishedScriptOptions");
+    const esc = value => escapeHtml(String(value ?? ""));
+    function renderPublishedOptions() {
+        const q = filter.value.trim().toLowerCase();
+        const matches = catalogue.filter(item =>
+            [item.name, item.category, item.description, ...(item.tags || [])]
+                .join(" ").toLowerCase().includes(q)
+        );
+        optionsHost.innerHTML = matches.length ? matches.map((item, index) => `
+          <div class="option" role="button" tabindex="0" data-published-index="${index}" style="margin-bottom:8px">
+            <div class="option-icon">📜</div>
+            <div style="min-width:0">
+              <div class="option-title">${esc(item.name)}</div>
+              <div class="option-desc">${esc(item.category)} · ${esc(item.description)}</div>
+            </div>
+          </div>`).join("") : '<div class="empty-text">No published scripts match your search.</div>';
 
-                option.addEventListener(
-                    "click",
-                    function () {
-
-                        const id =
-                            option.dataset.originalScript;
-
-                        const source =
-                            getScript(id);
-
-                        if (!source) {
-                            return;
-                        }
-
-                        /*
-                         * Selecting an existing M365Buddy
-                         * script creates an editable copy
-                         * instead of modifying the original.
-                         */
-
-                        const copyName =
-                            getNextCopyName(
-                                source
-                            );
-
-                        createPersonalScript(
-                            copyName,
-                            source.content,
-                            source.id
-                        );
-
-                        closeModal();
-
+        optionsHost.querySelectorAll("[data-published-index]").forEach(option => {
+            const activate = async () => {
+                const item = matches[Number(option.dataset.publishedIndex)];
+                if (!item) return;
+                option.setAttribute("aria-disabled", "true");
+                option.style.opacity = ".65";
+                try {
+                    showToast("Loading " + item.name + "…");
+                    const response = await fetch(item.path, { cache: "no-store" });
+                    if (!response.ok) throw new Error("HTTP " + response.status);
+                    const content = await response.text();
+                    if (!content.trim() || /<html[\\s>]/i.test(content.slice(0, 500))) {
+                        throw new Error("The URL did not return script source.");
                     }
-                );
-
-            }
-        );
-
-    document
-        .getElementById("modalBack")
-        .addEventListener(
-            "click",
-            openCreateModal
-        );
-
-    document
-        .getElementById("modalCancel")
-        .addEventListener(
-            "click",
-            closeModal
-        );
+                    createPersonalScript(getNextCopyName({name:item.name}), content, "published:" + item.path);
+                    closeModal();
+                } catch (error) {
+                    console.error("Unable to load published script:", error);
+                    showToast("Could not load this published script. Please try again.");
+                    option.removeAttribute("aria-disabled");
+                    option.style.opacity = "";
+                }
+            };
+            option.addEventListener("click", activate);
+            option.addEventListener("keydown", event => {
+                if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    activate();
+                }
+            });
+        });
+    }
+    filter.addEventListener("input", renderPublishedOptions);
+    renderPublishedOptions();
+    document.getElementById("modalBack").addEventListener("click", openCreateModal);
+    document.getElementById("modalCancel").addEventListener("click", closeModal);
+    filter.focus();
 }
-
 
 /* =========================================================
    NEW CUSTOM SCRIPT
