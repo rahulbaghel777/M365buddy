@@ -2,7 +2,7 @@
 :root{--m365-accent:#0878ee;--m365-border:#d7e1ee;--m365-muted:#617492}
 .m365-search input::selection{background:#fff;color:#0757a8}
 button,a,input,select{font-family:inherit}
-@media(max-width:900px){.m365-header-inner{grid-template-columns:auto 1fr auto!important}.m365-nav a{padding:0 7px!important}.m365-brand{font-size:18px!important}}
+@media(max-width:900px){.m365-header-inner{grid-template-columns:minmax(0,1fr) auto!important;gap:8px 12px!important}.m365-nav{grid-column:1;grid-row:1;flex-wrap:wrap}.m365-nav a{padding:0 7px!important}.m365-brand{grid-column:2;grid-row:1;font-size:18px!important}.m365-search,.m365-header-search,.global-search{grid-column:1/-1!important;grid-row:2!important;width:100%!important;max-width:none!important;justify-self:stretch!important}}
 
 /* Shared header search dropdown used by every content page */
 .m365-results,.global-results{display:none;position:absolute;left:0;right:0;top:calc(100% + 7px);z-index:500;max-height:420px;overflow:auto;padding:6px;border:1px solid #d7e1ee;border-radius:11px;background:#fff;box-shadow:0 16px 40px rgba(7,26,61,.18)}
