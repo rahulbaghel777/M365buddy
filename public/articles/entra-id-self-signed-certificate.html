@@ -352,5 +352,16 @@ Communication Site       https://contoso.sharepoint.com/sites/CommunicationSite<
     document.addEventListener('click',e=>{if(!globalWrap.contains(e.target))results.classList.remove('show');});
   }
 })();
-</script><style>.global-results.show{display:block}.global-results{display:none}.global-empty{padding:11px;color:#647084;font-size:12px}.m365-match{background:#ffec99}.current-match{outline:2px solid #0878ee}</style><script src="/assets/community-comments.js?v=20261021-3" defer></script>
+</script><style>.global-results.show{display:block}.global-results{display:none}.global-empty{padding:11px;color:#647084;font-size:12px}.m365-match{background:#ffec99}.current-match{outline:2px solid #0878ee}
+/* M365Buddy shared desktop header layout */
+@media(min-width:901px){
+  .m365-header-inner{
+    grid-template-columns:minmax(0,1fr) minmax(280px,min(38vw,520px)) minmax(0,1fr)!important;
+    gap:24px!important;
+  }
+  .m365-nav{justify-self:start}
+  .m365-search,.global-search{justify-self:center;width:100%;max-width:520px}
+  .m365-brand{justify-self:end}
+}
+</style><script src="/assets/community-comments.js?v=20261021-3" defer></script>
 </body></html>
