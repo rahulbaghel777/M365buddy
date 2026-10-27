@@ -892,6 +892,10 @@ body.dark .option:hover {
         min-width: 40px;
     }
 }
+
+/* Accessible focus and respect for reduced-motion preferences */
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #60a5fa;outline-offset:3px}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 </style>
 
 <meta name="description" content="Review and work with Microsoft 365 PowerShell scripts in the M365Buddy browser-based script editor. Check scripts carefully before running them.">
