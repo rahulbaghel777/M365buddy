@@ -44,7 +44,18 @@
     .btn.primary{background:#0878ee;border-color:#0878ee;color:#fff}
     footer{max-width:980px;margin:0 auto;padding:0 22px 28px;color:#617492;font-size:12px}
     @media(max-width:620px){.nav{align-items:flex-start;flex-direction:column;padding:14px 18px}.links{gap:12px}.grid{grid-template-columns:1fr}main{margin-top:18px;padding:0 14px}}
-  </style>
+  
+.m365-header-search .m365-results{display:none;position:absolute;top:calc(100% + 8px);left:0;right:0;z-index:200;max-height:420px;overflow:auto;padding:6px;border:1px solid #d7e1ee;border-radius:11px;background:#fff;box-shadow:0 16px 40px rgba(7,26,61,.18)}
+.m365-header-search .m365-results.show{display:block}
+.m365-header-search .m365-result{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:10px;border-radius:7px;color:#173961;text-decoration:none}
+.m365-header-search .m365-result:hover,.m365-header-search .m365-result:focus-visible{background:#eff6ff}
+.m365-header-search .m365-result strong{display:block;font-size:12px;line-height:1.4}.m365-header-search .m365-result small{display:block;margin-top:3px;color:#617492;font-size:11px;line-height:1.4}
+.m365-header-search .m365-result em{flex-shrink:0;padding:3px 6px;border-radius:5px;background:#eff6ff;color:#075fc4;font-size:10px;font-style:normal;font-weight:750}
+.m365-header-search .m365-result-empty{padding:12px;color:#617492;font-size:12px}
+
+a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #60a5fa;outline-offset:3px}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+</style>
 
 
 <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=20261022">
@@ -52,15 +63,20 @@
 <link rel="shortcut icon" href="/favicon.ico?v=20261022">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=20261022">
 <meta name="theme-color" content="#0878ee">
+<link rel="stylesheet" href="/assets/community.css?v=20261028-1">
 </head>
 <body>
-<header class="header">
-  <nav class="nav" aria-label="Main navigation">
-    <a class="brand" href="/">M365<span>Buddy</span></a>
-    <div class="links">
+<header class="m365-header">
+  <div class="m365-header-inner">
+    <nav class="m365-nav" aria-label="Main navigation">
       <a href="/">Home</a><a href="/articles/">Articles</a><a href="/scripts/">Scripts</a><a href="/community/">Community</a>
+    </nav>
+    <div class="m365-header-search">
+      <span class="m365-header-search-icon" aria-hidden="true">⌕</span>
+      <input type="search" data-m365-search placeholder="Search M365Buddy..." autocomplete="off" aria-label="Search M365Buddy">
     </div>
-  </nav>
+    <a class="m365-brand" href="/" aria-label="M365Buddy home">M365<span>Buddy</span></a>
+  </div>
 </header>
 <main>
   <section class="hero">
@@ -105,5 +121,21 @@
   </section>
 </main>
 <footer>M365Buddy · Microsoft 365 · SharePoint Online · <a href="/community/">Community</a> · <a href="https://www.youtube.com/@M365buddy" target="_blank" rel="noopener noreferrer">YouTube tutorials</a></footer>
+
+<script src="/assets/m365-search-index.js?v=20261028-1"></script>
+<script>
+(function(){
+ const input=document.querySelector("[data-m365-search]");if(!input)return;
+ const wrap=input.parentElement,box=document.createElement("div");box.className="m365-results";box.setAttribute("role","listbox");wrap.appendChild(box);
+ const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+ function render(){const q=input.value.trim();if(!q){box.classList.remove("show");box.innerHTML="";return}
+ const hits=window.M365BuddySearch?window.M365BuddySearch.search(q).slice(0,7):[];
+ box.innerHTML=hits.length?hits.map(x=>'<a class="m365-result" role="option" href="'+esc(x.url)+'"><span><strong>'+esc(x.title)+'</strong><small>'+esc(x.description||"")+'</small></span><em>'+esc(x.type||"Result")+'</em></a>').join(""):'<div class="m365-result-empty">No matching articles or scripts.</div>';
+ box.classList.add("show")}
+ input.addEventListener("input",render);input.addEventListener("focus",render);
+ input.addEventListener("keydown",e=>{if(e.key==="Enter"&&input.value.trim()){e.preventDefault();location.href="/search.html?q="+encodeURIComponent(input.value.trim())}if(e.key==="Escape"){input.value="";render()}});
+ document.addEventListener("click",e=>{if(!wrap.contains(e.target))box.classList.remove("show")});
+})();
+</script>
 </body>
 </html>
