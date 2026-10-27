@@ -46,6 +46,17 @@
     @media(max-width:620px){nav{align-items:flex-start;flex-direction:column;padding:14px 18px}.links{gap:12px}}
   
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+/* Shared desktop header alignment: navigation left, search centered, brand right */
+@media(min-width:901px){
+  .m365-header-inner{
+    grid-template-columns:minmax(0,1fr) minmax(280px,min(38vw,520px)) minmax(0,1fr)!important;
+    gap:24px!important;
+  }
+  .m365-nav{justify-self:start}
+  .m365-search,.m365-header-search{justify-self:center;width:100%;max-width:520px}
+  .m365-brand{justify-self:end}
+}
 </style>
 
 
@@ -84,7 +95,7 @@
 </section></main>
 <footer>M365Buddy · <a href="/about/">About</a> · <a href="/community/">Community</a> · <a href="https://www.youtube.com/@M365buddy" target="_blank" rel="noopener noreferrer">YouTube tutorials</a></footer>
 
-<script src="/assets/m365-search-index.js?v=20261028-1"></script>
+<script src="/assets/m365-search-index.js?v=20261028-2"></script>
 <script>
 (function(){
  const input=document.querySelector("[data-m365-search]");
