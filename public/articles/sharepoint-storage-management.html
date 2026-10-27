@@ -76,6 +76,17 @@ header{height:62px;background:linear-gradient(105deg,var(--nav1),var(--nav2));po
   .m365-header-inner{grid-template-columns:1fr auto;gap:6px 10px}
   .m365-search{grid-column:1/-1;grid-row:2;width:100%}
 }
+
+/* M365Buddy shared desktop header layout */
+@media(min-width:901px){
+  .m365-header-inner{
+    grid-template-columns:minmax(0,1fr) minmax(280px,min(38vw,520px)) minmax(0,1fr)!important;
+    gap:24px!important;
+  }
+  .m365-nav{justify-self:start}
+  .m365-search,.global-search{justify-self:center;width:100%;max-width:520px}
+  .m365-brand{justify-self:end}
+}
 </style>  <link rel="stylesheet" href="/assets/community.css?v=20261021-2">
 
 <meta name="description" content="Learn how to understand SharePoint Online storage usage, build site inventory reports, identify high-consumption sites, and improve storage governance.">
