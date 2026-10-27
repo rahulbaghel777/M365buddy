@@ -647,6 +647,17 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 html{scroll-padding-top:76px}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 
+
+/* Shared desktop header alignment: navigation left, search centered, brand right */
+@media(min-width:901px){
+  .m365-header-inner{
+    grid-template-columns:minmax(0,1fr) minmax(280px,min(38vw,520px)) minmax(0,1fr)!important;
+    gap:24px!important;
+  }
+  .m365-nav{justify-self:start}
+  .m365-search,.m365-header-search{justify-self:center;width:100%;max-width:520px}
+  .m365-brand{justify-self:end}
+}
 </style>
 
 <meta name="description" content="Step-by-step Microsoft 365, SharePoint Online, Entra ID, PowerShell, and Power Automate guides for administrators and IT professionals.">
