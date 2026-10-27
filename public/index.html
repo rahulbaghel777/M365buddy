@@ -278,6 +278,17 @@ html{scroll-padding-top:76px}
 .home-result small{display:block;font-size:10px;color:#647084;margin-top:2px}
 .home-result span{font-size:9.5px;color:#2563eb;background:#eff6ff;border:1px solid #bfdbfe;border-radius:999px;padding:2px 6px;white-space:nowrap}
 .home-result-empty{padding:11px;color:#647084;background:#fff;font-size:11px}
+
+/* Shared desktop header alignment: navigation left, search centered, brand right */
+@media(min-width:901px){
+  .m365-header-inner{
+    grid-template-columns:minmax(0,1fr) minmax(280px,min(38vw,520px)) minmax(0,1fr)!important;
+    gap:24px!important;
+  }
+  .m365-nav{justify-self:start}
+  .m365-search,.m365-header-search{justify-self:center;width:100%;max-width:520px}
+  .m365-brand{justify-self:end}
+}
 </style>
 
 <meta name="description" content="Practical Microsoft 365 administration guides, tested SharePoint Online and PnP PowerShell scripts, Entra ID troubleshooting, and reporting automation.">
