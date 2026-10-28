@@ -13,7 +13,10 @@ const ALLOWED_SOURCES = new Set([
 
 const MAX_QUESTION_LENGTH = 1200;
 const MAX_HISTORY_ITEMS = 6;
-const MAX_SOURCE_LENGTH = 9000;
+const MAX_SOURCE_LENGTH = 6000;
+const RATE_WINDOW_MS = 60_000;
+const RATE_LIMIT = 8;
+const requestBuckets = new Map();
 
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), {
@@ -65,6 +68,21 @@ async function loadSource(path, request, env) {
   }
 }
 
+function isRateLimited(request) {
+  const ip = request.headers.get("cf-connecting-ip") || "unknown";
+  const now = Date.now();
+  let bucket = requestBuckets.get(ip);
+  if (!bucket || now - bucket.start >= RATE_WINDOW_MS) bucket = { start: now, count: 0 };
+  bucket.count += 1;
+  requestBuckets.set(ip, bucket);
+  if (requestBuckets.size > 1000) {
+    for (const [key, value] of requestBuckets) {
+      if (now - value.start >= RATE_WINDOW_MS) requestBuckets.delete(key);
+    }
+  }
+  return bucket.count > RATE_LIMIT;
+}
+
 function validOrigin(request) {
   const origin = request.headers.get("origin");
   if (!origin) return true;
@@ -102,6 +120,7 @@ export default {
       return json({ error: "Use POST to ask the M365Buddy assistant." }, 405);
     }
     if (!validOrigin(request)) return json({ error: "Origin not allowed." }, 403);
+    if (isRateLimited(request)) return json({ error: "You have reached the short-term question limit. Please wait a minute and try again." }, 429);
     if (!env.AI || typeof env.AI.run !== "function") {
       return json({ error: "The AI service is not configured yet. Please try again later." }, 503);
     }
