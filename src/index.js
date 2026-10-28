@@ -106,10 +106,10 @@ export default {
       }
       let html = await assetResponse.text();
       // Replace the standalone navigation item with the floating, persistent chat launcher.
-      html = html.replace(/<a\\b(?=[^>]*href=["']\\/assistant\\/["'])(?=[^>]*data-nav=["']assistant["'])[^>]*>[\\s\\S]*?<\\/a>/gi, "");
-      html = html.replace(/<a\\b(?=[^>]*href=["']\\/assistant\\/["'])[^>]*>\\s*Ask AI Assistant\\s*<\\/a>/gi, "");
+      html = html.replace(/<a\b(?=[^>]*href=["']\/assistant\/["'])(?=[^>]*data-nav=["']assistant["'])[^>]*>[\s\S]*?<\/a>/gi, "");
+      html = html.replace(/<a\b(?=[^>]*href=["']\/assistant\/["'])[^>]*>\s*Ask AI Assistant\s*<\/a>/gi, "");
       if (!html.includes("/assets/m365-floating-chat.js")) {
-        html = html.replace(/<\\/body>/i, '<script src="/assets/m365-floating-chat.js?v=20261029-1"></script>\\n</body>');
+        html = html.replace(/<\/body>/i, '<script src="/assets/m365-floating-chat.js?v=20261029-2"></script>\n</body>');
       }
       const headers = new Headers(assetResponse.headers);
       headers.delete("content-length");
