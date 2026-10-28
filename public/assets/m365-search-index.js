@@ -194,6 +194,14 @@ const M365_INDEX = [
     description: "Download a PowerShell test script for sending CSV reports through Microsoft Graph.",
     keywords: ["graph","csv","email","powershell","mail.send","test"]
   },
+  {
+    title: "M365Buddy AI Assistant",
+    type: "Tool",
+    category: "Microsoft 365",
+    url: "/assistant/",
+    description: "Ask questions about Microsoft 365, SharePoint, Entra ID, PowerShell and automation, with links to relevant M365Buddy guides.",
+    keywords: ["ai assistant", "chat", "microsoft 365 help", "troubleshooting", "sharepoint", "powershell", "entra id", "copilot"]
+  }
 ];
 
  
