@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Ask M365Buddy Assistant Microsoft 365, SharePoint, Entra ID, PowerShell and automation questions.">
+  <link rel="canonical" href="https://m365buddy.com/assistant/">
+  <meta name="theme-color" content="#0878ee">
+  <title>M365Buddy AI Assistant | Microsoft 365 Help</title>
+  <link rel="stylesheet" href="/assets/m365-common.css?v=20261028-7">
+  <style>
+    :root{--ai-ink:#102344;--ai-muted:#5f718b;--ai-line:#d8e3ef;--ai-blue:#0878ee}
+    *{box-sizing:border-box}
+    body{margin:0;background:#f4f8fd;color:var(--ai-ink);font:15px/1.55 Inter,"Segoe UI",Arial,sans-serif}
+    a{color:var(--ai-blue)}
+    .assistant-wrap{max-width:1000px;margin:28px auto 56px;padding:0 18px}
+    .assistant-hero{padding:clamp(22px,4vw,40px);border:1px solid var(--ai-line);border-radius:18px;background:linear-gradient(125deg,#eaf5ff,#fff 70%);box-shadow:0 6px 24px rgba(20,55,95,.05)}
+    .eyebrow{font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:#0878ee}
+    h1{font-size:clamp(30px,4vw,42px);line-height:1.12;letter-spacing:-.04em;margin:8px 0 12px;color:#071a3d}
+    .assistant-hero p{max-width:760px;color:#526987;margin:0}
+    .chat-shell{margin-top:18px;background:#fff;border:1px solid var(--ai-line);border-radius:16px;overflow:hidden;box-shadow:0 8px 28px rgba(20,55,95,.06)}
+    .chat-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;border-bottom:1px solid #e8eef5}
+    .assistant-status{display:flex;align-items:center;gap:8px;font-weight:750}
+    .status-dot{width:9px;height:9px;border-radius:50%;background:#16a34a}
+    .reset{border:1px solid var(--ai-line);border-radius:8px;background:#fff;padding:7px 11px;color:#3d5675;cursor:pointer}
+    .messages{min-height:310px;max-height:58vh;overflow:auto;padding:20px;display:flex;flex-direction:column;gap:14px}
+    .welcome{max-width:720px;color:#405879}
+    .welcome h2{margin:0 0 7px;font-size:18px;color:#102344}
+    .prompts{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+    .prompt-chip{border:1px solid #c9dbee;background:#f7fbff;border-radius:999px;padding:8px 12px;color:#1f4e85;font-size:12px;cursor:pointer}
+    .prompt-chip:hover{background:#eaf4ff;border-color:#93c5fd}
+    .message{max-width:min(88%,760px);padding:12px 14px;border-radius:13px;white-space:pre-wrap;overflow-wrap:anywhere}
+    .message.user{align-self:flex-end;background:#eaf3ff;color:#123d70;border:1px solid #c9dfff}
+    .message.assistant{align-self:flex-start;background:#f7f9fc;border:1px solid #e3eaf2;color:#253d5b}
+    .message.error{border-color:#fecaca;background:#fff7f7;color:#991b1b}
+    .message-meta{font-size:10px;color:#73839a;margin-bottom:5px;font-weight:800;text-transform:uppercase;letter-spacing:.06em}
+    .source-links{margin-top:12px;padding-top:9px;border-top:1px solid #dce5ef;font-size:12px}
+    .source-links a{display:block;margin-top:5px;font-weight:650;text-decoration:none}
+    .source-links a:hover{text-decoration:underline}
+    .composer{padding:14px;border-top:1px solid #e8eef5;background:#fbfdff}
+    .composer-form{display:flex;align-items:flex-end;gap:10px}
+    #question{flex:1;min-height:48px;max-height:150px;resize:vertical;border:1px solid #c9d7e7;border-radius:11px;padding:12px;color:#142c4b;background:#fff;font:inherit}
+    #question:focus{outline:3px solid rgba(8,120,238,.15);border-color:#5da3ef}
+    #send{min-height:48px;border:0;border-radius:10px;background:#0878ee;color:#fff;padding:0 19px;font-weight:800;cursor:pointer}
+    #send:disabled{opacity:.55;cursor:wait}
+    .privacy-note{margin:9px 2px 0;color:#718198;font-size:11px}
+    .notice{margin:14px 0 0;padding:12px 14px;border:1px solid #dbe6f1;border-radius:10px;background:#fff;color:#60728a;font-size:12px}
+    .typing{display:inline-flex;gap:4px;align-items:center}
+    .typing span{width:6px;height:6px;border-radius:50%;background:#6683a6;animation:pulse 1s infinite alternate}
+    .typing span:nth-child(2){animation-delay:.2s}.typing span:nth-child(3){animation-delay:.4s}
+    @keyframes pulse{to{opacity:.25;transform:translateY(-2px)}}
+    @media(max-width:640px){.assistant-wrap{margin-top:16px;padding:0 12px}.messages{padding:13px;min-height:260px}.message{max-width:96%}.composer{padding:10px}.composer-form{gap:7px}#send{padding:0 13px}.chat-head{padding:12px}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;scroll-behavior:auto!important}}
+  </style>
+</head>
+<body>
+<header class="m365-header">
+  <div class="m365-header-inner">
+    <nav class="m365-nav" aria-label="Main navigation">
+      <a href="/">Home</a><a href="/articles/">Articles</a><a href="/scripts/">Scripts</a><a href="/community/">Community</a>
+    </nav>
+    <div class="m365-header-search">
+      <span class="m365-header-search-icon" aria-hidden="true">⌕</span>
+      <input type="search" data-m365-search placeholder="Search M365Buddy..." autocomplete="off" aria-label="Search M365Buddy">
+    </div>
+    <a class="m365-brand" href="/" aria-label="M365Buddy home">M365<span>Buddy</span></a>
+  </div>
+</header>
+<main class="assistant-wrap">
+  <section class="assistant-hero">
+    <div class="eyebrow">M365Buddy · AI assistant</div>
+    <h1>What are you trying to solve?</h1>
+    <p>Ask about SharePoint Online, Microsoft 365, Entra ID, PowerShell, Microsoft Graph, Teams, OneDrive, or automation. I can use M365Buddy guides and general technical knowledge to help you find a practical next step.</p>
+  </section>
+  <section class="chat-shell" aria-label="Chat with M365Buddy Assistant">
+    <div class="chat-head">
+      <div class="assistant-status"><span class="status-dot" aria-hidden="true"></span><span>M365Buddy Assistant</span></div>
+      <button class="reset" id="reset" type="button">New chat</button>
+    </div>
+    <div class="messages" id="messages" role="log" aria-live="polite" aria-relevant="additions text">
+      <div class="welcome" id="welcome">
+        <h2>Hi! How can I help?</h2>
+        <div>Try a question below, or type your own. For questions about current Microsoft changes, I’ll flag when you should verify the latest Microsoft Learn documentation.</div>
+        <div class="prompts">
+          <button class="prompt-chip" type="button">Create a SharePoint site inventory report</button>
+          <button class="prompt-chip" type="button">Troubleshoot PnP certificate authentication</button>
+          <button class="prompt-chip" type="button">Explain Microsoft Graph app permissions</button>
+          <button class="prompt-chip" type="button">Automate a report with Azure Automation</button>
+        </div>
+      </div>
+    </div>
+    <div class="composer">
+      <form class="composer-form" id="ask-form">
+        <label for="question" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">Your Microsoft 365 question</label>
+        <textarea id="question" rows="1" maxlength="1200" placeholder="Ask a Microsoft 365 question…" required></textarea>
+        <button id="send" type="submit">Ask</button>
+      </form>
+      <div class="privacy-note">Do not enter passwords, access tokens, private keys, certificate files, or confidential tenant data.</div>
+    </div>
+  </section>
+  <p class="notice">AI-generated answers can be incomplete or out of date. Validate permissions and commands against current Microsoft documentation and test scripts before using them in production. This assistant is not an official Microsoft support channel.</p>
+</main>
+<script src="/assets/m365-search-index.js?v=20261028-7"></script>
+<script src="/assets/m365-global-search.js?v=20261028-7"></script>
+<script src="/assets/m365-ai-assistant.js?v=20261028-1"></script>
+</body>
+</html>
