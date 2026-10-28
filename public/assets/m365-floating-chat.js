@@ -25,7 +25,7 @@
   .m365-chat-welcome{padding:14px;border:1px solid #e0e9f4;border-radius:13px;background:#fff;color:#536984;font-size:12px}
   .m365-chat-welcome strong{display:block;color:#132b4c;font-size:14px;margin-bottom:5px}
   .m365-chat-suggestions{display:flex;flex-direction:column;align-items:flex-start;gap:7px;margin-top:12px}
-  .m365-chat-suggestion{max-width:100%;padding:8px 10px;border:1px solid #cbdff5;border-radius:9px;background:#f7fbff;color:#1b568f;font:600 11px/1.35 inherit;text-align:left;cursor:pointer}
+  .m365-chat-suggestion{max-width:100%;padding:8px 10px;border:1px solid #cbdff5;border-radius:9px;background:#f7fbff;color:#1b568f;font:600 11px/1.35 Inter,"Segoe UI",Arial,sans-serif;text-align:left;cursor:pointer}
   .m365-chat-suggestion:hover{background:#e9f4ff;border-color:#93c5fd}
   .m365-chat-message{max-width:94%;padding:10px 12px;border:1px solid #e1e8f1;border-radius:12px;background:#fff;color:#263d5b;font-size:12px;overflow-wrap:anywhere}
   .m365-chat-message.user{align-self:flex-end;background:#e8f3ff;border-color:#c8e0fb;color:#143f6d}
