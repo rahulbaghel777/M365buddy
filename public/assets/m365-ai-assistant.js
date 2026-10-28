@@ -11,6 +11,29 @@
   let history = [];
   let busy = false;
 
+  function escapeHtml(value) {
+    return String(value ?? "").replace(/[&<>"']/g, function (char) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char];
+    });
+  }
+
+  function renderMarkdown(value) {
+    return String(value ?? "").split(/(```[a-zA-Z0-9_-]*\n[\s\S]*?\`\`\`)/g).map(function (part) {
+      if (part.startsWith("```")) {
+        const code = part.replace(/^```[a-zA-Z0-9_-]*\n?/, "").replace(/\`\`\`$/, "");
+        return "<pre class=\"assistant-code\"><code>" + escapeHtml(code) + "</code></pre>";
+      }
+      let safe = escapeHtml(part);
+      safe = safe.replace(/\[([^\]]+)\]\((https:\/\/[^\s)]+|\/(?!\/)[^\s)]+)\)/g, function (_, label, href) {
+        const external = href.startsWith("https://");
+        return '<a href="' + href + '"' + (external ? ' target="_blank" rel="noopener noreferrer"' : "") + ">" + label + "</a>";
+      });
+      safe = safe.replace(/`([^`]+)`/g, "<code>$1</code>");
+      safe = safe.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+      return safe.replace(/\n/g, "<br>");
+    }).join("");
+  }
+
   function addMessage(role, text, sources, isError) {
     const wrapper = document.createElement("div");
     wrapper.className = "message " + role + (isError ? " error" : "");
@@ -19,7 +42,7 @@
     meta.textContent = role === "user" ? "You" : (isError ? "Notice" : "M365Buddy Assistant");
     wrapper.appendChild(meta);
     const content = document.createElement("div");
-    content.textContent = text;
+    content.innerHTML = renderMarkdown(text);
     wrapper.appendChild(content);
 
     if (Array.isArray(sources) && sources.length) {
