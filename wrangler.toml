@@ -29,5 +29,5 @@ database_id = "2878e9c1-2fd4-4bf9-95f2-8237ef2b9ae3"
 migrations_dir = "migrations"
 
 [env.staging.vars]
-ACCESS_TEAM_DOMAIN = "REPLACE_WITH_YOUR_CLOUDFLARE_ACCESS_TEAM_DOMAIN"
+ACCESS_TEAM_DOMAIN = "m365buddy.cloudflareaccess.com"
 ACCESS_AUD = "REPLACE_WITH_STAGING_ACCESS_APPLICATION_AUD"
