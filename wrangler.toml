@@ -30,4 +30,4 @@ migrations_dir = "migrations"
 
 [env.staging.vars]
 ACCESS_TEAM_DOMAIN = "m365buddy.cloudflareaccess.com"
-ACCESS_AUD = "REPLACE_WITH_STAGING_ACCESS_APPLICATION_AUD"
+ACCESS_AUD = "3a9787d668314e0d1496b8d943de50eecbb9daa477dbb999660451cb6ae48d66"
