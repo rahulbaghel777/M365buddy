@@ -105,11 +105,17 @@ export default {
         return assetResponse;
       }
       let html = await assetResponse.text();
-      // Replace the standalone navigation item with the floating, persistent chat launcher.
-      html = html.replace(/<a\b(?=[^>]*href=["']\/assistant\/["'])(?=[^>]*data-nav=["']assistant["'])[^>]*>[\s\S]*?<\/a>/gi, "");
-      html = html.replace(/<a\b(?=[^>]*href=["']\/assistant\/["'])[^>]*>\s*Ask AI Assistant\s*<\/a>/gi, "");
+      // Remove the old navigation and homepage CTA without relying on word-boundary escapes.
+      html = html.replace(/<a[^>]*data-nav=["']assistant["'][^>]*>[\s\S]*?<\/a>/gi, "");
+      html = html.replace(/<a[^>]*href=["']\/assistant\/["'][^>]*>\s*Ask AI Assistant\s*<\/a>/gi, "");
+
+      // Inject the floating assistant once, immediately before the closing body tag.
       if (!html.includes("/assets/m365-floating-chat.js")) {
-        html = html.replace(/<\/body>/i, '<script src="/assets/m365-floating-chat.js?v=20261029-2"></script>\n</body>');
+        const bodyClose = html.toLowerCase().lastIndexOf("</body>");
+        const launcher = '<script src="/assets/m365-floating-chat.js?v=20261031-1"></script>';
+        html = bodyClose >= 0
+          ? html.slice(0, bodyClose) + launcher + "\n" + html.slice(bodyClose)
+          : html + launcher;
       }
       const headers = new Headers(assetResponse.headers);
       headers.delete("content-length");
