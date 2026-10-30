@@ -9,3 +9,25 @@ run_worker_first = ["/api/*"]
 
 [ai]
 binding = "AI"
+
+# Isolated Phase 1 staging deployment. Production bindings above remain unchanged.
+[env.staging]
+name = "m365buddy-staging"
+
+[env.staging.assets]
+directory = "./public"
+binding = "ASSETS"
+run_worker_first = ["/api/*", "/admin/*"]
+
+[env.staging.ai]
+binding = "AI"
+
+[[env.staging.d1_databases]]
+binding = "APPROVAL_DB"
+database_name = "m365buddy-ai-employee-staging"
+database_id = "2878e9c1-2fd4-4bf9-95f2-8237ef2b9ae3"
+migrations_dir = "migrations"
+
+[env.staging.vars]
+ACCESS_TEAM_DOMAIN = "REPLACE_WITH_YOUR_CLOUDFLARE_ACCESS_TEAM_DOMAIN"
+ACCESS_AUD = "REPLACE_WITH_STAGING_ACCESS_APPLICATION_AUD"
