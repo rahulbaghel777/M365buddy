@@ -4,13 +4,13 @@
   window.__m365BuddyChatInstalled = true;
 
   const css = `
-  #m365-chat-launcher{position:fixed;right:24px;bottom:22px;z-index:9998;display:flex;align-items:center;gap:10px;border:0;border-radius:999px;padding:13px 18px;background:linear-gradient(135deg,#0878ee,#0757b8);color:#fff;font:700 14px/1.2 Inter,"Segoe UI",Arial,sans-serif;box-shadow:0 8px 28px rgba(7,67,145,.3);cursor:pointer;transition:transform .18s,box-shadow .18s}
-  #m365-chat-launcher:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(7,67,145,.36)}
+  #m365-chat-launcher{position:fixed;right:0;top:42%;bottom:auto;z-index:9998;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;width:54px;min-height:138px;border:0;border-radius:12px 0 0 12px;padding:14px 9px;background:linear-gradient(160deg,#0878ee,#0757b8);color:#fff;font:700 13px/1.2 Inter,"Segoe UI",Arial,sans-serif;box-shadow:0 8px 28px rgba(7,67,145,.3);cursor:pointer;transition:width .18s,box-shadow .18s}
+  #m365-chat-launcher:hover{width:60px;box-shadow:0 12px 32px rgba(7,67,145,.36)}
   #m365-chat-launcher .m365-bot-icon{width:28px;height:28px;display:grid;place-items:center;border-radius:50%;background:rgba(255,255,255,.18)}
   #m365-chat-launcher svg{width:18px;height:18px}
-  #m365-chat-panel{position:fixed;right:24px;bottom:88px;z-index:9999;width:min(390px,calc(100vw - 24px));height:min(590px,calc(100dvh - 115px));min-height:360px;display:none;flex-direction:column;overflow:hidden;border:1px solid #d6e2f0;border-radius:18px;background:#fff;color:#152b49;box-shadow:0 20px 70px rgba(7,26,61,.26);font:14px/1.5 Inter,"Segoe UI",Arial,sans-serif}
+  #m365-chat-panel{position:fixed;right:66px;top:50%;bottom:auto;z-index:9999;width:min(390px,calc(100vw - 82px));height:min(590px,calc(100dvh - 32px));min-height:360px;display:none;flex-direction:column;overflow:hidden;border:1px solid #d6e2f0;border-radius:18px;background:#fff;color:#152b49;box-shadow:0 20px 70px rgba(7,26,61,.26);font:14px/1.5 Inter,"Segoe UI",Arial,sans-serif;transform:translateY(-50%)}
   #m365-chat-panel.is-open{display:flex;animation:m365-chat-in .16s ease-out}
-  @keyframes m365-chat-in{from{opacity:0;transform:translateY(8px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+  @keyframes m365-chat-in{from{opacity:0;transform:translateY(calc(-50% + 8px)) scale(.985)}to{opacity:1;transform:translateY(-50%) scale(1)}}
   #m365-chat-panel *{box-sizing:border-box}
   .m365-chat-head{display:flex;align-items:center;gap:10px;padding:15px 15px;background:linear-gradient(115deg,#07346f,#0878ee);color:#fff}
   .m365-chat-avatar{display:grid;place-items:center;flex:0 0 36px;width:36px;height:36px;border-radius:12px;background:rgba(255,255,255,.17)}
@@ -47,7 +47,7 @@
   #m365-chat-send:disabled{opacity:.55;cursor:wait}
   #m365-chat-send svg{width:18px;height:18px}
   .m365-chat-footnote{margin:7px 2px 0;color:#8290a4;font-size:9px;line-height:1.4}
-  @media(max-width:520px){#m365-chat-launcher{right:14px;bottom:14px;padding:11px 14px}#m365-chat-panel{right:8px;bottom:72px;width:calc(100vw - 16px);height:min(620px,calc(100dvh - 90px));min-height:320px;border-radius:15px}}
+  @media(max-width:520px){#m365-chat-launcher{right:0;top:auto;bottom:105px;width:48px;min-height:122px;padding:12px 7px;border-radius:10px 0 0 10px}#m365-chat-launcher:hover{width:52px}#m365-chat-panel{right:8px;top:auto;bottom:16px;width:calc(100vw - 16px);height:min(620px,calc(100dvh - 32px));min-height:320px;border-radius:15px;transform:none}#m365-chat-panel.is-open{animation:m365-chat-mobile-in .16s ease-out}}@keyframes m365-chat-mobile-in{from{opacity:0;transform:translateY(8px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
   @media(prefers-reduced-motion:reduce){#m365-chat-panel.is-open{animation:none}#m365-chat-launcher{transition:none}#m365-chat-body{scroll-behavior:auto}}
   `;
   const style = document.createElement("style");
@@ -58,7 +58,7 @@
   root.innerHTML = `
     <button id="m365-chat-launcher" type="button" aria-label="Open M365Buddy AI chat" aria-expanded="false" aria-controls="m365-chat-panel">
       <span class="m365-bot-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v3m-6 4h12a3 3 0 0 1 3 3v4a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-4a3 3 0 0 1 3-3Z"/><path d="M8 14h.01M16 14h.01M9 17h6"/></svg></span>
-      <span>Ask M365Buddy</span>
+      <span>Ask AI</span>
     </button>
     <section id="m365-chat-panel" role="dialog" aria-label="Chat with M365Buddy" aria-modal="false">
       <header class="m365-chat-head">
