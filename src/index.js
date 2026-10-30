@@ -1,3 +1,5 @@
+import { handleAdmin } from "./admin.js";
+
 const ALLOWED_SOURCES = new Set([
   "/articles/sharepoint-online-site-inventory.html",
   "/articles/entra-id-pnp-certificate-authentication.html",
@@ -97,6 +99,9 @@ function validOrigin(request) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+
+    const adminResponse = await handleAdmin(request, env);
+    if (adminResponse) return adminResponse;
 
     if (url.pathname !== "/api/assistant") {
       const assetResponse = await env.ASSETS.fetch(request);
