@@ -1,6 +1,14 @@
 
 const M365_INDEX = [
   {
+    title: "SharePoint Access Denied for External Vendors: Transition Internal Accounts to Entra B2B",
+    type: "Article",
+    category: "SharePoint",
+    url: "/articles/sharepoint-external-vendor-b2b-account.html",
+    description: "Troubleshoot vendor access denied when an external supplier is represented by a native Entra account, and transition the existing identity to B2B collaboration.",
+    keywords: ["sharepoint", "access denied", "external vendor", "guest", "member", "entra b2b", "b2b collaboration", "external sharing", "identity", "authentication", "xp studios"]
+  },
+  {
     title: "Export All SharePoint Online Sites Using PnP PowerShell",
     type: "Article",
     category: "SharePoint",
