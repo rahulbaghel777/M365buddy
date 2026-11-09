@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SharePoint Access Denied for External Vendors: Transition Internal Accounts to Entra B2B | M365Buddy</title>
+<meta name="description" content="Troubleshoot SharePoint access denied when an external vendor is using a native Microsoft Entra account. Learn how to transition the existing account to B2B collaboration so the vendor can use their home-organization identity.">
+<link rel="canonical" href="https://m365buddy.com/articles/sharepoint-external-vendor-b2b-account.html">
+<meta property="og:type" content="article"><meta property="og:site_name" content="M365Buddy">
+<meta property="og:title" content="SharePoint Access Denied for External Vendors: Transition Internal Accounts to Entra B2B | M365Buddy">
+<meta property="og:description" content="Diagnose internal credentials on vendor accounts and transition an existing account to Microsoft Entra B2B collaboration.">
+<meta property="og:url" content="https://m365buddy.com/articles/sharepoint-external-vendor-b2b-account.html">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"SharePoint Access Denied for External Vendors: Transition Internal Accounts to Entra B2B","description":"Troubleshoot SharePoint access denied when an external vendor is represented by a native Microsoft Entra account, and transition the existing identity to B2B collaboration.","url":"https://m365buddy.com/articles/sharepoint-external-vendor-b2b-account.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://m365buddy.com/articles/sharepoint-external-vendor-b2b-account.html"},"articleSection":"SharePoint","publisher":{"@type":"Organization","name":"M365Buddy","url":"https://m365buddy.com/"},"author":{"@type":"Person","name":"Rahul Baghel","url":"https://www.linkedin.com/in/rahul-baghel777/"}}</script>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg?v=20261022">
+<style>
+:root{--nav1:#07346f;--nav2:#0873c9;--blue:#0878ee;--ink:#071a3d;--text:#263b5c;--muted:#617492;--line:#d7e1ee;--soft:#f4f8fd}
+*{box-sizing:border-box}body{margin:0;color:var(--text);font:14px/1.65 Inter,"Segoe UI",Arial,sans-serif;background:#f8fbff}a{color:#0878ee;text-decoration:none}
+header{height:62px;background:linear-gradient(105deg,var(--nav1),var(--nav2));color:white;position:sticky;top:0;z-index:5}
+.nav{max-width:1250px;height:100%;margin:auto;padding:0 18px;display:flex;align-items:center;gap:22px}.nav a{color:white;font-size:13px;font-weight:700}.brand{margin-left:auto;font-size:22px!important;font-weight:800}.brand span{color:#9bd3ff}
+main{max-width:1120px;margin:26px auto;padding:0 18px;display:grid;grid-template-columns:minmax(0,1fr) 235px;gap:20px;align-items:start}
+article,.toc{background:white;border:1px solid var(--line);border-radius:12px;box-shadow:0 2px 10px rgba(20,55,95,.05)}
+article{padding:30px;min-width:0}.toc{padding:17px;position:sticky;top:80px}.toc strong{display:block;color:var(--ink);margin-bottom:8px}.toc a{display:block;font-size:12px;padding:5px 0;color:#526b89}
+.eyebrow{display:inline-block;padding:4px 9px;background:#edf6ff;border:1px solid #c9e0fa;border-radius:20px;color:#0878ee;font-size:11px;font-weight:800}
+h1{font-size:32px;line-height:1.2;letter-spacing:-.8px;color:var(--ink);margin:13px 0 8px}.intro{font-size:16px;color:#526b89;margin:0 0 15px}
+.meta{font-size:11px;color:#718096;margin-bottom:20px}
+h2{font-size:21px;color:var(--ink);margin:30px 0 8px;padding-bottom:6px;border-bottom:1px solid #e5edf6;scroll-margin-top:80px}
+h3{font-size:16px;color:#102a50;margin:20px 0 6px;scroll-margin-top:80px}
+p{margin:9px 0}li{margin:6px 0}ul,ol{padding-left:22px}
+.callout{padding:14px 16px;border:1px solid #bfdbfe;border-left:4px solid #0878ee;background:#eff6ff;border-radius:8px;margin:16px 0}
+.warning{background:#fff7ed;border-color:#fed7aa;border-left-color:#ea580c}
+.success{background:#f0fdf4;border-color:#bbf7d0;border-left-color:#16a34a}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:12px}th,td{border:1px solid var(--line);padding:9px;text-align:left;vertical-align:top}th{background:#f2f7fc;color:#17345a}
+code{background:#edf2f7;padding:2px 5px;border-radius:4px;font:12px Consolas,monospace;overflow-wrap:anywhere}
+pre{background:#0b1830;color:#e2e8f0;padding:14px;border-radius:8px;overflow:auto;font:12px/1.55 Consolas,monospace}
+footer{border-top:1px solid var(--line);margin-top:28px;padding-top:15px;color:#718096;font-size:11px}
+@media(max-width:850px){main{grid-template-columns:1fr}.toc{position:static;grid-row:1}article{padding:20px}h1{font-size:26px}}
+</style>
+</head>
+<body>
+<header><nav class="nav" aria-label="Main navigation"><a href="/">Home</a><a href="/articles/">Articles</a><a href="/scripts/">Scripts</a><a href="/community/">Community</a><a class="brand" href="/">M365<span>Buddy</span></a></nav></header>
+<main>
+<article>
+<span class="eyebrow">SharePoint · Microsoft Entra ID</span>
+<h1>SharePoint Access Denied for External Vendors: Transition Internal Accounts to Entra B2B</h1>
+<p class="intro">A practical guide to a confusing identity scenario: an external supplier has a Mattel-native Entra account, but needs to access SharePoint using the supplier's own work identity.</p>
+<div class="meta">By Rahul Baghel · November 2026 · 8–10 minute read</div>
+
+<div class="callout"><strong>Scenario:</strong> A vendor reports that a SharePoint file or site returns <em>Access denied</em>. The permissions appear correct. When the vendor enters their company email address, Microsoft keeps selecting or redirecting to an account in the resource organization's tenant. The root cause may be the identity used for authentication—not the SharePoint permission assignment.</div>
+
+<h2 id="symptoms">1. Understand the symptoms</h2>
+<p>Imagine a supplier employee, Kacper, works for XP Studios and should access Mattel SharePoint with <code>kacper.perkowski@xpstudios.com</code>. In Microsoft Entra ID, however, the account is a native Mattel member with a UPN such as <code>kacper.perkowski@mattelcorp.onmicrosoft.com</code>. The XP Studios address appears only in the account's email/contact attribute.</p>
+<p>SharePoint permissions can be correctly assigned to that Mattel account, but the vendor is not necessarily authenticating as the XP Studios identity. Entering an external email address at the sign-in prompt does not convert the Mattel account or change its authentication source.</p>
+
+<h2 id="key-concepts">2. Member, Guest and authentication are not the same thing</h2>
+<p>Microsoft Entra's <code>UserType</code> describes the user's relationship and permission level in the resource tenant. It does not, by itself, tell you which identity provider authenticates the user.</p>
+<table><thead><tr><th>Concept</th><th>What it tells you</th><th>What it does not prove</th></tr></thead><tbody>
+<tr><td><strong>UserType = Member</strong></td><td>The user's relationship/permission classification in this tenant.</td><td>It does not prove the user authenticates with the host tenant. External B2B members are supported too.</td></tr>
+<tr><td><strong>UserType = Guest</strong></td><td>The user is classified as a guest in the resource tenant.</td><td>Changing this value alone does not change the authentication identity.</td></tr>
+<tr><td><strong>UPN</strong></td><td>The account's sign-in name in the resource directory.</td><td>A UPN ending in the tenant's onmicrosoft.com domain is a clue, not the only identity property to inspect.</td></tr>
+<tr><td><strong>Identities</strong></td><td>Shows the identity provider/sign-in identity associated with the account.</td><td>Do not infer the provider from the Email contact field alone.</td></tr>
+</tbody></table>
+<p>Microsoft distinguishes internal members, internal guests, external guests and external members. An external member can authenticate against another organization's identity provider while having <code>UserType = Member</code> in the resource tenant.</p>
+
+<h2 id="diagnose">3. Diagnose the account before changing permissions</h2>
+<ol>
+<li>Open <strong>Microsoft Entra admin center → Identity → Users → All users</strong>.</li>
+<li>Find the vendor's account and open <strong>Properties</strong>.</li>
+<li>Record the complete UPN, User type, Creation type, Email and account source/synchronization status.</li>
+<li>Inspect the account's <strong>Identities</strong> information. For a B2B user authenticated by another Microsoft Entra tenant, the identity provider is typically shown as <code>ExternalAzureAD</code>. An internal account using host-tenant credentials has an identity associated with the host organization.</li>
+<li>Check whether the user has a mailbox and whether the account is synchronized from on-premises Active Directory. These details affect the supported transition path.</li>
+<li>In SharePoint, open the item's <strong>Manage access</strong> panel and confirm which directory object has been granted access. Check site, library, folder and item-level permissions as applicable.</li>
+</ol>
+<div class="callout warning"><strong>Do not stop at the Email field.</strong> An external vendor's address stored in <code>mail</code> or Contact Information does not mean the account is already a B2B identity. Confirm the identity provider and how the account authenticates.</div>
+
+<h2 id="root-cause">4. Why the vendor is sent to the wrong sign-in</h2>
+<p>In a legacy or manually provisioned setup, an organization may create a cloud account for a supplier and give that person a tenant UPN and password. The vendor's company email may be stored as a contact address. That is an internally authenticated account even though the person is not an employee.</p>
+<p>When the vendor opens a SharePoint URL, Microsoft can resolve the sign-in to the existing host-tenant account. Typing the supplier email at the prompt does not automatically replace that account with the supplier's home identity. A browser session containing multiple Microsoft accounts can add confusion, but an InPrivate test only isolates the browser session—it does not repair the underlying identity configuration.</p>
+
+<h2 id="recommended-fix">5. Recommended approach: transition the existing account to B2B</h2>
+<p>If the vendor must authenticate with their XP Studios work identity, use Microsoft's supported <strong>Invite internal users to B2B collaboration</strong> process for the existing internal user object.</p>
+<p>This process is designed to let an existing internal account become a B2B user while retaining the user's object ID, UPN, group memberships and application assignments. When the invitation is accepted, the user signs in to cloud resources with the external identity.</p>
+<div class="callout success"><strong>Why this is preferable:</strong> It can preserve the existing Entra object and its assignments instead of deleting the account and rebuilding access from scratch. Plan and test the transition carefully because the sign-in method changes.</div>
+
+<h3 id="prerequisites">Before you start</h3>
+<ul>
+<li>Confirm the vendor's correct home-organization sign-in address (for example, <code>kacper.perkowski@xpstudios.com</code>).</li>
+<li>Confirm the account is eligible for internal-to-external B2B conversion and identify whether it is cloud-only or synchronized.</li>
+<li>Check the user's <code>mail</code> property. Microsoft requires it to contain the external address that will be used for B2B. If the account already has a mailbox, the property may need to be updated through Exchange admin center; do not blindly overwrite mailbox attributes.</li>
+<li>Check for <code>onPremisesUserPrincipalName</code>. Microsoft documents that this attribute can prevent the internal-to-external conversion. For synchronized accounts, work with the identity team to assess the supported directory-sync configuration before proceeding.</li>
+<li>Review Conditional Access, cross-tenant access settings, external collaboration restrictions, licensing and any applications that depend on the current internal credentials.</li>
+<li>Plan a maintenance window and communicate the sign-in change to the vendor. Keep a record of current group memberships, app assignments and SharePoint access for validation.</li>
+</ul>
+
+<h3 id="conversion">Perform the B2B invitation</h3>
+<p>Follow Microsoft's current procedure in <a href="https://learn.microsoft.com/en-us/entra/external-id/invite-internal-users" target="_blank" rel="noopener noreferrer">Invite internal users to B2B collaboration</a>. The documented process uses the Microsoft Entra invitation capability (invitation API/PowerShell workflow) and requires both the existing internal user object and the external email address.</p>
+<ol>
+<li>Prepare the existing user object and verify its external <code>mail</code> address and conversion eligibility.</li>
+<li>Use the supported invitation workflow to invite the existing internal user object to B2B with the vendor's external identity. Do not create a duplicate guest object as a substitute for this existing-object conversion process.</li>
+<li>Send the invitation and have the vendor redeem it using the XP Studios identity.</li>
+<li>After redemption, verify the user's identity provider and confirm that the account is now using the external B2B authentication path.</li>
+<li>Review the account's group memberships, application assignments and SharePoint permissions. Confirm they remain appropriate and that the vendor can access only the resources intended for them.</li>
+<li>Test access to the original SharePoint site/file using a fresh browser session and the XP Studios account.</li>
+</ol>
+<div class="callout warning"><strong>Important:</strong> Do not assume that changing <code>UserType</code> from Member to Guest performs this conversion. Microsoft explicitly documents that UserType and internal/external authentication are separate. Also, do not delete the existing account or remove its access before the B2B transition and validation are complete.</div>
+
+<h2 id="sharepoint-sharing">6. Share the SharePoint content after identity is corrected</h2>
+<p>Once the vendor can authenticate with the intended external identity:</p>
+<ol>
+<li>Open the SharePoint file or folder and select <strong>Share</strong>.</li>
+<li>For a controlled vendor collaboration scenario, prefer <strong>Specific people</strong> and enter the vendor's external work address.</li>
+<li>Choose the minimum required permission (View or Edit) and send the invitation/link.</li>
+<li>Check <strong>Manage access</strong> to confirm the intended recipient and link permission.</li>
+<li>Ask the vendor to open the link while signed in with the same XP Studios identity used to redeem the B2B invitation.</li>
+</ol>
+<p>A <strong>People in your organization</strong> link is not a mechanism for converting an internal account into an external identity. Link type and authentication identity are separate controls. Use the link type that matches your organization's sharing policy and verify the recipient's actual sign-in identity.</p>
+
+<h2 id="validation">7. Validation checklist</h2>
+<ul>
+<li>The vendor's B2B invitation is redeemed.</li>
+<li>The account's identity provider reflects the vendor's home identity.</li>
+<li>The vendor can authenticate using the XP Studios work account.</li>
+<li>The existing object, group memberships and app assignments have been reviewed.</li>
+<li>The vendor has only the required SharePoint site, library, folder or item permissions.</li>
+<li>The file opens successfully from a clean browser session.</li>
+<li>Conditional Access and cross-tenant access policies allow the intended collaboration.</li>
+</ul>
+
+<h2 id="when-not-to-convert">8. When should you not convert the existing account?</h2>
+<p>If the account is not eligible for the supported internal-to-B2B transition, or the business requires a separate external identity object, work with the identity team to design a controlled migration. That may involve inviting the vendor as a new B2B guest, validating access with the new identity, and only then retiring the old internal account. This is a separate migration path: do not delete the old object until dependencies and access have been mapped.</p>
+
+<h2 id="takeaway">Key takeaway</h2>
+<p>When an external vendor receives SharePoint access denied—even though permissions appear correct—check the identity being used to authenticate before repeatedly changing SharePoint permissions. A vendor's external email in the contact field does not make a native account a B2B user. Use Microsoft's supported internal-to-B2B invitation process when the existing internal account must be transitioned, then validate authentication and resource access.</p>
+
+<h2 id="references">Microsoft documentation</h2>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/entra/external-id/invite-internal-users" target="_blank" rel="noopener noreferrer">Invite internal users to B2B collaboration</a></li>
+<li><a href="https://learn.microsoft.com/en-us/entra/external-id/user-properties" target="_blank" rel="noopener noreferrer">B2B guest user properties</a></li>
+<li><a href="https://learn.microsoft.com/en-us/entra/external-id/authentication-conditional-access" target="_blank" rel="noopener noreferrer">Authentication and Conditional Access for B2B users</a></li>
+<li><a href="https://learn.microsoft.com/en-us/entra/external-id/what-is-b2b" target="_blank" rel="noopener noreferrer">What is Microsoft Entra B2B collaboration?</a></li>
+</ul>
+<footer>© 2026 M365Buddy · Practical Microsoft 365 administration guides. Always validate identity changes in a test scenario and follow your organization's change-management process.</footer>
+</article>
+<aside class="toc"><strong>In this article</strong>
+<a href="#symptoms">Symptoms</a><a href="#key-concepts">Member vs Guest vs authentication</a><a href="#diagnose">Diagnose the account</a><a href="#root-cause">Why sign-in redirects</a><a href="#recommended-fix">Recommended B2B approach</a><a href="#prerequisites">Prerequisites</a><a href="#conversion">B2B invitation steps</a><a href="#sharepoint-sharing">SharePoint sharing</a><a href="#validation">Validation checklist</a><a href="#references">Microsoft references</a></aside>
+</main>
+</body></html>
